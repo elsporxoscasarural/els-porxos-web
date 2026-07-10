@@ -44,6 +44,8 @@
     "description": "Casa rural de 2 plantas con piscina privada, porches con arcos, jardín, barbacoa, zona de juegos infantil y pista de fútbol. Capacidad para hasta 19 personas en 6 habitaciones con 3 baños.",
     "url": "https://elsporxoscasarural.netlify.app/",
     "telephone": "+34620104539",
+    "identifier": "HUTL-000401",
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5.0", "bestRating": "5", "reviewCount": "6" },
     "email": "elsporxoscasarural@gmail.com",
     "image": "https://elsporxoscasarural.netlify.app/images/hero.jpg",
     "address": {
@@ -501,6 +503,26 @@
     .lightbox-prev { left: 1.2rem; top: 50%; translate: 0 -50%; }
     .lightbox-next { right: 1.2rem; top: 50%; translate: 0 -50%; }
 
+    /* ════════ OPINIONES ════════ */
+    .reviews { padding-block: clamp(5rem, 9vw, 8rem); }
+    .reviews-header { text-align: center; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+    .reviews-heading { font-size: clamp(2.2rem, 4.6vw, 3.6rem); margin-top: 1.2rem; color: var(--ink); }
+    .reviews-sub { color: var(--ink-soft); max-width: 52ch; margin: 1.2rem auto 0; line-height: 1.75; }
+    .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+    .review-card {
+      display: flex; flex-direction: column; background: var(--cream); border: 1px solid var(--line);
+      border-radius: 18px; padding: 1.8rem 1.6rem 1.6rem;
+      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s;
+    }
+    .review-card:hover { transform: translateY(-5px); box-shadow: 0 18px 44px rgba(61, 50, 32, 0.13); border-color: var(--line-2); }
+    .review-stars { color: var(--gold-deep); font-size: 0.95rem; letter-spacing: 0.18em; margin-bottom: 0.9rem; }
+    .review-text { color: var(--ink-soft); font-size: 0.92rem; line-height: 1.7; flex-grow: 1; }
+    .review-meta { margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--line); font-size: 0.85rem; }
+    .review-name { font-weight: 700; color: var(--ink); }
+    .review-src { display: block; margin-top: 0.15rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-deep); }
+    @media (max-width: 960px) { .reviews-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px) { .reviews-grid { grid-template-columns: 1fr; } }
+
     /* ════════ UBICACIÓN ════════ */
     .location { background: var(--cream); border-block: 1px solid var(--line); padding-block: clamp(5rem, 9vw, 8rem); }
     .location-grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(2.5rem, 6vw, 5rem); align-items: center; }
@@ -916,6 +938,49 @@
       </div>
     </section>
 
+    <!-- ═══ OPINIONES ═══ -->
+    <section class="reviews" id="opiniones" aria-labelledby="reviews-title">
+      <div class="container">
+        <div class="reviews-header">
+          <p class="eyebrow ru" style="justify-content:center;">Opiniones</p>
+          <h2 class="reviews-heading ru" data-d="1" id="reviews-title">Lo que dicen nuestros huéspedes</h2>
+          <p class="reviews-sub ru" data-d="2">Valoración media de 5 estrellas en Airbnb y Google. Estas son algunas opiniones reales de grupos y familias que ya han pasado por Els Porxos.</p>
+        </div>
+        <div class="reviews-grid">
+          <article class="review-card ru">
+            <div class="review-stars" aria-label="5 estrellas">★★★★★</div>
+            <p class="review-text">«La casa estuvo genial, todo en perfectas condiciones para las 13 personas que fuimos. Incluso mejor que en fotos: no se ven el futbolín ni la mesa de ping-pong, con los que pasamos muy buenos ratos. Pol estuvo muy atento y nos facilitó las horas de entrada y salida.»</p>
+            <div class="review-meta"><span class="review-name">Sergi</span><span class="review-src">Airbnb · junio 2026</span></div>
+          </article>
+          <article class="review-card ru" data-d="1">
+            <div class="review-stars" aria-label="5 estrellas">★★★★★</div>
+            <p class="review-text">«Un fin de semana muy divertido en un ambiente familiar. La protección de la piscina para los niños nos gustó mucho: podían corretear cerca sin riesgo. La casa es muy familiar y a la vez íntima. ¡Nos encantó el lugar!»</p>
+            <div class="review-meta"><span class="review-name">Dary</span><span class="review-src">Airbnb · mayo 2026</span></div>
+          </article>
+          <article class="review-card ru" data-d="2">
+            <div class="review-stars" aria-label="5 estrellas">★★★★★</div>
+            <p class="review-text">«Pasamos dos semanas de vacaciones en familia estupendas. Éramos 16 y la casa se adaptó perfectamente a toda nuestra tribu. Pol es encantador, muy acogedor y siempre atento cuando lo necesitas.»</p>
+            <div class="review-meta"><span class="review-name">Marty</span><span class="review-src">Airbnb · agosto 2025</span></div>
+          </article>
+          <article class="review-card ru">
+            <div class="review-stars" aria-label="5 estrellas">★★★★★</div>
+            <p class="review-text">«Espacios muy grandes, camas cómodas, piscina limpia... ¡Y el futbolín ha sido un gran entretenimiento! Pol y su familia, muy amables, nos han ayudado en todo momento. Casa perfecta para ir con buena compañía.»</p>
+            <div class="review-meta"><span class="review-name">Marc</span><span class="review-src">Airbnb · julio 2023</span></div>
+          </article>
+          <article class="review-card ru" data-d="1">
+            <div class="review-stars" aria-label="5 estrellas">★★★★★</div>
+            <p class="review-text">«Es un encanto, estuvimos muy cómodos y la zona es muy tranquila. Lugar perfecto para que los críos se lo pasen bien. Recomendado al 100%.»</p>
+            <div class="review-meta"><span class="review-name">Quico</span><span class="review-src">Google</span></div>
+          </article>
+          <article class="review-card ru" data-d="2">
+            <div class="review-stars" aria-label="5 estrellas">★★★★★</div>
+            <p class="review-text">«Una casa muy bien montada, prácticamente tiene de todo. Nos lo pasamos espectacular. Repetiremos seguro.»</p>
+            <div class="review-meta"><span class="review-name">Óscar</span><span class="review-src">Google</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- ═══ UBICACIÓN ═══ -->
     <section class="location" id="ubicacion" aria-labelledby="location-title">
       <div class="container">
@@ -1085,13 +1150,14 @@
       <p class="footer-place">Casa rural · Bellcaire d'Urgell · Lleida</p>
       <nav class="footer-nav" aria-label="Navegación del pie">
         <a href="#inicio">Inicio</a>
+        <a href="#opiniones">Opiniones</a>
         <a href="#la-casa">La casa</a>
         <a href="#habitaciones">Habitaciones</a>
         <a href="#fotos">Fotos</a>
         <a href="#actividades">Qué hacer</a>
         <a href="#contacto">Contacto</a>
       </nav>
-      <p class="footer-copy">© 2026 Els Porxos Casa Rural — Bellcaire d'Urgell, Lleida</p>
+      <p class="footer-copy">© 2026 Els Porxos Casa Rural — Bellcaire d'Urgell, Lleida · Nº de registro turístico: HUTL-000401</p>
     </div>
   </footer>
 
