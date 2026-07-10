@@ -151,7 +151,7 @@
       --arch:   999px 999px 0 0;
     }
 
-    html { overflow-x: clip; scroll-behavior: smooth; }
+    html { overflow-x: clip; scroll-behavior: smooth; scroll-padding-top: 96px; }
     body {
       overflow-x: clip;
       font-family: var(--f-body);
@@ -688,6 +688,35 @@
     }
 
     /* ════════ MOVIMIENTO REDUCIDO ════════ */
+    /* ════════ MOTION PACK ════════ */
+    /* Los arcos se dibujan al entrar en pantalla (firma de marca) */
+    .arcade-ornament svg path { stroke-dasharray: 100; stroke-dashoffset: 100; }
+    .arcade-ornament.v svg path { animation: arch-draw 1.6s var(--ease) 0.2s forwards; }
+    @keyframes arch-draw { to { stroke-dashoffset: 0; } }
+
+    /* La foto del hero asienta con un zoom suave al cargar */
+    .hero-arch-frame img { animation: hero-settle 1.8s var(--ease) both; }
+    @keyframes hero-settle { from { transform: scale(1.055); } }
+
+    /* Lightbox: la imagen entra con escala (contexto espacial del modal) */
+    .lightbox-img { transform: scale(0.94); transition: transform 320ms var(--ease); }
+    .lightbox.active .lightbox-img { transform: scale(1); }
+
+    /* Pulso periódico y discreto del botón de WhatsApp */
+    .wa-float::after {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      pointer-events: none; animation: wa-pulse 7s ease-out 4s infinite;
+    }
+    @keyframes wa-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(31, 170, 85, 0.35); }
+      12% { box-shadow: 0 0 0 16px rgba(31, 170, 85, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(31, 170, 85, 0); }
+    }
+
+    /* Nav se retira al bajar y reaparece al subir */
+    .nav { transition: transform 0.34s var(--ease), box-shadow 0.34s var(--ease); }
+    .nav.nav-hidden { transform: translateY(-102%); }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
@@ -1262,11 +1291,19 @@
       var overlay = document.getElementById("nav-overlay");
       if (!nav) return;
       var ticking = false;
+      var lastY = window.scrollY;
       window.addEventListener("scroll", function () {
         if (ticking) return;
         ticking = true;
         requestAnimationFrame(function () {
-          nav.classList.toggle("scrolled", window.scrollY > 24);
+          var y = window.scrollY;
+          nav.classList.toggle("scrolled", y > 24);
+          if (!REDUCED) {
+            var menuOpen = burger && burger.getAttribute("aria-expanded") === "true";
+            if (y > 360 && y - lastY > 8 && !menuOpen) nav.classList.add("nav-hidden");
+            else if (y < lastY - 4 || y <= 360) nav.classList.remove("nav-hidden");
+            lastY = y;
+          }
           ticking = false;
         });
       }, { passive: true });
@@ -1447,7 +1484,32 @@
       });
     }
 
+    /* Cifras del hero cuentan hasta su valor al entrar en pantalla */
+    function initCounters() {
+      var nums = document.querySelectorAll(".hstat-num");
+      if (!nums.length || REDUCED || !("IntersectionObserver" in window)) return;
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          var el = e.target;
+          var target = parseInt(el.textContent, 10);
+          io.unobserve(el);
+          if (isNaN(target)) return;
+          var t0 = null;
+          function step(ts) {
+            if (!t0) t0 = ts;
+            var p = Math.min((ts - t0) / 900, 1);
+            el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+            if (p < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        });
+      }, { threshold: 0.6 });
+      nums.forEach(function (n) { io.observe(n); });
+    }
+
     function boot() {
+      safe(initCounters, "counters");
       safe(initImageFallbacks, "fallbacks");
       safe(initNav, "nav");
       safe(initReveals, "reveals");
