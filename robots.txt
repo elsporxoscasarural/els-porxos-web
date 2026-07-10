@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://elsporxoscasarural.netlify.app/sitemap.xml
+Sitemap: https://elsporxos.es/sitemap.xml
