@@ -27,6 +27,7 @@
 ## Comandos
 ```bash
 npm run dev      # servidor de desarrollo (en la app: preview «web-porxos»)
+npm run dev:limpio # igual, rehaciendo la caché de librerías (si tras compilar las animaciones dejan de funcionar: error 504)
 npm run build    # web estática en dist/
 ```
 En desarrollo, `?y=1200` en la URL coloca el scroll en esa posición (para revisar secuencias).
