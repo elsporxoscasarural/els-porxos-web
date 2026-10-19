@@ -27,7 +27,7 @@ const anyo = new Date().getFullYear();
 		</nav>
 		<div class="datos">
 			<p>Casa rural en {casa.direccion.localidad}, {casa.direccion.comarca} ({casa.direccion.provincia})</p>
-			<p><a href={`tel:${casa.telefono.enlace}`}>{casa.telefono.visible}</a> · <a href={`mailto:${casa.email}`}>{casa.email}</a></p>
+			<p><a href={casa.whatsapp} target="_blank" rel="noopener">WhatsApp {casa.telefono.visible}</a> · <a href={`mailto:${casa.email}`}>{casa.email}</a></p>
 		</div>
 	</div>
 	<div class="envoltorio base">
