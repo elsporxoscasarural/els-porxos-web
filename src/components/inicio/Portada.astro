@@ -1,10 +1,10 @@
 ---
-// Portada: la casa vista dentro de un arco y, al hacer scroll, el arco se abre y entras al porche.
+// Portada: la casa en maqueta (vista aérea recortada) y, al hacer scroll, la cámara se acerca y entras al porche por un arco.
 // Sin JS o con «reducir movimiento», las dos escenas se ven una debajo de otra, estáticas y completas.
 import { Picture } from 'astro:assets';
 import Icono from '../Icono.astro';
 import { casa } from '../../data/casa';
-import fachada from '../../assets/img/casa/casa-dron.jpg';
+import maqueta from '../../assets/img/casa/maqueta-casa.png';
 import porche from '../../assets/img/casa/porche-futbolin-piscina.jpg';
 
 const numeros = ['cero', 'una', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve'];
@@ -15,13 +15,13 @@ const mayuscula = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 <section class="secuencia" aria-label="Portada" data-secuencia>
 	<div class="escena">
 		<div class="inicio">
-			<div class="capa fachada" data-fachada>
+			<div class="maqueta" data-maqueta>
 				<Picture
 					formats={['avif', 'webp']}
-					src={fachada}
-					alt="Vista aérea de la casa rural Els Porxos con su jardín y la piscina, entre los campos de Bellcaire d'Urgell"
-					widths={[800, 1200, 1600, 2000]}
-					sizes="100vw"
+					src={maqueta}
+					alt="Vista aérea de Els Porxos: la casa, el jardín, la piscina y la pista deportiva, rodeados de setos"
+					widths={[600, 900, 1165]}
+					sizes="(max-width: 820px) 100vw, 54vw"
 					loading="eager"
 					fetchpriority="high"
 				/>
@@ -88,25 +88,36 @@ const mayuscula = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 		object-fit: cover;
 	}
 
-	/* La casa, dentro de un arco a la derecha. La capa se desplaza para que en el arco
-	   se vean los porches y el balcón (y no solo el magnolio); al abrirse vuelve a su sitio. */
-	.fachada {
-		--desp: 26vw;
-		--arriba: calc(var(--alto-cabecera) + 2.5vh);
+	/* La maqueta de la casa flota a la derecha, con una sombra suave en el suelo */
+	.maqueta {
 		position: absolute;
-		inset: 0;
-		transform: translateX(var(--desp));
-		clip-path: inset(var(--arriba) 30vw 0 24vw round 23vw 23vw 0 0);
-		will-change: transform, clip-path;
+		top: calc(var(--alto-cabecera) + 2vh);
+		bottom: 3vh;
+		right: var(--g);
+		width: 54vw;
+		display: grid;
+		place-items: center;
+		transform-origin: 58% 48%; /* hacia la casa y el porche: ahí se acerca la cámara */
+		will-change: transform, opacity;
 	}
-	.fachada :global(img) {
-		object-position: 50% 55%;
+	.maqueta::after {
+		content: '';
+		position: absolute;
+		left: 12%;
+		right: 8%;
+		bottom: 14%;
+		height: 18%;
+		z-index: -1;
+		background: radial-gradient(closest-side, color-mix(in oklch, var(--carbon) 16%, transparent), transparent);
+		filter: blur(6px);
 	}
-	/* Foto de dron: se acerca a la casa y la piscina (fuera la carretera y los vecinos) */
-	.fachada :global(picture) {
+	.maqueta :global(picture) {
 		display: block;
-		transform: scale(1.5);
-		transform-origin: 53% 50%;
+		width: 100%;
+	}
+	.maqueta :global(img) {
+		width: 100%;
+		height: auto;
 	}
 
 	.portada {
@@ -243,8 +254,8 @@ const mayuscula = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 		.entra:nth-child(4) {
 			animation-delay: 280ms;
 		}
-		.fachada :global(img) {
-			animation: asentar 1.8s var(--ease) both;
+		.maqueta :global(picture) {
+			animation: posar 1.6s var(--ease) 0.15s both;
 		}
 	}
 	@keyframes subir {
@@ -253,9 +264,11 @@ const mayuscula = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 			transform: translateY(24px);
 		}
 	}
-	@keyframes asentar {
+	/* La maqueta baja y se posa, como si la dejaran sobre la mesa */
+	@keyframes posar {
 		from {
-			transform: scale(1.08);
+			opacity: 0;
+			transform: translateY(-28px) scale(0.97);
 		}
 	}
 
@@ -264,13 +277,13 @@ const mayuscula = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 		.inicio {
 			min-height: 640px;
 		}
-		/* La capa baja 18vh: en el arco (mitad inferior de la pantalla) se ven el balcón y los arcos del porche */
-		.fachada {
-			transform: translateY(18vh);
-			clip-path: inset(34vh 5vw 18vh 5vw round 45vw 45vw 0 0);
-		}
-		.fachada :global(img) {
-			object-position: 52% 50%;
+		.maqueta {
+			top: 50%;
+			bottom: 2vh;
+			left: 0;
+			right: 0;
+			width: auto;
+			padding-inline: 2vw;
 		}
 		.portada {
 			inset: 0 0 auto 0;
@@ -310,19 +323,12 @@ const mayuscula = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 		const vh = () => window.innerHeight / 100;
 		const cabecera = 72;
 
-		// Recortes en px (GSAP necesita la misma estructura al principio y al final para interpolar)
-		const arcoFachada = () =>
-			movil()
-				? `inset(${34 * vh()}px ${5 * vw()}px ${18 * vh()}px ${5 * vw()}px round ${45 * vw()}px ${45 * vw()}px 0px 0px)`
-				: `inset(${cabecera + 2.5 * vh()}px ${30 * vw()}px 0px ${24 * vw()}px round ${23 * vw()}px ${23 * vw()}px 0px 0px)`;
+		// Recorte del arco del porche en px (GSAP necesita la misma estructura al principio y al final)
 		const arcoPorche = () =>
 			movil()
 				? `inset(${64 * vh()}px ${30 * vw()}px 0px ${30 * vw()}px round ${20 * vw()}px ${20 * vw()}px 0px 0px)`
 				: `inset(${58 * vh()}px ${41 * vw()}px 0px ${41 * vw()}px round ${9 * vw()}px ${9 * vw()}px 0px 0px)`;
 		const abierto = 'inset(0px 0px 0px 0px round 0px 0px 0px 0px)';
-		// Desplazamiento de reposo de la capa de la casa (escritorio: a la derecha; móvil: hacia abajo)
-		const despX = () => (movil() ? 0 : 26 * vw());
-		const despY = () => (movil() ? 18 * vh() : 0);
 
 		gsap
 			.timeline({
@@ -335,15 +341,9 @@ const mayuscula = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 					invalidateOnRefresh: true,
 				},
 			})
-			// 1. El texto se retira y el arco de la casa se abre a pantalla completa
+			// 1. El texto se retira y la cámara se acerca a la casa (en móvil, la maqueta sube al centro)
 			.to('.portada', { yPercent: -14, opacity: 0, duration: 0.16 }, 0)
-			.fromTo(
-				'[data-fachada]',
-				{ clipPath: arcoFachada, x: despX, y: despY },
-				{ clipPath: abierto, x: 0, y: 0, duration: 0.3, ease: 'power2.inOut' },
-				0,
-			)
-			.to('[data-fachada]', { scale: 1.16, duration: 0.42, ease: 'power1.in' }, 0.08)
+			.to('[data-maqueta]', { scale: () => (movil() ? 2.1 : 2.4), y: () => (movil() ? -22 * vh() : 0), duration: 0.42, ease: 'power2.in' }, 0)
 			// 2. Entras por un arco pequeño al porche
 			.set('[data-porche]', { visibility: 'visible' }, 0.28)
 			.fromTo('[data-porche]', { clipPath: arcoPorche }, { clipPath: abierto, duration: 0.3, ease: 'power2.inOut' }, 0.28)
