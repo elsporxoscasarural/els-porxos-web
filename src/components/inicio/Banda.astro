@@ -1,0 +1,113 @@
+---
+// Banda con lo que tiene la casa. Se desliza sola y responde al scroll: acelera al bajar rápido
+// y cambia de sentido al subir. Es la única banda en movimiento de la web.
+const servicios = [
+	'Piscina privada',
+	'Barbacoa de obra',
+	'Futbolín',
+	'Ping-pong',
+	'Zona de juegos',
+	'Pista deportiva',
+	'Chimenea',
+	'Jardín con magnolio',
+];
+---
+
+<section class="banda sobre-oscuro" aria-label="Lo que tiene la casa">
+	<ul class="visualmente-oculto">{servicios.map((s) => <li>{s}</li>)}</ul>
+	<div class="pista" data-banda aria-hidden="true">
+		{
+			[0, 1].map(() => (
+				<div class="grupo">
+					{servicios.map((s) => (
+						<span class="item">
+							{s}
+							<i class="arco-mini" />
+						</span>
+					))}
+				</div>
+			))
+		}
+	</div>
+</section>
+
+<style>
+	.banda {
+		overflow: hidden;
+		padding-block: clamp(1.4rem, 3vw, 2.2rem);
+		background: var(--carbon);
+		color: var(--cal);
+	}
+	.pista {
+		display: flex;
+		width: max-content;
+	}
+	.grupo {
+		display: flex;
+		flex: none;
+	}
+	.item {
+		display: inline-flex;
+		align-items: center;
+		gap: clamp(1.4rem, 3vw, 2.6rem);
+		padding-inline-end: clamp(1.4rem, 3vw, 2.6rem);
+		font: italic 500 clamp(1.6rem, 3.2vw, 2.9rem) / 1.1 var(--f-display);
+		white-space: nowrap;
+	}
+	/* Separador: el arco del logo en pequeño */
+	.arco-mini {
+		flex: none;
+		width: 0.42em;
+		height: 0.56em;
+		border: 1.5px solid var(--oro);
+		border-bottom: 0;
+		border-radius: 999px 999px 0 0;
+		transform: translateY(0.06em);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.pista {
+			width: auto;
+			flex-wrap: wrap;
+			justify-content: center;
+			padding-inline: var(--g);
+		}
+		.grupo + .grupo {
+			display: none;
+		}
+		.grupo {
+			flex: 1 1 100%;
+			flex-wrap: wrap;
+			justify-content: center;
+			row-gap: var(--s-3);
+		}
+	}
+</style>
+
+<script>
+	import { gsap } from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+	import { reducido } from '../../scripts/movimiento';
+
+	const pista = document.querySelector<HTMLElement>('[data-banda]');
+	if (pista && !reducido) {
+		gsap.registerPlugin(ScrollTrigger);
+		// Bucle continuo: la pista lleva dos copias seguidas; al llegar a la mitad vuelve al inicio sin que se note.
+		const bucle = gsap.to(pista, { xPercent: -50, duration: 38, ease: 'none', repeat: -1 });
+		// Empieza «a mitad de su vida» para que pueda ir hacia atrás al subir sin topar con el inicio
+		bucle.totalTime(bucle.duration() * 1000);
+		let sentido = 1;
+		ScrollTrigger.create({
+			trigger: pista,
+			start: 'top bottom',
+			end: 'bottom top',
+			onUpdate: (st) => {
+				sentido = st.direction;
+				const impulso = Math.min(Math.abs(st.getVelocity()) / 260, 5);
+				gsap.to(bucle, { timeScale: sentido * (1 + impulso), duration: 0.25, overwrite: true });
+				gsap.to(bucle, { timeScale: sentido, duration: 1.2, delay: 0.25, ease: 'power2.out' });
+			},
+			// Fuera de pantalla no gasta nada
+			onToggle: (st) => (st.isActive ? bucle.play() : bucle.pause()),
+		});
+	}
+</script>

@@ -1,0 +1,208 @@
+/* Estilos base. Se importan una sola vez desde el layout. */
+@import '@fontsource-variable/eb-garamond';
+@import '@fontsource-variable/eb-garamond/wght-italic.css';
+@import '@fontsource-variable/figtree';
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+	/* Al navegar por anclas, lo enfocado no queda tapado por la cabecera fija */
+	scroll-padding-top: calc(var(--alto-cabecera) + 24px);
+}
+
+a,
+button {
+	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
+}
+
+body {
+	margin: 0;
+	background: var(--cal);
+	color: var(--texto);
+	font-family: var(--f-texto);
+	font-size: var(--t-base);
+	line-height: var(--lh-texto);
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+img,
+svg,
+video {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+h1,
+h2,
+h3,
+.display {
+	margin: 0;
+	font-family: var(--f-display);
+	font-weight: 500;
+	line-height: var(--lh-display);
+	letter-spacing: -0.012em;
+	color: var(--tinta);
+	text-wrap: balance;
+}
+h1 {
+	font-size: var(--t-mega);
+}
+h2 {
+	font-size: var(--t-1);
+}
+h3 {
+	font-size: var(--t-3);
+	font-weight: 600;
+}
+/* Énfasis dentro de un titular: la cursiva de la misma Garamond, en el oro del logo */
+h1 em,
+h2 em {
+	font-style: italic;
+	font-weight: 500;
+	color: var(--oro-texto);
+}
+
+p {
+	margin: 0;
+	max-width: var(--medida);
+	text-wrap: pretty;
+}
+
+a {
+	color: inherit;
+}
+
+:focus-visible {
+	outline: 2px solid var(--oro-texto);
+	outline-offset: 3px;
+}
+.sobre-oscuro :focus-visible {
+	outline-color: var(--oro);
+}
+
+::selection {
+	background: var(--oro);
+	color: var(--carbon);
+}
+
+/* Botones: píldora (el arco cerrado), firmes, con respuesta al pulsar */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--s-3);
+	min-height: 48px;
+	padding: 0.85rem 1.6rem;
+	border: 1.5px solid transparent;
+	border-radius: var(--radio-boton);
+	background: var(--tinta);
+	color: var(--cal);
+	font: 600 var(--t-sm) / 1.15 var(--f-texto);
+	letter-spacing: 0.01em;
+	text-decoration: none;
+	white-space: nowrap;
+	cursor: pointer;
+	transition:
+		background-color var(--d-media) var(--ease),
+		border-color var(--d-media) var(--ease),
+		color var(--d-media) var(--ease),
+		transform var(--d-rapida) var(--ease);
+}
+.btn:hover {
+	background: var(--marron);
+}
+.btn:active {
+	transform: scale(0.97);
+}
+.btn svg {
+	flex: none;
+	width: 18px;
+	height: 18px;
+}
+/* Secundario: solo borde, sobre claro */
+.btn--linea {
+	background: transparent;
+	color: var(--tinta);
+	border-color: color-mix(in oklch, var(--tinta) 35%, transparent);
+}
+.btn--linea:hover {
+	background: transparent;
+	border-color: var(--tinta);
+}
+/* Sobre foto u oscuro */
+.btn--claro {
+	background: var(--cal);
+	color: var(--carbon);
+}
+.btn--claro:hover {
+	background: var(--oro);
+}
+.btn .flecha {
+	transition: transform var(--d-media) var(--ease);
+}
+.btn:hover .flecha {
+	transform: translateX(3px);
+}
+
+/* Fotos en arco: esquinas de arriba completamente redondas (semicírculo) */
+.arco {
+	border-radius: 9999px 9999px 0 0;
+	overflow: hidden;
+}
+
+.envoltorio {
+	width: min(100% - 2 * var(--g), var(--ancho-max));
+	margin-inline: auto;
+}
+
+/* Utilidades */
+.visualmente-oculto {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* Apariciones al hacer scroll (src/scripts/movimiento.ts). Sin JS o con movimiento reducido, todo visible. */
+.con-movimiento .aparece {
+	transform: translateY(28px);
+	opacity: 0.001;
+	transition:
+		transform var(--d-lenta) var(--ease),
+		opacity 800ms var(--ease);
+}
+.con-movimiento .aparece.visible {
+	transform: none;
+	opacity: 1;
+}
+html.lenis,
+html.lenis body {
+	height: auto;
+}
+.lenis.lenis-smooth {
+	scroll-behavior: auto !important;
+}

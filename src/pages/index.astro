@@ -1,0 +1,18 @@
+---
+// Portada. Título y descripción idénticos a los de la web actual (no se pierde posicionamiento).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Portada from '../components/inicio/Portada.astro';
+import Banda from '../components/inicio/Banda.astro';
+import LaCasa from '../components/inicio/LaCasa.astro';
+---
+
+<BaseLayout
+	title="Els Porxos — Casa rural en Bellcaire d'Urgell, Lleida · Piscina privada · hasta 19 personas"
+	description="Casa rural para grupos de hasta 19 personas en Bellcaire d'Urgell (La Noguera, Lleida). 6 habitaciones, piscina privada, porches con arcos, barbacoa y zona de juegos. Alquiler completo ideal para familias y amigos. Cerca de Mont-rebei, Camarasa y el Estany d'Ivars. Reserva ahora."
+>
+	<Portada />
+	<Banda />
+	<LaCasa />
+	<!-- Próximas secciones: espacios (galería horizontal), servicios, opiniones, qué hacer cerca, contacto -->
+	<div style="height: 60vh"></div>
+</BaseLayout>

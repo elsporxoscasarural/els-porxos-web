@@ -1,0 +1,77 @@
+---
+// Layout base de todas las páginas: sistema de diseño, cabecera, metadatos y movimiento.
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import { indexable } from '../data/sitio';
+// Fuentes críticas: se precargan para que los titulares se pinten cuanto antes (mismo archivo que usa el CSS).
+import fuenteDisplay from '@fontsource-variable/eb-garamond/files/eb-garamond-latin-wght-normal.woff2?url';
+import fuenteTexto from '@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2?url';
+
+interface Props {
+	title: string;
+	description: string;
+	/** Imagen para compartir en WhatsApp y redes (URL absoluta) */
+	imagen?: string;
+}
+const { title, description, imagen = 'https://elsporxos.es/images/hero.jpg' } = Astro.props;
+const canonica = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+		<!-- Antes del primer pintado: activa la versión con movimiento (evita saltos al cargar) -->
+		<script is:inline>
+			if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('con-movimiento');
+		</script>
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="robots" content={indexable ? 'index, follow, max-image-preview:large' : 'noindex, nofollow'} />
+		<link rel="canonical" href={canonica} />
+		<link rel="icon" href="/favicon.ico" sizes="48x48" />
+		<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<meta name="theme-color" content="#f5f4ef" />
+		<meta name="geo.region" content="ES-L" />
+		<meta name="geo.placename" content="Bellcaire d'Urgell" />
+		<meta name="geo.position" content="41.7611;0.9056" />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Els Porxos Casa Rural" />
+		<meta property="og:locale" content="es_ES" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonica} />
+		<meta property="og:image" content={imagen} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<link rel="preload" href={fuenteDisplay} as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href={fuenteTexto} as="font" type="font/woff2" crossorigin />
+		<slot name="head" />
+	</head>
+	<body>
+		<a class="saltar" href="#contenido">Saltar al contenido</a>
+		<Header />
+		<main id="contenido">
+			<slot />
+		</main>
+		<script>
+			import '../scripts/movimiento';
+		</script>
+	</body>
+</html>
+
+<style>
+	.saltar {
+		position: absolute;
+		top: -100px;
+		left: var(--g);
+		z-index: calc(var(--z-nav) + 10);
+		padding: var(--s-3) var(--s-4);
+		background: var(--tinta);
+		color: var(--cal);
+		font-weight: 600;
+	}
+	.saltar:focus {
+		top: var(--s-3);
+	}
+</style>

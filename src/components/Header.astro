@@ -1,0 +1,259 @@
+---
+// Cabecera fija, sobre fondo de cal. Se esconde al bajar y reaparece al subir (deja ver las fotos).
+// En móvil, el menú se abre a pantalla completa con el botón «Menú».
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/logo-color.png';
+import { casa } from '../data/casa';
+
+const menu = [
+	{ texto: 'La casa', href: '/#la-casa' },
+	{ texto: 'Espacios', href: '/#espacios' },
+	{ texto: 'Qué hacer cerca', href: '/que-hacer-cerca/' },
+	{ texto: 'Opiniones', href: '/#opiniones' },
+	{ texto: 'Contacto', href: '/#contacto' },
+];
+---
+
+<header class="cabecera" data-cabecera>
+	<a class="marca" href="/" aria-label={`${casa.nombre}, inicio`}>
+		<Image src={logo} alt="" width={92} densities={[1, 2]} loading="eager" />
+	</a>
+
+	<nav class="menu" aria-label="Principal">
+		<ul>{menu.map((item) => <li><a href={item.href}>{item.texto}</a></li>)}</ul>
+	</nav>
+
+	<a class="btn cta" href={casa.whatsapp} target="_blank" rel="noopener">Reservar</a>
+
+	<button class="boton-menu" type="button" aria-expanded="false" aria-controls="menu-movil" data-boton-menu>
+		<span>Menú</span>
+		<span class="boton-menu__icono" aria-hidden="true"><i></i><i></i></span>
+	</button>
+</header>
+
+<div class="menu-movil sobre-oscuro" id="menu-movil" data-menu-movil hidden>
+	<nav aria-label="Principal (móvil)">
+		<ul>{menu.map((item) => <li><a href={item.href}>{item.texto}</a></li>)}</ul>
+	</nav>
+	<div class="menu-movil__contacto">
+		<a class="menu-movil__tel" href={`tel:${casa.telefono.enlace}`}>{casa.telefono.visible}</a>
+		<a class="btn btn--claro" href={casa.whatsapp} target="_blank" rel="noopener">Reservar</a>
+	</div>
+</div>
+
+<style>
+	.cabecera {
+		position: fixed;
+		inset: 0 0 auto 0;
+		z-index: var(--z-nav);
+		display: flex;
+		align-items: center;
+		gap: var(--s-6);
+		height: calc(var(--alto-cabecera) + env(safe-area-inset-top, 0px));
+		padding: env(safe-area-inset-top, 0px) var(--g) 0;
+		color: var(--tinta);
+		background: color-mix(in oklch, var(--cal) 92%, transparent);
+		-webkit-backdrop-filter: blur(14px);
+		backdrop-filter: blur(14px);
+		transition:
+			transform 420ms var(--ease),
+			box-shadow var(--d-media) var(--ease);
+	}
+	.cabecera.con-linea {
+		box-shadow: 0 1px 0 var(--linea);
+	}
+	.cabecera.oculta {
+		transform: translateY(-100%);
+	}
+
+	.marca {
+		flex: none;
+		display: block;
+		width: 92px;
+		margin-top: 4px; /* el logo tiene los arcos arriba: así queda centrado a la vista */
+	}
+	.marca :global(img) {
+		width: 100%;
+		height: auto;
+	}
+
+	.menu {
+		margin-inline-start: auto;
+	}
+	.menu ul {
+		display: flex;
+		gap: clamp(1.2rem, 2.4vw, 2.4rem);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.menu a {
+		padding-block: var(--s-2);
+		font-weight: 500;
+		font-size: var(--t-sm);
+		text-decoration: none;
+		white-space: nowrap;
+		background: linear-gradient(var(--oro), var(--oro)) 0 100% / 0 1.5px no-repeat;
+		transition: background-size var(--d-media) var(--ease);
+	}
+	.menu a:hover {
+		background-size: 100% 1.5px;
+	}
+	.cta {
+		flex: none;
+	}
+
+	/* Botón de menú (solo móvil y tableta) */
+	.boton-menu {
+		display: none;
+		align-items: center;
+		gap: var(--s-3);
+		min-height: 44px;
+		margin-inline-start: auto;
+		padding: 0 var(--s-2);
+		border: 0;
+		background: none;
+		color: inherit;
+		font: 600 var(--t-sm) / 1 var(--f-texto);
+		cursor: pointer;
+	}
+	.boton-menu__icono {
+		position: relative;
+		width: 22px;
+		height: 10px;
+	}
+	.boton-menu__icono i {
+		position: absolute;
+		left: 0;
+		width: 100%;
+		height: 1.5px;
+		background: currentColor;
+		transition: transform var(--d-media) var(--ease);
+	}
+	.boton-menu__icono i:first-child {
+		top: 0;
+	}
+	.boton-menu__icono i:last-child {
+		bottom: 0;
+	}
+	.boton-menu[aria-expanded='true'] .boton-menu__icono i:first-child {
+		transform: translateY(4.25px) rotate(45deg);
+	}
+	.boton-menu[aria-expanded='true'] .boton-menu__icono i:last-child {
+		transform: translateY(-4.25px) rotate(-45deg);
+	}
+
+	.menu-movil {
+		position: fixed;
+		inset: 0;
+		z-index: calc(var(--z-nav) - 1);
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: var(--s-7);
+		padding: calc(env(safe-area-inset-top, 0px) + var(--alto-cabecera) + var(--s-6)) var(--g)
+			calc(env(safe-area-inset-bottom, 0px) + var(--s-7));
+		background: var(--carbon);
+		color: var(--cal);
+		overflow-y: auto;
+		overscroll-behavior: contain;
+	}
+	.menu-movil[hidden] {
+		display: none;
+	}
+	.menu-movil ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.menu-movil li a {
+		display: block;
+		padding-block: var(--s-2);
+		font: 500 clamp(2rem, 9vw, 2.8rem) / 1.15 var(--f-display);
+		text-decoration: none;
+	}
+	.menu-movil__contacto {
+		display: grid;
+		gap: var(--s-4);
+		justify-items: start;
+	}
+	.menu-movil__tel {
+		font: 500 1.6rem / 1 var(--f-display);
+		color: var(--oro);
+		text-decoration: none;
+	}
+	/* Con el menú abierto, la cabecera pasa a oscuro para fundirse con él */
+	:global(html.menu-abierto) .cabecera {
+		background: var(--carbon);
+		color: var(--cal);
+		box-shadow: none;
+		transform: none;
+	}
+	:global(html.menu-abierto) .cabecera .cta {
+		display: none;
+	}
+	:global(html.menu-abierto) .marca {
+		filter: brightness(0) invert(0.95);
+	}
+
+	@media (max-width: 960px) {
+		.menu {
+			display: none;
+		}
+		.boton-menu {
+			display: inline-flex;
+		}
+		.cta {
+			order: 3;
+		}
+		.cabecera {
+			gap: var(--s-4);
+		}
+	}
+	@media (max-width: 420px) {
+		.cta {
+			padding-inline: 1.1rem;
+		}
+	}
+</style>
+
+<script>
+	import { lenis } from '../scripts/movimiento';
+
+	const cabecera = document.querySelector<HTMLElement>('[data-cabecera]');
+	const boton = document.querySelector<HTMLButtonElement>('[data-boton-menu]');
+	const menuMovil = document.querySelector<HTMLElement>('[data-menu-movil]');
+
+	function cerrarMenu() {
+		if (!boton || !menuMovil) return;
+		boton.setAttribute('aria-expanded', 'false');
+		menuMovil.hidden = true;
+		document.documentElement.classList.remove('menu-abierto');
+		lenis?.start();
+	}
+	boton?.addEventListener('click', () => {
+		if (!menuMovil) return;
+		const abrir = boton.getAttribute('aria-expanded') !== 'true';
+		if (!abrir) return cerrarMenu();
+		boton.setAttribute('aria-expanded', 'true');
+		menuMovil.hidden = false;
+		document.documentElement.classList.add('menu-abierto');
+		lenis?.stop();
+	});
+	menuMovil?.querySelectorAll('a').forEach((a) => a.addEventListener('click', cerrarMenu));
+	document.addEventListener('keydown', (e) => e.key === 'Escape' && cerrarMenu());
+
+	// Esconder al bajar y mostrar al subir. Se usa el scroll de Lenis (o el nativo con movimiento reducido).
+	let ultimo = 0;
+	function alDesplazar(y: number) {
+		if (!cabecera) return;
+		cabecera.classList.toggle('con-linea', y > 8);
+		if (!document.documentElement.classList.contains('menu-abierto')) {
+			cabecera.classList.toggle('oculta', y > 160 && y > ultimo + 2);
+			if (y < ultimo - 2) cabecera.classList.remove('oculta');
+		}
+		ultimo = y;
+	}
+	if (lenis) lenis.on('scroll', (l: { scroll: number }) => alDesplazar(l.scroll));
+	else window.addEventListener('scroll', () => alDesplazar(window.scrollY), { passive: true });
+</script>
