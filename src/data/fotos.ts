@@ -51,6 +51,7 @@ const datos: { archivo: string; alt: string; grupo: Grupo }[] = [
 	{ archivo: 'habitacion-a-triple', alt: 'Habitación triple con litera', grupo: 'habitaciones' },
 	{ archivo: 'habitacion-b-literas', alt: 'Habitación séxtuple con literas de madera', grupo: 'habitaciones' },
 	// Jardín y piscina
+	{ archivo: 'maqueta-galeria', alt: 'Vista aérea de la finca: la casa, el jardín, la piscina y la pista deportiva', grupo: 'exterior' },
 	{ archivo: 'casa-dron', alt: "Vista aérea de la casa con el jardín y la piscina, entre los campos de Bellcaire d'Urgell", grupo: 'exterior' },
 	{ archivo: 'piscina-seto', alt: 'Piscina privada junto al seto y la balaustrada', grupo: 'exterior' },
 	{ archivo: 'fachada-jardin-entrada', alt: 'La casa con sus porches de arcos, el magnolio y la piscina', grupo: 'exterior' },
