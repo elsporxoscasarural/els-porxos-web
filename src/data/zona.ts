@@ -111,8 +111,8 @@ export const lugares: Lugar[] = [
 		distancia: 'Aprox. 1 h en coche',
 		texto: 'El desfiladero más impresionante de Cataluña: un sendero excavado en la roca sobre las aguas turquesas de la Noguera Ribagorçana. Imprescindible.',
 		foto: img('mont-rebei'),
-		alt: 'Excursionistas en el sendero excavado en la roca del Congost de Mont-rebei',
-		credito: { autor: 'Alberto-g-rovi', licencia: 'CC BY 3.0', urlLicencia: 'https://creativecommons.org/licenses/by/3.0', fuente: 'https://commons.wikimedia.org/wiki/File:Congost_de_Mont-rebei_(2).jpg' },
+		alt: 'El Congost de Mont-rebei visto desde arriba, con el río turquesa entre las dos paredes del cañón',
+		credito: { autor: 'Sílvia Martín', licencia: 'CC BY 2.0', urlLicencia: 'https://creativecommons.org/licenses/by/2.0', fuente: 'https://commons.wikimedia.org/wiki/File:Congost_de_Mont-rebei_-_8677113211.jpg' },
 	},
 	{
 		id: 'rutas-bici',
