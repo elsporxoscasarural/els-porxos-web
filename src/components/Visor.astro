@@ -1,0 +1,234 @@
+---
+// Visor de fotos común a toda la página. Cualquier botón con data-ampliar y data-id lo abre.
+// - Desde la galería se navega por las fotos visibles con el filtro activo.
+// - Desde cualquier otra sección, por todo el catálogo.
+// Flechas, teclado (← → Esc) y deslizar con el dedo. <dialog> nativo: atrapa el foco y se cierra con Esc.
+import { getImage } from 'astro:assets';
+import Icono from './Icono.astro';
+import { fotos } from '../data/fotos';
+
+const datos = await Promise.all(
+	fotos.map(async (f) => {
+		const g = await getImage({ src: f.src, width: Math.min(f.src.width, 1920), format: 'webp' });
+		return { id: f.id, url: g.src, alt: f.alt, w: g.attributes.width, h: g.attributes.height };
+	}),
+);
+---
+
+<dialog class="visor" aria-label="Visor de fotos" data-visor>
+	<figure>
+		<img src="" alt="" data-visor-img />
+		<figcaption>
+			<span class="contador" data-visor-contador></span>
+			<span data-visor-texto></span>
+		</figcaption>
+	</figure>
+	<button class="boton boton--cerrar" type="button" aria-label="Cerrar" data-visor-cerrar><Icono nombre="x" /></button>
+	<button class="boton boton--anterior" type="button" aria-label="Foto anterior" data-visor-anterior><Icono nombre="caret-left" /></button>
+	<button class="boton boton--siguiente" type="button" aria-label="Foto siguiente" data-visor-siguiente><Icono nombre="caret-right" /></button>
+</dialog>
+<script type="application/json" id="visor-datos" set:html={JSON.stringify(datos)} />
+
+<style>
+	.visor {
+		width: 100vw;
+		height: 100dvh;
+		max-width: none;
+		max-height: none;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		background: color-mix(in oklch, var(--carbon) 96%, transparent);
+		color: var(--cal);
+		overscroll-behavior: contain;
+	}
+	.visor::backdrop {
+		background: transparent;
+	}
+	.visor[open] {
+		display: grid;
+		place-items: center;
+		animation: visor-entra 320ms var(--ease);
+	}
+	@keyframes visor-entra {
+		from {
+			opacity: 0;
+		}
+	}
+	figure {
+		display: grid;
+		justify-items: center;
+		gap: var(--s-4);
+		margin: 0;
+		padding: var(--s-6) clamp(1rem, 8vw, 7rem) var(--s-5);
+		touch-action: pan-y;
+	}
+	img {
+		max-width: min(100%, 1400px);
+		max-height: calc(100dvh - 9rem);
+		width: auto;
+		height: auto;
+		object-fit: contain;
+		transition:
+			opacity 260ms var(--ease),
+			transform 420ms var(--ease);
+	}
+	img.cambiando {
+		opacity: 0;
+		transform: scale(0.985);
+	}
+	figcaption {
+		display: flex;
+		gap: var(--s-4);
+		align-items: baseline;
+		max-width: 60ch;
+		font-size: var(--t-sm);
+		color: var(--cal-suave);
+		text-align: center;
+	}
+	.contador {
+		flex: none;
+		font-weight: 600;
+		color: var(--oro);
+		font-variant-numeric: tabular-nums;
+	}
+	.boton {
+		position: absolute;
+		display: grid;
+		place-items: center;
+		width: 52px;
+		height: 52px;
+		border: 1px solid color-mix(in oklch, var(--cal) 22%, transparent);
+		border-radius: 50%;
+		background: color-mix(in oklch, var(--carbon) 60%, transparent);
+		color: var(--cal);
+		cursor: pointer;
+		transition:
+			background-color var(--d-media) var(--ease),
+			transform var(--d-rapida) var(--ease);
+	}
+	.boton:hover {
+		background: color-mix(in oklch, var(--cal) 14%, transparent);
+	}
+	.boton:active {
+		transform: scale(0.94);
+	}
+	.boton :global(.icono) {
+		width: 24px;
+		height: 24px;
+	}
+	.boton--cerrar {
+		top: calc(env(safe-area-inset-top, 0px) + var(--s-4));
+		right: var(--s-4);
+	}
+	.boton--anterior,
+	.boton--siguiente {
+		top: 50%;
+		translate: 0 -50%;
+	}
+	.boton--anterior {
+		left: var(--s-4);
+	}
+	.boton--siguiente {
+		right: var(--s-4);
+	}
+	.boton--anterior:active,
+	.boton--siguiente:active {
+		transform: scale(0.94);
+	}
+	@media (max-width: 640px) {
+		figure {
+			padding-inline: 0;
+		}
+		.boton--anterior,
+		.boton--siguiente {
+			top: auto;
+			bottom: calc(env(safe-area-inset-bottom, 0px) + var(--s-4));
+			translate: none;
+		}
+		figcaption {
+			padding-inline: var(--g);
+			padding-bottom: 4.5rem;
+			flex-direction: column;
+			align-items: center;
+			gap: var(--s-1);
+		}
+	}
+</style>
+
+<script>
+	import { lenis } from '../scripts/movimiento';
+
+	type Dato = { id: string; url: string; alt: string; w: number; h: number };
+	const visor = document.querySelector<HTMLDialogElement>('[data-visor]');
+	const img = document.querySelector<HTMLImageElement>('[data-visor-img]');
+	const contador = document.querySelector<HTMLElement>('[data-visor-contador]');
+	const texto = document.querySelector<HTMLElement>('[data-visor-texto]');
+	const datos: Dato[] = JSON.parse(document.getElementById('visor-datos')?.textContent || '[]');
+	const porId = new Map(datos.map((d) => [d.id, d]));
+
+	let lista: string[] = [];
+	let actual = 0;
+
+	function mostrar(i: number, animar = true) {
+		if (!img || !contador || !texto) return;
+		actual = (i + lista.length) % lista.length;
+		const d = porId.get(lista[actual]);
+		if (!d) return;
+		const poner = () => {
+			img.src = d.url;
+			img.alt = d.alt;
+			img.width = d.w;
+			img.height = d.h;
+			contador.textContent = `${actual + 1} / ${lista.length}`;
+			texto.textContent = d.alt;
+			img.classList.remove('cambiando');
+		};
+		if (animar) {
+			img.classList.add('cambiando');
+			setTimeout(poner, 180);
+		} else poner();
+		// Precarga las vecinas para que el cambio sea instantáneo
+		[actual + 1, actual - 1].forEach((j) => {
+			const v = porId.get(lista[(j + lista.length) % lista.length]);
+			if (v) new Image().src = v.url;
+		});
+	}
+
+	document.addEventListener('click', (e) => {
+		const boton = (e.target as HTMLElement).closest<HTMLElement>('[data-ampliar]');
+		if (!boton || !visor) return;
+		const id = boton.dataset.id!;
+		// Desde la galería: solo las fotos visibles con el filtro activo. Desde otra sección: todo el catálogo.
+		lista =
+			boton.dataset.ampliar === 'galeria'
+				? [...document.querySelectorAll<HTMLElement>('[data-galeria] li:not([hidden]) [data-ampliar]')].map((b) => b.dataset.id!)
+				: datos.map((d) => d.id);
+		mostrar(lista.indexOf(id), false);
+		visor.showModal();
+		lenis?.stop();
+	});
+
+	visor?.addEventListener('close', () => lenis?.start());
+	document.querySelector('[data-visor-cerrar]')?.addEventListener('click', () => visor?.close());
+	document.querySelector('[data-visor-anterior]')?.addEventListener('click', () => mostrar(actual - 1));
+	document.querySelector('[data-visor-siguiente]')?.addEventListener('click', () => mostrar(actual + 1));
+	visor?.addEventListener('keydown', (e) => {
+		if (e.key === 'ArrowRight') mostrar(actual + 1);
+		if (e.key === 'ArrowLeft') mostrar(actual - 1);
+	});
+	// Clic fuera de la foto (en el fondo) cierra
+	visor?.addEventListener('click', (e) => {
+		if (e.target === visor) visor.close();
+	});
+
+	// Deslizar con el dedo
+	let x0: number | null = null;
+	visor?.addEventListener('pointerdown', (e) => (x0 = e.clientX));
+	visor?.addEventListener('pointerup', (e) => {
+		if (x0 === null) return;
+		const dx = e.clientX - x0;
+		x0 = null;
+		if (Math.abs(dx) > 50) mostrar(actual + (dx < 0 ? 1 : -1));
+	});
+</script>

@@ -1,0 +1,172 @@
+---
+// Galería completa: todas las fotos del catálogo (src/data/fotos.ts), con filtros por zona de la casa.
+// Las fotos se abren en el visor común (Visor.astro).
+import { Picture } from 'astro:assets';
+import { fotos, grupos } from '../../data/fotos';
+---
+
+<section class="galeria" id="fotos" aria-labelledby="galeria-titulo" data-galeria>
+	<div class="envoltorio">
+		<div class="cabeza">
+			<h2 id="galeria-titulo" class="aparece">Recorre la <em>casa</em></h2>
+			<div class="filtros aparece" role="group" aria-label="Filtrar fotos">
+				<button type="button" aria-pressed="true" data-filtro="todas">Todas <span>{fotos.length}</span></button>
+				{
+					grupos.map((g) => (
+						<button type="button" aria-pressed="false" data-filtro={g.id}>
+							{g.nombre} <span>{fotos.filter((f) => f.grupo === g.id).length}</span>
+						</button>
+					))
+				}
+			</div>
+		</div>
+
+		<ul class="rejilla">
+			{
+				fotos.map((f) => (
+					<li data-grupo={f.grupo}>
+						<button type="button" data-ampliar="galeria" data-id={f.id} aria-label={`Ampliar: ${f.alt}`}>
+							<Picture
+								formats={['avif', 'webp']}
+								src={f.src}
+								alt={f.alt}
+								widths={[360, 720]}
+								sizes="(max-width: 560px) 50vw, (max-width: 960px) 33vw, 25vw"
+							/>
+						</button>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.galeria {
+		padding-block: var(--seccion);
+	}
+	.cabeza {
+		display: grid;
+		gap: var(--s-5);
+		margin-bottom: clamp(2rem, 4vw, 3.5rem);
+	}
+	.filtros {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-2);
+	}
+	.filtros button {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--s-2);
+		min-height: 44px;
+		padding: 0 1.1rem;
+		border: 1.5px solid color-mix(in oklch, var(--tinta) 22%, transparent);
+		border-radius: var(--radio-boton);
+		background: transparent;
+		color: var(--tinta);
+		font: 500 var(--t-sm) / 1 var(--f-texto);
+		cursor: pointer;
+		transition:
+			background-color var(--d-media) var(--ease),
+			color var(--d-media) var(--ease),
+			border-color var(--d-media) var(--ease),
+			transform var(--d-rapida) var(--ease);
+	}
+	.filtros button span {
+		font-size: var(--t-xs);
+		color: var(--sec);
+		transition: color var(--d-media) var(--ease);
+	}
+	.filtros button:hover {
+		border-color: var(--tinta);
+	}
+	.filtros button:active {
+		transform: scale(0.97);
+	}
+	.filtros button[aria-pressed='true'] {
+		background: var(--tinta);
+		border-color: var(--tinta);
+		color: var(--cal);
+	}
+	.filtros button[aria-pressed='true'] span {
+		color: var(--oro);
+	}
+
+	/* Mosaico en columnas: cada foto con su proporción natural */
+	.rejilla {
+		columns: 4;
+		column-gap: clamp(0.6rem, 1.2vw, 1rem);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.rejilla li {
+		break-inside: avoid;
+		margin-bottom: clamp(0.6rem, 1.2vw, 1rem);
+	}
+	.rejilla li[hidden] {
+		display: none;
+	}
+	.rejilla button {
+		display: block;
+		width: 100%;
+		padding: 0;
+		border: 0;
+		background: var(--linea);
+		overflow: hidden;
+		cursor: zoom-in;
+	}
+	.rejilla :global(img) {
+		width: 100%;
+		height: auto;
+		transition: transform 900ms var(--ease);
+	}
+	.rejilla button:hover :global(img) {
+		transform: scale(1.04);
+	}
+	@media (max-width: 960px) {
+		.rejilla {
+			columns: 3;
+		}
+	}
+	@media (max-width: 560px) {
+		.rejilla {
+			columns: 2;
+		}
+	}
+</style>
+
+<script>
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+	import { reducido, lenis } from '../../scripts/movimiento';
+
+	const botones = document.querySelectorAll<HTMLButtonElement>('[data-filtro]');
+	const items = document.querySelectorAll<HTMLLIElement>('[data-galeria] [data-grupo]');
+
+	botones.forEach((b) =>
+		b.addEventListener('click', () => {
+			const filtro = b.dataset.filtro;
+			botones.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+			let i = 0;
+			items.forEach((li) => {
+				const mostrar = filtro === 'todas' || li.dataset.grupo === filtro;
+				li.hidden = !mostrar;
+				// Las fotos que quedan entran suaves, en cascada
+				if (mostrar && !reducido && i < 16) {
+					li.animate(
+						[
+							{ opacity: 0, transform: 'translateY(16px)' },
+							{ opacity: 1, transform: 'none' },
+						],
+						{ duration: 520, delay: i * 35, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'backwards' },
+					);
+					i++;
+				}
+			});
+			// La página cambia de alto: se recalculan el scroll suave y las animaciones de más abajo
+			lenis?.resize();
+			ScrollTrigger.refresh();
+		}),
+	);
+</script>

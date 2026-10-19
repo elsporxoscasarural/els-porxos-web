@@ -1,0 +1,172 @@
+---
+// El exterior: mosaico con el texto en una celda oscura y seis fotos de distinto tamaño.
+import { Picture } from 'astro:assets';
+import Icono from '../Icono.astro';
+import { foto } from '../../data/fotos';
+
+const servicios = [
+	{ icono: 'swimming-pool', texto: 'Piscina privada' },
+	{ icono: 'campfire', texto: 'Barbacoa equipada' },
+	{ icono: 'soccer-ball', texto: 'Pista de fútbol privada' },
+	{ icono: 'basketball', texto: 'Zona de juegos infantil' },
+	{ icono: 'ping-pong', texto: 'Futbolín y ping-pong' },
+	{ icono: 'fire', texto: 'Chimenea interior' },
+	{ icono: 'tree', texto: 'Jardín con árboles y flores' },
+];
+const celdas = [
+	{ zona: 'piscina', foto: foto('piscina-seto'), sizes: '(max-width: 820px) 100vw, 25vw', anchos: [480, 800, 1200] },
+	{ zona: 'campos', foto: foto('jardin-piscina-campos'), sizes: '(max-width: 820px) 50vw, 25vw', anchos: [400, 800] },
+	{ zona: 'juegos', foto: foto('zona-juegos'), sizes: '(max-width: 820px) 50vw, 25vw', anchos: [400, 800] },
+	{ zona: 'barbacoa', foto: foto('barbacoa-mesa-porche'), sizes: '(max-width: 820px) 100vw, 25vw', anchos: [400, 800] },
+	{ zona: 'pista', foto: foto('pista-deportiva'), sizes: '(max-width: 820px) 100vw, 50vw', anchos: [480, 800] },
+	{ zona: 'camino', foto: foto('jardin-camino-entrada'), sizes: '(max-width: 820px) 50vw, 25vw', anchos: [400, 800] },
+];
+---
+
+<section class="exterior" id="exterior" aria-labelledby="exterior-titulo">
+	<div class="envoltorio mosaico">
+		<div class="celda celda--texto sobre-oscuro">
+			<h2 id="exterior-titulo">Piscina privada, jardín y <em>zona de juegos</em></h2>
+			<p>
+				El exterior de esta casa rural con piscina en Lleida es un paraíso para las familias. El jardín está rodeado de
+				árboles, plantas y flores, y cuenta con una piscina privada de uso exclusivo. Los más pequeños tienen su propia
+				zona de juegos, y para los futboleros hay una pista privada con dos porterías, un futbolín clásico y una mesa de
+				ping-pong bajo los porches. Todo el espacio exterior es solo para vosotros durante el alquiler.
+			</p>
+			<ul class="servicios">
+				{servicios.map((s) => <li><Icono nombre={s.icono} />{s.texto}</li>)}
+			</ul>
+		</div>
+		{
+			celdas.map((c) => (
+				<button class:list={['celda', 'celda--foto', `celda--${c.zona}`, 'aparece']} type="button" data-ampliar="casa" data-id={c.foto.id} aria-label={`Ampliar: ${c.foto.alt}`}>
+					<Picture formats={['avif', 'webp']} src={c.foto.src} alt={c.foto.alt} widths={c.anchos} sizes={c.sizes} />
+				</button>
+			))
+		}
+	</div>
+</section>
+
+<style>
+	.exterior {
+		padding-block: var(--seccion);
+		background: var(--cal-2);
+	}
+	.mosaico {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		/* Filas de alto fijo, pero crecen si el texto lo necesita (texto ampliado, pantallas medianas) */
+		grid-auto-rows: minmax(clamp(11rem, 17vw, 16rem), auto);
+		grid-template-areas:
+			'texto texto piscina campos'
+			'texto texto piscina juegos'
+			'barbacoa pista pista camino';
+		gap: clamp(0.6rem, 1.2vw, 1rem);
+	}
+	.celda {
+		position: relative;
+		overflow: hidden;
+	}
+	.celda--texto {
+		grid-area: texto;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: var(--s-5);
+		padding: clamp(1.5rem, 3.2vw, 3rem);
+		background: var(--carbon);
+		color: var(--cal-suave);
+	}
+	.celda--texto h2 {
+		color: var(--cal);
+		font-size: var(--t-2);
+		max-width: 14ch;
+		padding-bottom: 0.08em;
+	}
+	.celda--texto h2 em {
+		color: var(--oro);
+	}
+	.celda--texto p {
+		font-size: var(--t-sm);
+		max-width: 56ch;
+	}
+	.servicios {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--s-2) var(--s-5);
+		margin: 0;
+		padding: var(--s-4) 0 0;
+		border-top: 1px solid color-mix(in oklch, var(--cal) 16%, transparent);
+		list-style: none;
+		font-size: var(--t-sm);
+		color: var(--cal);
+	}
+	.servicios li {
+		display: flex;
+		align-items: center;
+		gap: var(--s-3);
+	}
+	.servicios :global(.icono) {
+		flex: none;
+		width: 22px;
+		height: 22px;
+		color: var(--oro);
+	}
+
+	.celda--foto {
+		display: block;
+		padding: 0;
+		border: 0;
+		background: var(--linea);
+		cursor: zoom-in;
+	}
+	.celda--foto :global(picture),
+	.celda--foto :global(img) {
+		width: 100%;
+		height: 100%;
+	}
+	.celda--foto :global(img) {
+		object-fit: cover;
+		transition: transform 900ms var(--ease);
+	}
+	.celda--foto:hover :global(img) {
+		transform: scale(1.05);
+	}
+	.celda--piscina {
+		grid-area: piscina;
+		border-radius: 9999px 9999px 0 0;
+	}
+	.celda--campos {
+		grid-area: campos;
+	}
+	.celda--juegos {
+		grid-area: juegos;
+	}
+	.celda--barbacoa {
+		grid-area: barbacoa;
+	}
+	.celda--pista {
+		grid-area: pista;
+	}
+	.celda--camino {
+		grid-area: camino;
+	}
+
+	@media (max-width: 960px) {
+		.mosaico {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			grid-template-rows: auto repeat(4, clamp(10rem, 40vw, 16rem));
+			grid-template-areas:
+				'texto texto'
+				'piscina campos'
+				'piscina juegos'
+				'pista pista'
+				'barbacoa camino';
+		}
+	}
+	@media (max-width: 560px) {
+		.servicios {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

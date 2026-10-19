@@ -4,6 +4,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Portada from '../components/inicio/Portada.astro';
 import Banda from '../components/inicio/Banda.astro';
 import LaCasa from '../components/inicio/LaCasa.astro';
+import PorDentro from '../components/inicio/PorDentro.astro';
+import Habitaciones from '../components/inicio/Habitaciones.astro';
+import Exterior from '../components/inicio/Exterior.astro';
+import Galeria from '../components/inicio/Galeria.astro';
+import Visor from '../components/Visor.astro';
 ---
 
 <BaseLayout
@@ -13,6 +18,10 @@ import LaCasa from '../components/inicio/LaCasa.astro';
 	<Portada />
 	<Banda />
 	<LaCasa />
-	<!-- Próximas secciones: espacios (galería horizontal), servicios, opiniones, qué hacer cerca, contacto -->
-	<div style="height: 60vh"></div>
+	<PorDentro />
+	<Habitaciones />
+	<Exterior />
+	<Galeria />
+	<!-- Próximas secciones: tarifas, opiniones, ubicación, qué hacer cerca, contacto y pie -->
+	<Visor />
 </BaseLayout>
