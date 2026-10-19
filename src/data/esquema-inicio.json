@@ -1,0 +1,248 @@
+[
+ {
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  "name": "Els Porxos Casa Rural",
+  "alternateName": "Els Porxos Bellcaire d'Urgell",
+  "description": "Casa rural de 2 plantas con piscina privada, porches con arcos, jardín, barbacoa, zona de juegos infantil y pista de fútbol en Bellcaire d'Urgell, Lleida. Capacidad para hasta 19 personas en 6 habitaciones con 3 baños. Alquiler completo para grupos y familias.",
+  "url": "https://elsporxos.es/",
+  "telephone": "+34620104539",
+  "identifier": "HUTL-000401",
+  "aggregateRating": {
+   "@type": "AggregateRating",
+   "ratingValue": "5.0",
+   "bestRating": "5",
+   "reviewCount": "6"
+  },
+  "email": "elsporxoscasarural@gmail.com",
+  "image": [
+   "https://elsporxos.es/images/hero.jpg",
+   "https://elsporxos.es/images/01_exterior__800x406_.jpg",
+   "https://elsporxos.es/images/08.jpg",
+   "https://elsporxos.es/images/190_habitacio__D_suite__800x600_.jpg"
+  ],
+  "address": {
+   "@type": "PostalAddress",
+   "streetAddress": "Bellcaire d'Urgell",
+   "addressLocality": "Bellcaire d'Urgell",
+   "addressRegion": "Lleida",
+   "postalCode": "25337",
+   "addressCountry": "ES"
+  },
+  "geo": {
+   "@type": "GeoCoordinates",
+   "latitude": 41.7611,
+   "longitude": 0.9056
+  },
+  "hasMap": "https://www.google.com/maps/search/?api=1&query=Bellcaire+d%27Urgell+Lleida",
+  "numberOfRooms": 6,
+  "petsAllowed": false,
+  "sameAs": [
+   "https://www.airbnb.es/rooms/877940795557551538",
+   "https://www.booking.com/Share-Bkol2V"
+  ],
+  "amenityFeature": [
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "Piscina privada",
+    "value": true
+   },
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "Barbacoa equipada",
+    "value": true
+   },
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "Jardín",
+    "value": true
+   },
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "Zona de juegos infantil",
+    "value": true
+   },
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "Futbolín y mesa de ping-pong",
+    "value": true
+   },
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "Pista de fútbol privada",
+    "value": true
+   },
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "Chimenea",
+    "value": true
+   },
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "Cocina equipada",
+    "value": true
+   },
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "Aparcamiento gratuito",
+    "value": true
+   },
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "WiFi",
+    "value": true
+   }
+  ],
+  "review": [
+   {
+    "@type": "Review",
+    "reviewRating": {
+     "@type": "Rating",
+     "ratingValue": "5",
+     "bestRating": "5"
+    },
+    "author": {
+     "@type": "Person",
+     "name": "Sergi"
+    },
+    "datePublished": "2026-06",
+    "reviewBody": "La casa estuvo genial, todo en perfectas condiciones para las 13 personas que fuimos. Incluso mejor que en fotos."
+   },
+   {
+    "@type": "Review",
+    "reviewRating": {
+     "@type": "Rating",
+     "ratingValue": "5",
+     "bestRating": "5"
+    },
+    "author": {
+     "@type": "Person",
+     "name": "Dary"
+    },
+    "datePublished": "2026-05",
+    "reviewBody": "Un fin de semana muy divertido en un ambiente familiar. La protección de la piscina para los niños nos gustó mucho."
+   },
+   {
+    "@type": "Review",
+    "reviewRating": {
+     "@type": "Rating",
+     "ratingValue": "5",
+     "bestRating": "5"
+    },
+    "author": {
+     "@type": "Person",
+     "name": "Marty"
+    },
+    "datePublished": "2025-08",
+    "reviewBody": "Pasamos dos semanas de vacaciones en familia estupendas. Éramos 16 y la casa se adaptó perfectamente a toda nuestra tribu."
+   }
+  ]
+ },
+ {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Qué hacer cerca de Els Porxos Casa Rural",
+  "itemListElement": [
+   {
+    "@type": "ListItem",
+    "position": 1,
+    "item": {
+     "@type": "TouristAttraction",
+     "name": "Congost de Mont-rebei",
+     "description": "Desfiladero con sendero excavado en la roca sobre la Noguera Ribagorçana."
+    }
+   },
+   {
+    "@type": "ListItem",
+    "position": 2,
+    "item": {
+     "@type": "TouristAttraction",
+     "name": "Congost de Mu",
+     "description": "Ruta de pasarelas colgantes sobre el río Segre entre Camarasa y Alòs de Balaguer."
+    }
+   },
+   {
+    "@type": "ListItem",
+    "position": 3,
+    "item": {
+     "@type": "TouristAttraction",
+     "name": "Camarasa",
+     "description": "Embalse para kayak, pesca y baño rodeado de rutas de senderismo."
+    }
+   },
+   {
+    "@type": "ListItem",
+    "position": 4,
+    "item": {
+     "@type": "TouristAttraction",
+     "name": "Estany d'Ivars i Vila-sana",
+     "description": "El lago interior más grande de Cataluña, humedal recuperado ideal para observar aves."
+    }
+   },
+   {
+    "@type": "ListItem",
+    "position": 5,
+    "item": {
+     "@type": "TouristAttraction",
+     "name": "Penelles",
+     "description": "Pueblo de los murales de arte urbano del festival GarGar."
+    }
+   },
+   {
+    "@type": "ListItem",
+    "position": 6,
+    "item": {
+     "@type": "TouristAttraction",
+     "name": "Castell del Remei",
+     "description": "Finca histórica con bodega centenaria de la D.O. Costers del Segre, santuario, lago y restaurante."
+    }
+   }
+  ]
+ },
+ {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+   {
+    "@type": "Question",
+    "name": "¿Cuántas personas caben en la casa rural Els Porxos?",
+    "acceptedAnswer": {
+     "@type": "Answer",
+     "text": "La casa rural tiene capacidad para hasta 19 personas en 6 habitaciones (2 dobles, 2 de matrimonio, 1 triple y 1 séxtuple con literas) y 3 cuartos de baño."
+    }
+   },
+   {
+    "@type": "Question",
+    "name": "¿Tiene piscina privada la casa rural?",
+    "acceptedAnswer": {
+     "@type": "Answer",
+     "text": "Sí, Els Porxos dispone de piscina privada de uso exclusivo para los huéspedes, rodeada de jardín y con acceso directo desde los porches."
+    }
+   },
+   {
+    "@type": "Question",
+    "name": "¿Dónde está situada la casa rural Els Porxos?",
+    "acceptedAnswer": {
+     "@type": "Answer",
+     "text": "En Bellcaire d'Urgell, comarca de La Noguera, provincia de Lleida (Cataluña). A 30 minutos de Balaguer y cerca de Mont-rebei, Camarasa y el Estany d'Ivars."
+    }
+   },
+   {
+    "@type": "Question",
+    "name": "¿Se puede alquilar la casa rural para grupos grandes?",
+    "acceptedAnswer": {
+     "@type": "Answer",
+     "text": "Sí, el alquiler es siempre de la casa completa, ideal para grupos de amigos, familias o celebraciones. Tiene barbacoa, zona de juegos, pista de fútbol y porches con arcos."
+    }
+   },
+   {
+    "@type": "Question",
+    "name": "¿Qué actividades se pueden hacer cerca de la casa rural?",
+    "acceptedAnswer": {
+     "@type": "Answer",
+     "text": "Desde Els Porxos se accede fácilmente al Congost de Mont-rebei, las pasarelas del Congost de Mu, el embalse de Camarasa, el Estany d'Ivars i Vila-sana y los murales de Penelles. También hay rutas en bici y senderismo por la llanura de Urgell."
+    }
+   }
+  ]
+ }
+]

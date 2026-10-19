@@ -1,0 +1,121 @@
+[
+ {
+  "@context": "https://schema.org",
+  "@type": "TouristTrip",
+  "name": "Excursiones cerca de Bellcaire d'Urgell y la casa rural Els Porxos",
+  "description": "Las mejores actividades y excursiones desde Bellcaire d'Urgell (Lleida): congostos, embalses, pueblos con arte urbano y bodegas centenarias.",
+  "touristType": [
+   "Familias",
+   "Grupos de amigos",
+   "Senderistas",
+   "Amantes de la naturaleza"
+  ],
+  "itinerary": {
+   "@type": "ItemList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "item": {
+      "@type": "TouristAttraction",
+      "name": "Congost de Mont-rebei",
+      "description": "Desfiladero con sendero excavado en la roca sobre la Noguera Ribagorçana. A 1 hora de Bellcaire d'Urgell.",
+      "address": {
+       "@type": "PostalAddress",
+       "addressRegion": "Lleida",
+       "addressCountry": "ES"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "item": {
+      "@type": "TouristAttraction",
+      "name": "Congost de Mu",
+      "description": "Ruta de pasarelas colgantes sobre el río Segre entre Camarasa y Alòs de Balaguer. A 30 minutos.",
+      "address": {
+       "@type": "PostalAddress",
+       "addressRegion": "Lleida",
+       "addressCountry": "ES"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "item": {
+      "@type": "TouristAttraction",
+      "name": "Embalse de Camarasa",
+      "description": "Kayak, pesca y baño en un embalse rodeado de montañas. A 25 minutos.",
+      "address": {
+       "@type": "PostalAddress",
+       "addressRegion": "Lleida",
+       "addressCountry": "ES"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "item": {
+      "@type": "TouristAttraction",
+      "name": "Estany d'Ivars i Vila-sana",
+      "description": "El lago interior más grande de Cataluña. Observación de aves y camino circular. A 15 minutos.",
+      "address": {
+       "@type": "PostalAddress",
+       "addressRegion": "Lleida",
+       "addressCountry": "ES"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 5,
+     "item": {
+      "@type": "TouristAttraction",
+      "name": "Penelles",
+      "description": "Pueblo-museo de arte urbano con murales del festival GarGar. A 5 minutos.",
+      "address": {
+       "@type": "PostalAddress",
+       "addressRegion": "Lleida",
+       "addressCountry": "ES"
+      }
+     }
+    },
+    {
+     "@type": "ListItem",
+     "position": 6,
+     "item": {
+      "@type": "TouristAttraction",
+      "name": "Castell del Remei",
+      "description": "Bodega centenaria de la D.O. Costers del Segre con visitas, catas, santuario y restaurante. A 10 minutos.",
+      "address": {
+       "@type": "PostalAddress",
+       "addressRegion": "Lleida",
+       "addressCountry": "ES"
+      }
+     }
+    }
+   ]
+  }
+ },
+ {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+   {
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Inicio",
+    "item": "https://elsporxos.es/"
+   },
+   {
+    "@type": "ListItem",
+    "position": 2,
+    "name": "Qué hacer cerca",
+    "item": "https://elsporxos.es/que-hacer-cerca/"
+   }
+  ]
+ }
+]

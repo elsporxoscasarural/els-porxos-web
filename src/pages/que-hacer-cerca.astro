@@ -1,0 +1,342 @@
+---
+// Página «Qué hacer cerca» (SEO). Mismo título, descripción, textos, anclas (#mont-rebei…) y datos
+// estructurados que la versión anterior. Fotos de Wikimedia Commons con su crédito.
+import { Picture } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CabeceraPagina from '../components/pagina/CabeceraPagina.astro';
+import LlamadaFinal from '../components/pagina/LlamadaFinal.astro';
+import { lugares } from '../data/zona';
+import esquema from '../data/esquema-que-hacer-cerca.json';
+
+// Mismo orden que la página anterior
+const orden = ['mont-rebei', 'congost-de-mu', 'camarasa', 'estany-ivars', 'penelles', 'castell-del-remei', 'rutas-bici'];
+const lista = orden.map((id) => lugares.find((l) => l.id === id)!);
+const portada = lugares.find((l) => l.id === 'mont-rebei')!;
+
+// Minutos en coche (para colocar cada lugar en la línea de distancias)
+const minutos: Record<string, number> = { penelles: 5, 'castell-del-remei': 10, 'estany-ivars': 15, camarasa: 25, 'congost-de-mu': 30, 'mont-rebei': 60 };
+const corto: Record<string, string> = { 'estany-ivars': "Estany d'Ivars", 'mont-rebei': 'Mont-rebei' };
+const distancias = lugares
+	.filter((l) => minutos[l.id])
+	.map((l) => ({ id: l.id, nombre: corto[l.id] || l.nombre, min: minutos[l.id] }))
+	.sort((a, b) => a.min - b.min);
+const texto = (m: number) => (m >= 60 ? `${m / 60} h` : `${m} min`);
+---
+
+<BaseLayout
+	title="Qué hacer cerca de Bellcaire d'Urgell · Excursiones desde Els Porxos, Lleida"
+	description="Descubre qué hacer cerca de nuestra casa rural en Bellcaire d'Urgell (Lleida): Congost de Mont-rebei, pasarelas del Congost de Mu, embalse de Camarasa, Estany d'Ivars, murales de Penelles y bodegas de Castell del Remei."
+>
+	{esquema.map((bloque) => <script slot="head" type="application/ld+json" set:html={JSON.stringify(bloque)} />)}
+
+	<CabeceraPagina
+		miga="Qué hacer cerca"
+		entradilla="Desde Els Porxos, en Bellcaire d'Urgell, tienes a menos de una hora algunos de los rincones más espectaculares de la provincia de Lleida: congostos sobre ríos turquesas, embalses para el kayak, humedales llenos de aves, pueblos con murales de artistas internacionales y bodegas centenarias entre viñedos."
+		foto={portada.foto}
+		alt={portada.alt}
+		encuadre="30% 50%"
+	>
+		<Fragment slot="titulo">Qué hacer cerca de nuestra <em>casa rural en Lleida</em></Fragment>
+	</CabeceraPagina>
+
+	<section class="distancias" aria-labelledby="distancias-titulo">
+		<div class="envoltorio">
+			<h2 id="distancias-titulo" class="aparece">Distancias desde Bellcaire d'Urgell</h2>
+			<ol class="linea aparece" style="--total: 60">
+				<li class="punto punto--casa" style="--min: 0"><span class="punto__nombre">Els Porxos</span></li>
+				{
+					distancias.map((d, i) => (
+						<li class:list={['punto', { 'punto--abajo': i % 2 === 1 }]} style={`--min: ${d.min}`}>
+							<a href={`#${d.id}`}>
+								<span class="punto__tiempo">{texto(d.min)}</span>
+								<span class="punto__nombre">{d.nombre}</span>
+							</a>
+						</li>
+					))
+				}
+			</ol>
+		</div>
+	</section>
+
+	<section class="lugares" aria-label="Excursiones y planes" data-lugares>
+		<div class="envoltorio rejilla">
+			<div class="vista" aria-hidden="true">
+				<div class="vista__arco arco">
+					{
+						lista.map((l, i) => (
+							<div class:list={['vista__foto', { activa: i === 0 }]} data-vista={l.id}>
+								<Picture formats={['avif', 'webp']} src={l.foto} alt="" widths={[640, 960, 1280]} sizes="40vw" />
+							</div>
+						))
+					}
+				</div>
+			</div>
+			<div class="articulos">
+				{
+					lista.map((l) => (
+						<article id={l.id} class="lugar" data-lugar={l.id}>
+							<div class="lugar__foto arco">
+								<Picture formats={['avif', 'webp']} src={l.foto} alt={l.alt} widths={[480, 800]} sizes="100vw" />
+							</div>
+							<p class="lugar__distancia">{l.distancia}</p>
+							<h2>{l.titulo}</h2>
+							{l.parrafos.map((p) => <p>{p}</p>)}
+							<ul class="etiquetas">{l.etiquetas.map((e) => <li>{e}</li>)}</ul>
+							<p class="credito">
+								Foto: <a href={l.credito.fuente} target="_blank" rel="noopener">{l.credito.autor}</a>, Wikimedia Commons (
+								<a href={l.credito.urlLicencia} target="_blank" rel="noopener license">{l.credito.licencia}</a>)
+							</p>
+						</article>
+					))
+				}
+			</div>
+		</div>
+	</section>
+
+	<LlamadaFinal
+		titulo="Tu campamento base en Lleida"
+		texto="Alquila Els Porxos para tu grupo y descubre todo lo que La Noguera y la provincia de Lleida tienen para ofrecer. 19 plazas, piscina privada, barbacoa y mucho más."
+		secundario={{ texto: 'Ver la casa', href: '/casa-rural-lleida/' }}
+	/>
+</BaseLayout>
+
+<style>
+	/* ---------- Línea de distancias ---------- */
+	.distancias {
+		padding-block: 0 var(--seccion);
+	}
+	.distancias h2 {
+		font-size: var(--t-2);
+		margin-bottom: clamp(3rem, 6vw, 5rem);
+	}
+	.linea {
+		position: relative;
+		height: 150px;
+		margin: 0 3rem 0 1rem;
+		padding: 0;
+		list-style: none;
+	}
+	.linea::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 50%;
+		height: 1.5px;
+		background: linear-gradient(90deg, var(--oro-texto), var(--linea));
+	}
+	.punto {
+		position: absolute;
+		top: 50%;
+		left: calc(var(--min) / var(--total) * 100%);
+	}
+	.punto::before {
+		content: '';
+		position: absolute;
+		left: -6px;
+		top: -8px;
+		width: 12px;
+		height: 16px;
+		border-radius: 999px 999px 0 0;
+		background: var(--oro);
+	}
+	.punto--casa::before {
+		left: -9px;
+		top: -12px;
+		width: 18px;
+		height: 24px;
+		background: var(--tinta);
+	}
+	.punto a,
+	.punto--casa .punto__nombre {
+		position: absolute;
+		bottom: 22px;
+		left: 0;
+		translate: -50% 0;
+		display: grid;
+		justify-items: center;
+		white-space: nowrap;
+		text-decoration: none;
+		color: var(--tinta);
+	}
+	.punto--casa .punto__nombre {
+		translate: -12px 0;
+		font: 600 var(--t-sm) / 1.2 var(--f-texto);
+	}
+	.punto--abajo a {
+		bottom: auto;
+		top: 22px;
+	}
+	.punto__tiempo {
+		font: 500 var(--t-3) / 1 var(--f-display);
+	}
+	.punto a .punto__nombre {
+		font-size: var(--t-xs);
+		color: var(--sec);
+	}
+	.punto a:hover .punto__nombre {
+		color: var(--oro-texto);
+	}
+
+	/* ---------- Lugares: foto fija que cambia según el lugar que lees ---------- */
+	.lugares {
+		padding-block: var(--seccion);
+		background: var(--cal-2);
+	}
+	.rejilla {
+		display: grid;
+		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+		gap: clamp(2.5rem, 7vw, 8rem);
+	}
+	.vista {
+		position: sticky;
+		top: calc(var(--alto-cabecera) + var(--s-6));
+		align-self: start;
+	}
+	.vista__arco {
+		position: relative;
+		aspect-ratio: 4 / 5;
+		background: var(--linea);
+	}
+	.vista__foto {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		transform: scale(1.06);
+		transition:
+			opacity 800ms var(--ease),
+			transform 1400ms var(--ease);
+	}
+	.vista__foto.activa {
+		opacity: 1;
+		transform: none;
+	}
+	.vista__foto :global(picture),
+	.vista__foto :global(img),
+	.lugar__foto :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.articulos {
+		display: grid;
+		gap: clamp(4rem, 12vh, 9rem);
+		padding-block: 6vh 20vh;
+	}
+	.lugar {
+		display: grid;
+		gap: var(--s-4);
+		scroll-margin-top: calc(var(--alto-cabecera) + var(--s-6));
+	}
+	.lugar__foto {
+		display: none;
+	}
+	.lugar__distancia {
+		font-size: var(--t-sm);
+		font-weight: 600;
+		color: var(--oro-texto);
+	}
+	.lugar h2 {
+		font-size: var(--t-2);
+		padding-bottom: 0.08em;
+	}
+	.etiquetas {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-2);
+		margin: var(--s-2) 0 0;
+		padding: 0;
+		list-style: none;
+	}
+	.etiquetas li {
+		padding: 0.35rem 0.85rem;
+		border: 1px solid color-mix(in oklch, var(--tinta) 20%, transparent);
+		border-radius: var(--radio-boton);
+		font-size: var(--t-xs);
+		font-weight: 600;
+		color: var(--tinta);
+	}
+	.credito {
+		font-size: var(--t-xs);
+		color: var(--sec);
+	}
+	.credito a {
+		color: inherit;
+	}
+
+	@media (max-width: 900px) {
+		.rejilla {
+			grid-template-columns: 1fr;
+		}
+		.vista {
+			display: none;
+		}
+		.lugar__foto {
+			display: block;
+			aspect-ratio: 4 / 3;
+			margin-bottom: var(--s-2);
+		}
+		.articulos {
+			padding-block: 0;
+		}
+		/* Distancias en vertical */
+		.linea {
+			height: auto;
+			margin: 0;
+			display: grid;
+			gap: var(--s-4);
+			padding-left: var(--s-6);
+		}
+		.linea::before {
+			left: 5px;
+			right: auto;
+			top: 0;
+			bottom: 0;
+			width: 1.5px;
+			height: auto;
+			background: linear-gradient(180deg, var(--oro-texto), var(--linea));
+		}
+		.punto {
+			position: relative;
+			top: auto;
+			left: auto;
+		}
+		.punto::before,
+		.punto--casa::before {
+			left: calc(-1 * var(--s-6) - 1px);
+			top: 4px;
+		}
+		.punto--casa::before {
+			left: calc(-1 * var(--s-6) - 4px);
+			top: 0;
+		}
+		.punto a,
+		.punto--casa .punto__nombre,
+		.punto--abajo a {
+			position: static;
+			translate: none;
+			display: flex;
+			align-items: baseline;
+			gap: var(--s-3);
+		}
+		.punto a .punto__nombre {
+			font-size: var(--t-sm);
+		}
+	}
+</style>
+
+<script>
+	// La foto fija muestra el lugar que está en el centro de la pantalla
+	const fotos = document.querySelectorAll<HTMLElement>('[data-lugares] [data-vista]');
+	const observador = new IntersectionObserver(
+		(entradas) => {
+			for (const e of entradas) {
+				if (!e.isIntersecting) continue;
+				const id = (e.target as HTMLElement).dataset.lugar;
+				fotos.forEach((f) => f.classList.toggle('activa', f.dataset.vista === id));
+			}
+		},
+		{ rootMargin: '-45% 0px -45% 0px' },
+	);
+	document.querySelectorAll('[data-lugares] [data-lugar]').forEach((a) => observador.observe(a));
+</script>

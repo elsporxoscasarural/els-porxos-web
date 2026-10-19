@@ -1,0 +1,299 @@
+---
+// Opiniones reales (Airbnb y Google). La de Sergi va destacada: habla del futbolín, el ping-pong
+// y de un grupo de 13. El resto, en una fila que se desliza.
+import Icono from '../Icono.astro';
+import Marca from '../Marca.astro';
+import { opiniones, destacada } from '../../data/opiniones';
+import { casa } from '../../data/casa';
+---
+
+<section class="opiniones" id="opiniones" aria-labelledby="opiniones-titulo">
+	<div class="envoltorio">
+		<div class="cabeza">
+			<div class="nota aparece">
+				<p class="nota__cifra">5,0</p>
+				<p class="estrellas" role="img" aria-label="5 de 5 estrellas">
+					{[1, 2, 3, 4, 5].map(() => <Icono nombre="star" peso="fill" />)}
+				</p>
+				<p class="nota__texto">Valoración media en Airbnb y Google</p>
+			</div>
+
+			<figure class="destacada aparece">
+				<h2 id="opiniones-titulo" class="visualmente-oculto">Lo que dicen nuestros huéspedes</h2>
+				<blockquote>
+					<p>«{destacada.texto}»</p>
+				</blockquote>
+				<figcaption>
+					<span class="avatar" aria-hidden="true">{destacada.nombre.charAt(0)}</span>
+					<span><strong>{destacada.nombre}</strong>, huésped en {destacada.fuente} · {destacada.fecha}</span>
+				</figcaption>
+			</figure>
+		</div>
+
+		<div class="fila-cabeza">
+			<p class="fila-titulo">Más opiniones de grupos y familias</p>
+			<div class="flechas">
+				<button type="button" aria-label="Opiniones anteriores" data-opiniones-ant><Icono nombre="caret-left" /></button>
+				<button type="button" aria-label="Más opiniones" data-opiniones-sig><Icono nombre="caret-right" /></button>
+			</div>
+		</div>
+		<ul class="fila" data-opiniones-fila>
+			{
+				opiniones.map((o) => (
+					<li class="tarjeta">
+						<p class="estrellas estrellas--peq" role="img" aria-label="5 de 5 estrellas">
+							{[1, 2, 3, 4, 5].map(() => <Icono nombre="star" peso="fill" />)}
+						</p>
+						<blockquote>
+							<p>«{o.texto}»</p>
+						</blockquote>
+						<p class="autor">
+							<span class="avatar" aria-hidden="true">{o.nombre.charAt(0)}</span>
+							<span>
+								<strong>{o.nombre}</strong>
+								<span class="fuente">
+									<Marca nombre={o.fuente === 'Airbnb' ? 'airbnb' : 'google'} /> {o.fuente}
+									{o.fecha && ` · ${o.fecha}`}
+								</span>
+							</span>
+						</p>
+					</li>
+				))
+			}
+			<li class="tarjeta tarjeta--enlace">
+				<a href={casa.reservas.airbnb} target="_blank" rel="noopener">
+					<Marca nombre="airbnb" />
+					<span>Ver todas las opiniones en Airbnb</span>
+					<Icono nombre="arrow-right" class="flecha" />
+				</a>
+			</li>
+		</ul>
+	</div>
+</section>
+
+<style>
+	.opiniones {
+		padding-block: var(--seccion);
+		overflow: hidden;
+	}
+	.cabeza {
+		display: grid;
+		grid-template-columns: minmax(0, 3fr) minmax(0, 8fr);
+		gap: clamp(2rem, 6vw, 7rem);
+		align-items: start;
+		margin-bottom: clamp(3rem, 7vw, 6rem);
+	}
+	.nota {
+		display: grid;
+		gap: var(--s-2);
+		padding-top: var(--s-2);
+	}
+	.nota__cifra {
+		font: 500 clamp(4.5rem, 9vw, 8rem) / 0.9 var(--f-display);
+		color: var(--tinta);
+	}
+	.estrellas {
+		display: flex;
+		gap: 3px;
+		color: var(--oro);
+	}
+	.estrellas :global(.icono) {
+		width: 22px;
+		height: 22px;
+	}
+	.estrellas--peq :global(.icono) {
+		width: 15px;
+		height: 15px;
+	}
+	.nota__texto {
+		font-size: var(--t-sm);
+		color: var(--sec);
+		max-width: 16ch;
+	}
+
+	.destacada {
+		margin: 0;
+		display: grid;
+		gap: var(--s-5);
+	}
+	.destacada blockquote {
+		margin: 0;
+	}
+	.destacada blockquote p {
+		max-width: 40ch;
+		font: italic 400 clamp(1.45rem, 2.3vw, 2.15rem) / 1.28 var(--f-display);
+		color: var(--tinta);
+		text-wrap: pretty;
+	}
+	figcaption,
+	.autor {
+		display: flex;
+		align-items: center;
+		gap: var(--s-3);
+		font-size: var(--t-sm);
+		color: var(--sec);
+	}
+	figcaption strong,
+	.autor strong {
+		color: var(--tinta);
+		font-weight: 600;
+	}
+	.avatar {
+		display: grid;
+		place-items: center;
+		flex: none;
+		width: 40px;
+		height: 44px;
+		border-radius: 999px 999px 4px 4px;
+		background: var(--cal-2);
+		font: 600 1.1rem / 1 var(--f-display);
+		color: var(--oro-texto);
+	}
+
+	.fila-cabeza {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--s-5);
+		margin-bottom: var(--s-5);
+		padding-top: var(--s-5);
+		border-top: var(--borde);
+	}
+	.fila-titulo {
+		font-weight: 600;
+		color: var(--tinta);
+	}
+	.flechas {
+		display: flex;
+		gap: var(--s-2);
+	}
+	.flechas button {
+		display: grid;
+		place-items: center;
+		width: 48px;
+		height: 48px;
+		border: 1.5px solid color-mix(in oklch, var(--tinta) 22%, transparent);
+		border-radius: 50%;
+		background: transparent;
+		color: var(--tinta);
+		cursor: pointer;
+		transition:
+			border-color var(--d-media) var(--ease),
+			transform var(--d-rapida) var(--ease);
+	}
+	.flechas button:hover {
+		border-color: var(--tinta);
+	}
+	.flechas button:active {
+		transform: scale(0.94);
+	}
+	.flechas :global(.icono) {
+		width: 20px;
+		height: 20px;
+	}
+
+	/* Fila deslizable: con el dedo, la rueda del ratón en horizontal o las flechas */
+	.fila {
+		display: grid;
+		grid-auto-flow: column;
+		grid-auto-columns: clamp(17rem, 30vw, 24rem);
+		gap: var(--s-4);
+		margin: 0 calc(-1 * var(--g));
+		padding: 0 var(--g) var(--s-2);
+		list-style: none;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scroll-padding-inline: var(--g);
+		overscroll-behavior-x: contain;
+		scrollbar-width: none;
+	}
+	.fila::-webkit-scrollbar {
+		display: none;
+	}
+	.tarjeta {
+		display: flex;
+		flex-direction: column;
+		gap: var(--s-4);
+		padding: var(--s-6) var(--s-5) var(--s-5);
+		border: var(--borde);
+		background: var(--cal);
+		scroll-snap-align: start;
+	}
+	.tarjeta blockquote {
+		flex-grow: 1;
+		margin: 0;
+	}
+	.tarjeta blockquote p {
+		font-size: var(--t-sm);
+		line-height: 1.65;
+		color: var(--texto);
+	}
+	.fuente {
+		display: flex;
+		align-items: center;
+		gap: 0.35em;
+		margin-top: 2px;
+	}
+	.fuente :global(.marca-logo) {
+		width: 13px;
+		height: 13px;
+	}
+	.tarjeta--enlace {
+		padding: 0;
+		background: var(--carbon);
+		border-color: var(--carbon);
+	}
+	.tarjeta--enlace a {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: var(--s-6);
+		height: 100%;
+		padding: var(--s-6) var(--s-5) var(--s-5);
+		color: var(--cal);
+		font: italic 500 var(--t-3) / 1.15 var(--f-display);
+		text-decoration: none;
+	}
+	.tarjeta--enlace :global(.marca-logo) {
+		width: 30px;
+		height: 30px;
+		color: var(--oro);
+	}
+	.tarjeta--enlace :global(.flecha) {
+		width: 28px;
+		height: 28px;
+		color: var(--oro);
+		transition: transform var(--d-media) var(--ease);
+	}
+	.tarjeta--enlace a:hover :global(.flecha) {
+		transform: translateX(5px);
+	}
+
+	@media (max-width: 820px) {
+		.cabeza {
+			grid-template-columns: 1fr;
+		}
+		.nota {
+			grid-template-columns: auto 1fr;
+			align-items: end;
+			column-gap: var(--s-5);
+		}
+		.nota__cifra {
+			grid-row: span 2;
+		}
+		.fila {
+			grid-auto-columns: 82vw;
+		}
+	}
+</style>
+
+<script>
+	const fila = document.querySelector<HTMLElement>('[data-opiniones-fila]');
+	const mover = (sentido: number) => {
+		if (!fila) return;
+		const paso = (fila.querySelector('li')?.getBoundingClientRect().width || 300) + 16;
+		fila.scrollBy({ left: sentido * paso, behavior: 'smooth' });
+	};
+	document.querySelector('[data-opiniones-ant]')?.addEventListener('click', () => mover(-1));
+	document.querySelector('[data-opiniones-sig]')?.addEventListener('click', () => mover(1));
+</script>

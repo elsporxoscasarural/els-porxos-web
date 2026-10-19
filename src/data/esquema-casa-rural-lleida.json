@@ -1,0 +1,83 @@
+[
+ {
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  "name": "Els Porxos Casa Rural",
+  "alternateName": "Casa rural en Lleida para grupos",
+  "description": "Casa rural de alquiler completo para grupos de hasta 19 personas en Bellcaire d'Urgell, Lleida. Piscina privada, porches con arcos, barbacoa, zona de juegos y pista de fútbol.",
+  "url": "https://elsporxos.es/",
+  "telephone": "+34620104539",
+  "email": "elsporxoscasarural@gmail.com",
+  "image": "https://elsporxos.es/images/hero.jpg",
+  "numberOfRooms": 6,
+  "address": {
+   "@type": "PostalAddress",
+   "streetAddress": "Bellcaire d'Urgell",
+   "addressLocality": "Bellcaire d'Urgell",
+   "addressRegion": "Lleida",
+   "postalCode": "25337",
+   "addressCountry": "ES"
+  },
+  "geo": {
+   "@type": "GeoCoordinates",
+   "latitude": 41.7611,
+   "longitude": 0.9056
+  },
+  "aggregateRating": {
+   "@type": "AggregateRating",
+   "ratingValue": "5.0",
+   "bestRating": "5",
+   "reviewCount": "6"
+  },
+  "amenityFeature": [
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "Piscina privada",
+    "value": true
+   },
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "Barbacoa equipada",
+    "value": true
+   },
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "Jardín",
+    "value": true
+   },
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "Zona de juegos infantil",
+    "value": true
+   },
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "Pista de fútbol privada",
+    "value": true
+   },
+   {
+    "@type": "LocationFeatureSpecification",
+    "name": "Chimenea",
+    "value": true
+   }
+  ]
+ },
+ {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+   {
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Inicio",
+    "item": "https://elsporxos.es/"
+   },
+   {
+    "@type": "ListItem",
+    "position": 2,
+    "name": "Casa rural en Lleida",
+    "item": "https://elsporxos.es/casa-rural-lleida/"
+   }
+  ]
+ }
+]

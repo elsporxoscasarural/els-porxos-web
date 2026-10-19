@@ -1,0 +1,103 @@
+---
+// Pie común a todas las páginas: logo en claro, navegación y datos legales (registro turístico).
+import { Image } from 'astro:assets';
+import logoClaro from '../assets/brand/logo-claro.png';
+import { casa } from '../data/casa';
+
+const enlaces = [
+	{ texto: 'La casa', href: '/#la-casa' },
+	{ texto: 'Habitaciones', href: '/#habitaciones' },
+	{ texto: 'Fotos', href: '/#fotos' },
+	{ texto: 'Tarifas', href: '/#tarifas' },
+	{ texto: 'Opiniones', href: '/#opiniones' },
+	{ texto: 'Casa rural en Lleida', href: '/casa-rural-lleida/' },
+	{ texto: 'Qué hacer cerca', href: '/que-hacer-cerca/' },
+	{ texto: 'Contacto', href: '/#contacto' },
+];
+const anyo = new Date().getFullYear();
+---
+
+<footer class="pie sobre-oscuro">
+	<div class="envoltorio rejilla">
+		<a class="logo" href="/" aria-label={`${casa.nombre}, inicio`}>
+			<Image src={logoClaro} alt="" width={180} densities={[1, 2]} loading="lazy" />
+		</a>
+		<nav aria-label="Pie de página">
+			<ul>{enlaces.map((e) => <li><a href={e.href}>{e.texto}</a></li>)}</ul>
+		</nav>
+		<div class="datos">
+			<p>Casa rural en {casa.direccion.localidad}, {casa.direccion.comarca} ({casa.direccion.provincia})</p>
+			<p><a href={`tel:${casa.telefono.enlace}`}>{casa.telefono.visible}</a> · <a href={`mailto:${casa.email}`}>{casa.email}</a></p>
+		</div>
+	</div>
+	<div class="envoltorio base">
+		<p>© {anyo} {casa.nombre}</p>
+		<p>Nº de registro turístico: {casa.registroTuristico}</p>
+	</div>
+</footer>
+
+<style>
+	.pie {
+		padding-block: clamp(3.5rem, 7vw, 6rem) var(--s-6);
+		background: var(--carbon);
+		color: var(--cal-suave);
+		font-size: var(--t-sm);
+		border-top: 1px solid color-mix(in oklch, var(--cal) 10%, transparent);
+	}
+	.rejilla {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		gap: clamp(2rem, 6vw, 6rem);
+		align-items: start;
+	}
+	.logo {
+		display: block;
+		width: 150px;
+	}
+	.logo :global(img) {
+		width: 100%;
+		height: auto;
+	}
+	nav ul {
+		display: grid;
+		grid-template-columns: repeat(2, max-content);
+		gap: var(--s-2) var(--s-7);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	nav a,
+	.datos a {
+		color: var(--cal);
+		text-decoration: none;
+		background: linear-gradient(var(--oro), var(--oro)) 0 100% / 0 1px no-repeat;
+		transition: background-size var(--d-media) var(--ease);
+	}
+	nav a:hover,
+	.datos a:hover {
+		background-size: 100% 1px;
+	}
+	.datos {
+		display: grid;
+		gap: var(--s-2);
+		text-align: right;
+	}
+	.base {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: var(--s-3);
+		margin-top: clamp(2.5rem, 5vw, 4rem);
+		padding-top: var(--s-5);
+		border-top: 1px solid color-mix(in oklch, var(--cal) 10%, transparent);
+		font-size: var(--t-xs);
+	}
+	@media (max-width: 900px) {
+		.rejilla {
+			grid-template-columns: 1fr;
+		}
+		.datos {
+			text-align: left;
+		}
+	}
+</style>

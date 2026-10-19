@@ -1,5 +1,6 @@
 ---
-// Portada. Título y descripción idénticos a los de la web actual (no se pierde posicionamiento).
+// Portada. Título, descripción, textos y datos estructurados idénticos a los de la web actual
+// (no se pierde posicionamiento).
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Portada from '../components/inicio/Portada.astro';
 import Banda from '../components/inicio/Banda.astro';
@@ -8,13 +9,21 @@ import PorDentro from '../components/inicio/PorDentro.astro';
 import Habitaciones from '../components/inicio/Habitaciones.astro';
 import Exterior from '../components/inicio/Exterior.astro';
 import Galeria from '../components/inicio/Galeria.astro';
+import Tarifas from '../components/inicio/Tarifas.astro';
+import Opiniones from '../components/inicio/Opiniones.astro';
+import QueHacer from '../components/inicio/QueHacer.astro';
+import Ubicacion from '../components/inicio/Ubicacion.astro';
+import Preguntas from '../components/inicio/Preguntas.astro';
+import Contacto from '../components/inicio/Contacto.astro';
 import Visor from '../components/Visor.astro';
+import esquema from '../data/esquema-inicio.json';
 ---
 
 <BaseLayout
 	title="Els Porxos — Casa rural en Bellcaire d'Urgell, Lleida · Piscina privada · hasta 19 personas"
 	description="Casa rural para grupos de hasta 19 personas en Bellcaire d'Urgell (La Noguera, Lleida). 6 habitaciones, piscina privada, porches con arcos, barbacoa y zona de juegos. Alquiler completo ideal para familias y amigos. Cerca de Mont-rebei, Camarasa y el Estany d'Ivars. Reserva ahora."
 >
+	{esquema.map((bloque) => <script slot="head" type="application/ld+json" set:html={JSON.stringify(bloque)} />)}
 	<Portada />
 	<Banda />
 	<LaCasa />
@@ -22,6 +31,11 @@ import Visor from '../components/Visor.astro';
 	<Habitaciones />
 	<Exterior />
 	<Galeria />
-	<!-- Próximas secciones: tarifas, opiniones, ubicación, qué hacer cerca, contacto y pie -->
+	<Tarifas />
+	<Opiniones />
+	<QueHacer />
+	<Ubicacion />
+	<Preguntas />
+	<Contacto />
 	<Visor />
 </BaseLayout>

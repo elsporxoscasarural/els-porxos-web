@@ -1,0 +1,97 @@
+---
+// Preguntas frecuentes en acordeón (<details> nativo: funciona sin JS y con teclado).
+import Icono from '../Icono.astro';
+import { preguntas } from '../../data/preguntas';
+---
+
+<section class="preguntas" id="preguntas" aria-labelledby="preguntas-titulo">
+	<div class="envoltorio rejilla">
+		<h2 id="preguntas-titulo" class="aparece">Preguntas <em>frecuentes</em></h2>
+		<div class="lista">
+			{
+				preguntas.map((p, i) => (
+					<details class="aparece" open={i === 0}>
+						<summary>
+							{p.pregunta}
+							<Icono nombre="plus" class="mas" />
+						</summary>
+						<p>{p.respuesta}</p>
+					</details>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.preguntas {
+		padding-block: var(--seccion);
+		background: var(--cal-2);
+	}
+	.rejilla {
+		display: grid;
+		grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+		gap: clamp(2rem, 6vw, 7rem);
+		align-items: start;
+	}
+	h2 {
+		max-width: 10ch;
+	}
+	.lista {
+		border-top: var(--borde);
+	}
+	details {
+		border-bottom: var(--borde);
+	}
+	summary {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--s-5);
+		min-height: 64px;
+		padding-block: var(--s-4);
+		font: 500 var(--t-3) / 1.2 var(--f-display);
+		color: var(--tinta);
+		cursor: pointer;
+		list-style: none;
+	}
+	summary::-webkit-details-marker {
+		display: none;
+	}
+	summary :global(.mas) {
+		flex: none;
+		width: 24px;
+		height: 24px;
+		color: var(--oro-texto);
+		transition: transform var(--d-media) var(--ease);
+	}
+	details[open] summary :global(.mas) {
+		transform: rotate(45deg);
+	}
+	details p {
+		padding-bottom: var(--s-5);
+		max-width: 60ch;
+		color: var(--texto);
+	}
+	/* Apertura suave donde el navegador lo permite */
+	@media (prefers-reduced-motion: no-preference) {
+		details::details-content {
+			block-size: 0;
+			overflow: hidden;
+			transition:
+				block-size 380ms var(--ease),
+				content-visibility 380ms allow-discrete;
+		}
+		details[open]::details-content {
+			block-size: auto;
+		}
+		:root {
+			interpolate-size: allow-keywords;
+		}
+	}
+	@media (max-width: 820px) {
+		.rejilla {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

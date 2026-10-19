@@ -1,0 +1,207 @@
+---
+// Tarifas: sin precios (dependen del grupo, las noches y las fechas). Las temporadas se leen
+// de un vistazo en una barra con los doce meses del año.
+import Icono from '../Icono.astro';
+import { casa } from '../../data/casa';
+
+const meses = ['E', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+const nombresMeses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const alta = (i: number) => i >= 3 && i <= 8; // de abril a septiembre
+const temporadas = [
+	{ nombre: 'Temporada alta', meses: 'De abril a septiembre', texto: 'La mejor época para disfrutar de la piscina privada y el exterior.', clase: 'alta' },
+	{ nombre: 'Temporada baja', meses: 'De octubre a marzo', texto: 'Ideal para escapadas en grupo con chimenea y tranquilidad.', clase: 'baja' },
+	{ nombre: 'Puentes y festivos', meses: 'Semana Santa, Navidad, puentes', texto: 'Consulta disponibilidad con antelación, se llena rápido para grupos.', clase: 'festivos' },
+];
+---
+
+<section class="tarifas" id="tarifas" aria-labelledby="tarifas-titulo">
+	<div class="envoltorio rejilla">
+		<div class="texto">
+			<h2 id="tarifas-titulo" class="aparece">Precio del alquiler de la casa rural <em>completa</em></h2>
+			<p class="aparece">
+				El alquiler de Els Porxos es siempre de la casa rural completa, con acceso exclusivo a la piscina, el jardín, la
+				barbacoa y todas las instalaciones para tu grupo.
+			</p>
+			<ul class="incluye aparece">
+				<li><Icono nombre="moon-stars" /> Mínimo 2 noches</li>
+				<li><Icono nombre="users" /> Hasta {casa.capacidad} personas</li>
+				<li><Icono nombre="bed" /> Sábanas y toallas incluidas</li>
+				<li><Icono nombre="sparkle" /> Limpieza final incluida</li>
+			</ul>
+			<div class="acciones aparece">
+				<a class="btn" href={casa.whatsapp} target="_blank" rel="noopener"><Icono nombre="whatsapp-logo" /> Reservar</a>
+				<a class="btn btn--linea" href="#contacto">Enviar consulta</a>
+			</div>
+		</div>
+
+		<div class="temporadas">
+			<div class="anyo aparece" role="img" aria-label="Temporada alta de abril a septiembre; temporada baja de octubre a marzo">
+				{meses.map((m, i) => <span class:list={['mes', { 'mes--alta': alta(i) }]} title={nombresMeses[i]}>{m}</span>)}
+			</div>
+			<ul>
+				{
+					temporadas.map((t) => (
+						<li class:list={['temporada', `temporada--${t.clase}`, 'aparece']}>
+							<span class="marca" aria-hidden="true" />
+							<div>
+								<h3>{t.nombre}</h3>
+								<p class="meses">{t.meses}</p>
+							</div>
+							<p class="nota">{t.texto}</p>
+						</li>
+					))
+				}
+			</ul>
+			<p class="aviso aparece">
+				Precios por noche para la casa rural completa. Consulta precios exactos para las fechas de tu grupo.
+			</p>
+		</div>
+	</div>
+</section>
+
+<style>
+	.tarifas {
+		padding-block: var(--seccion);
+		background: var(--cal-2);
+	}
+	.rejilla {
+		display: grid;
+		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+		gap: clamp(2.5rem, 7vw, 8rem);
+		align-items: start;
+	}
+	.texto {
+		display: grid;
+		gap: var(--s-5);
+	}
+	h2 {
+		max-width: 17ch;
+		padding-bottom: 0.08em;
+	}
+	.incluye {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--s-3) var(--s-5);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		font-weight: 500;
+		color: var(--tinta);
+	}
+	.incluye li {
+		display: flex;
+		align-items: center;
+		gap: var(--s-3);
+	}
+	.incluye :global(.icono) {
+		flex: none;
+		width: 24px;
+		height: 24px;
+		color: var(--oro-texto);
+	}
+	.acciones {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-3);
+		margin-top: var(--s-2);
+	}
+
+	/* Barra del año: los meses de temporada alta en oro */
+	.anyo {
+		display: grid;
+		grid-template-columns: repeat(12, 1fr);
+		gap: 4px;
+		margin-bottom: var(--s-6);
+	}
+	.mes {
+		display: grid;
+		place-items: end center;
+		height: 64px;
+		padding-bottom: var(--s-2);
+		border-radius: 999px 999px 0 0;
+		background: color-mix(in oklch, var(--sec) 22%, transparent);
+		font-size: var(--t-xs);
+		font-weight: 600;
+		color: var(--sec);
+	}
+	.mes--alta {
+		height: 88px;
+		align-self: end;
+		background: var(--oro);
+		color: var(--carbon);
+	}
+	.anyo {
+		align-items: end;
+	}
+
+	.temporadas ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.temporada {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) minmax(0, 1.1fr);
+		gap: var(--s-5);
+		align-items: baseline;
+		padding-block: var(--s-5);
+		border-top: var(--borde);
+	}
+	.marca {
+		width: 12px;
+		height: 16px;
+		border-radius: 999px 999px 0 0;
+		background: color-mix(in oklch, var(--sec) 35%, transparent);
+		transform: translateY(2px);
+	}
+	.temporada--alta .marca {
+		background: var(--oro);
+	}
+	.temporada--festivos .marca {
+		background: transparent;
+		border: 1.5px solid var(--oro-texto);
+		border-bottom: 0;
+	}
+	h3 {
+		font-size: var(--t-3);
+	}
+	.meses {
+		margin-top: var(--s-1);
+		font-size: var(--t-sm);
+		font-weight: 600;
+		color: var(--oro-texto);
+	}
+	.nota {
+		font-size: var(--t-sm);
+		color: var(--sec);
+	}
+	.aviso {
+		padding-top: var(--s-5);
+		border-top: var(--borde);
+		font-size: var(--t-sm);
+		color: var(--sec);
+	}
+
+	@media (max-width: 900px) {
+		.rejilla {
+			grid-template-columns: 1fr;
+		}
+		.temporada {
+			grid-template-columns: auto 1fr;
+		}
+		.nota {
+			grid-column: 2;
+		}
+		.mes {
+			height: 48px;
+		}
+		.mes--alta {
+			height: 64px;
+		}
+	}
+	@media (max-width: 480px) {
+		.incluye {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

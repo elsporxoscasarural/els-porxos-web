@@ -1,0 +1,136 @@
+---
+// Dónde estamos. El mapa de Google se carga solo al pulsar (RGPD: hasta entonces Google no recibe
+// nada del visitante), sobre una foto de los campos de alrededor.
+import { Picture } from 'astro:assets';
+import Icono from '../Icono.astro';
+import { foto } from '../../data/fotos';
+import { casa } from '../../data/casa';
+
+const campos = foto('jardin-piscina-campos');
+const mapa = 'https://maps.google.com/maps?q=Bellcaire%20d%27Urgell%2C%20Lleida&z=13&hl=es&output=embed';
+const comoLlegar = 'https://www.google.com/maps/dir/?api=1&destination=Bellcaire+d%27Urgell,+Lleida';
+const verEnMaps = 'https://www.google.com/maps/search/?api=1&query=Bellcaire+d%27Urgell+Lleida';
+---
+
+<section class="ubicacion" id="ubicacion" aria-labelledby="ubicacion-titulo">
+	<div class="envoltorio rejilla">
+		<div class="mapa arco aparece" data-mapa={mapa}>
+			<Picture formats={['avif', 'webp']} src={campos.src} alt="Los campos de la llanura de Urgell vistos desde la casa" widths={[480, 800]} sizes="(max-width: 820px) 100vw, 45vw" />
+			<button class="btn btn--claro mapa__boton" type="button" data-mapa-cargar>
+				<Icono nombre="map-pin" /> Mostrar el mapa
+			</button>
+			<p class="mapa__aviso">Se cargará Google Maps</p>
+		</div>
+		<div class="texto">
+			<h2 id="ubicacion-titulo" class="aparece">Casa rural en {casa.direccion.localidad}, <em>{casa.direccion.comarca}</em> ({casa.direccion.provincia})</h2>
+			<p class="aparece">
+				Els Porxos se encuentra en Bellcaire d'Urgell, un pueblo tranquilo de la comarca de La Noguera, en la provincia de
+				Lleida. El punto de partida perfecto para grupos y familias que quieren descansar y descubrir la llanura de Urgell,
+				con fácil acceso por carretera.
+			</p>
+			<div class="acciones aparece">
+				<a class="btn" href={comoLlegar} target="_blank" rel="noopener"><Icono nombre="navigation-arrow" /> Cómo llegar</a>
+				<a class="btn btn--linea" href={verEnMaps} target="_blank" rel="noopener">Ver en Google Maps</a>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.ubicacion {
+		padding-block: var(--seccion);
+	}
+	.rejilla {
+		display: grid;
+		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+		gap: clamp(2.5rem, 7vw, 8rem);
+		align-items: center;
+	}
+	.mapa {
+		position: relative;
+		display: grid;
+		place-items: center;
+		aspect-ratio: 4 / 4.6;
+		background: var(--linea);
+	}
+	.mapa > :global(picture) {
+		position: absolute;
+		inset: 0;
+	}
+	.mapa :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.mapa::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: color-mix(in oklch, var(--carbon) 28%, transparent);
+		pointer-events: none;
+	}
+	.mapa.cargado::after {
+		display: none;
+	}
+	.mapa__boton,
+	.mapa__aviso {
+		position: relative;
+		z-index: 1;
+	}
+	.mapa__boton {
+		grid-area: 1 / 1;
+	}
+	.mapa__aviso {
+		grid-area: 1 / 1;
+		align-self: end;
+		margin-bottom: var(--s-5);
+		font-size: var(--t-xs);
+		color: var(--cal);
+		text-shadow: 0 1px 8px color-mix(in oklch, var(--carbon) 60%, transparent);
+	}
+	.mapa :global(iframe) {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+	.texto {
+		display: grid;
+		gap: var(--s-5);
+	}
+	h2 {
+		max-width: 16ch;
+		padding-bottom: 0.08em;
+	}
+	.acciones {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-3);
+		margin-top: var(--s-2);
+	}
+	@media (max-width: 820px) {
+		.rejilla {
+			grid-template-columns: 1fr;
+		}
+		.mapa {
+			order: 2;
+			aspect-ratio: 4 / 4;
+		}
+	}
+</style>
+
+<script>
+	const caja = document.querySelector<HTMLElement>('[data-mapa]');
+	caja?.querySelector('[data-mapa-cargar]')?.addEventListener('click', () => {
+		const iframe = document.createElement('iframe');
+		iframe.src = caja.dataset.mapa!;
+		iframe.title = "Mapa de Bellcaire d'Urgell";
+		iframe.loading = 'lazy';
+		iframe.referrerPolicy = 'no-referrer-when-downgrade';
+		caja.querySelectorAll('button, p').forEach((el) => el.remove());
+		caja.classList.add('cargado');
+		caja.append(iframe);
+		iframe.focus();
+	});
+</script>

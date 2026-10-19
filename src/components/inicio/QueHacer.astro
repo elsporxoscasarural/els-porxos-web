@@ -1,0 +1,266 @@
+---
+// Qué hacer cerca: lista de lugares por distancia. En escritorio, al pasar el ratón (o el foco del
+// teclado) por un lugar, su foto aparece en el arco fijo de la derecha. En móvil, cada lugar con su foto.
+import { Picture } from 'astro:assets';
+import Icono from '../Icono.astro';
+import { lugares } from '../../data/zona';
+---
+
+<section class="que-hacer" id="que-hacer" aria-labelledby="que-hacer-titulo" data-que-hacer>
+	<div class="envoltorio rejilla">
+		<div class="lista-col">
+			<h2 id="que-hacer-titulo" class="aparece">Qué hacer cerca de nuestra casa rural en <em>Lleida</em></h2>
+			<p class="intro aparece">
+				Els Porxos es el campamento base perfecto para grupos y familias que quieren descubrir algunos de los rincones más
+				espectaculares de La Noguera y la provincia de Lleida: congostos, embalses, humedales y pueblos con mucho arte.
+			</p>
+			<ol class="lista">
+				{
+					lugares.map((l, i) => (
+						<li class="aparece">
+							<a href={`/que-hacer-cerca/#${l.id}`} data-lugar={i} class:list={{ activo: i === 0 }}>
+								<span class="lugar__foto arco" aria-hidden="true">
+									<Picture formats={['avif', 'webp']} src={l.foto} alt="" widths={[360, 640]} sizes="40vw" />
+								</span>
+								<span class="lugar__nombre">{l.nombre}</span>
+								<span class="lugar__distancia">{l.distancia}</span>
+								<span class="lugar__texto">{l.texto}</span>
+								<Icono nombre="arrow-right" class="lugar__flecha" />
+							</a>
+						</li>
+					))
+				}
+			</ol>
+			<a class="btn btn--linea todas aparece" href="/que-hacer-cerca/">Ver todas las excursiones</a>
+		</div>
+
+		<div class="vista" aria-hidden="true">
+			<div class="vista__fijo">
+				<div class="vista__arco arco">
+					{
+						lugares.map((l, i) => (
+							<div class:list={['vista__foto', { activa: i === 0 }]} data-vista={i}>
+								<Picture formats={['avif', 'webp']} src={l.foto} alt="" widths={[640, 960, 1280]} sizes="38vw" />
+							</div>
+						))
+					}
+				</div>
+				{
+					lugares.map((l, i) => (
+						<div class:list={['vista__pie', { activa: i === 0 }]} data-vista-pie={i}>
+							<p>{l.texto}</p>
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</div>
+	<p class="envoltorio creditos">
+		Fotos de los lugares: Wikimedia Commons.
+		{
+			lugares.map((l, i) => (
+				<>
+					<a href={l.credito.fuente} target="_blank" rel="noopener">{l.nombre}</a> ({l.credito.autor},{' '}
+					<a href={l.credito.urlLicencia} target="_blank" rel="noopener license">{l.credito.licencia}</a>)
+					{i < lugares.length - 1 ? '; ' : '.'}
+				</>
+			))
+		}
+	</p>
+</section>
+
+<style>
+	.que-hacer {
+		padding-block: var(--seccion);
+		background: var(--cal-2);
+	}
+	.rejilla {
+		display: grid;
+		grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+		gap: clamp(2.5rem, 6vw, 7rem);
+		align-items: start;
+	}
+	.lista-col {
+		display: grid;
+		gap: var(--s-5);
+	}
+	h2 {
+		max-width: 15ch;
+		padding-bottom: 0.08em;
+	}
+	.intro {
+		max-width: 52ch;
+	}
+	.lista {
+		margin: var(--s-4) 0 0;
+		padding: 0;
+		list-style: none;
+		border-top: var(--borde);
+	}
+	.lista a {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto auto;
+		align-items: baseline;
+		column-gap: var(--s-5);
+		padding-block: var(--s-4);
+		border-bottom: var(--borde);
+		text-decoration: none;
+		color: var(--tinta);
+		transition: padding var(--d-media) var(--ease);
+	}
+	.lugar__nombre {
+		font: 500 var(--t-3) / 1.15 var(--f-display);
+		transition: color var(--d-media) var(--ease);
+	}
+	.lugar__distancia {
+		font-size: var(--t-sm);
+		color: var(--sec);
+		white-space: nowrap;
+	}
+	.lista :global(.lugar__flecha) {
+		width: 20px;
+		height: 20px;
+		align-self: center;
+		color: var(--oro-texto);
+		opacity: 0;
+		transform: translateX(-6px);
+		transition:
+			opacity var(--d-media) var(--ease),
+			transform var(--d-media) var(--ease);
+	}
+	.lista a.activo .lugar__nombre {
+		color: var(--oro-texto);
+	}
+	.lista a.activo :global(.lugar__flecha),
+	.lista a:focus-visible :global(.lugar__flecha) {
+		opacity: 1;
+		transform: none;
+	}
+	/* En escritorio, la foto y el texto de cada lugar se ven en el arco de la derecha */
+	.lugar__foto,
+	.lugar__texto {
+		display: none;
+	}
+	.todas {
+		justify-self: start;
+		margin-top: var(--s-3);
+	}
+
+	.vista {
+		align-self: stretch;
+	}
+	.vista__fijo {
+		position: sticky;
+		top: calc(var(--alto-cabecera) + var(--s-6));
+	}
+	.vista__arco {
+		position: relative;
+		aspect-ratio: 4 / 5;
+		background: var(--linea);
+	}
+	.vista__foto {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		transform: scale(1.06);
+		transition:
+			opacity 700ms var(--ease),
+			transform 1200ms var(--ease);
+	}
+	.vista__foto.activa {
+		opacity: 1;
+		transform: none;
+	}
+	.vista__foto :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.vista__fijo {
+		display: grid;
+	}
+	.vista__pie {
+		grid-area: 2 / 1;
+		padding-top: var(--s-4);
+		font-size: var(--t-sm);
+		color: var(--sec);
+		opacity: 0;
+		transition: opacity 400ms var(--ease);
+	}
+	.vista__pie.activa {
+		opacity: 1;
+	}
+	.creditos {
+		margin-top: clamp(2.5rem, 5vw, 4rem);
+		max-width: none;
+		font-size: var(--t-xs);
+		color: var(--sec);
+	}
+	.creditos a {
+		color: inherit;
+	}
+
+	/* Móvil: cada lugar con su foto y su texto */
+	@media (max-width: 900px) {
+		.rejilla {
+			grid-template-columns: 1fr;
+		}
+		.vista {
+			display: none;
+		}
+		.lista a {
+			grid-template-columns: 112px minmax(0, 1fr);
+			grid-template-areas:
+				'foto nombre'
+				'foto distancia'
+				'foto texto';
+			row-gap: var(--s-1);
+			align-items: start;
+		}
+		.lugar__foto {
+			display: block;
+			grid-area: foto;
+			width: 112px;
+			aspect-ratio: 4 / 5;
+		}
+		.lugar__foto :global(img) {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		.lugar__nombre {
+			grid-area: nombre;
+		}
+		.lugar__distancia {
+			grid-area: distancia;
+		}
+		.lugar__texto {
+			display: block;
+			grid-area: texto;
+			font-size: var(--t-sm);
+			color: var(--sec);
+		}
+		.lista :global(.lugar__flecha) {
+			display: none;
+		}
+		.lista a.activo .lugar__nombre {
+			color: var(--tinta);
+		}
+	}
+</style>
+
+<script>
+	// Pasar el ratón o el foco por un lugar muestra su foto en el arco
+	const enlaces = document.querySelectorAll<HTMLAnchorElement>('[data-que-hacer] [data-lugar]');
+	const fotos = document.querySelectorAll<HTMLElement>('[data-que-hacer] [data-vista]');
+	const pies = document.querySelectorAll<HTMLElement>('[data-que-hacer] [data-vista-pie]');
+	const activar = (i: number) => {
+		enlaces.forEach((a, j) => a.classList.toggle('activo', i === j));
+		fotos.forEach((f, j) => f.classList.toggle('activa', i === j));
+		pies.forEach((p, j) => p.classList.toggle('activa', i === j));
+	};
+	enlaces.forEach((a, i) => {
+		a.addEventListener('pointerenter', () => activar(i));
+		a.addEventListener('focus', () => activar(i));
+	});
+</script>

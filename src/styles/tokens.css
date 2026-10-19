@@ -21,6 +21,7 @@
 	--tinta: #2a2219; /* titulares y botón principal (14:1 sobre cal) */
 	--carbon: #1f1b16; /* negro de los capiteles: secciones oscuras, velos de foto, pie */
 	--cal-suave: #b9b3a6; /* texto secundario sobre carbón (8:1) */
+	--error-oscuro: #f0b4a2; /* errores de formulario sobre carbón (8,9:1) */
 
 	/* Velos para leer texto sobre foto: color-mix(in oklch, var(--carbon) N%, transparent) */
 

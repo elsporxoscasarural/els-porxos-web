@@ -1,0 +1,333 @@
+---
+// Reservas y consultas: WhatsApp, teléfono y email bien visibles, formulario (Formspree, el mismo
+// de la web actual) y las plataformas donde también se puede reservar.
+import Icono from '../Icono.astro';
+import Marca from '../Marca.astro';
+import { casa } from '../../data/casa';
+---
+
+<section class="contacto sobre-oscuro" id="contacto" aria-labelledby="contacto-titulo">
+	<div class="envoltorio rejilla">
+		<div class="lado">
+			<h2 id="contacto-titulo" class="aparece">Reserva tu estancia en <em>Els Porxos</em></h2>
+			<p class="aparece">
+				Escríbenos por WhatsApp para consultar disponibilidad y precios de alquiler, o envíanos el formulario y te
+				contestaremos lo antes posible.
+			</p>
+			<ul class="canales aparece">
+				<li>
+					<a href={casa.whatsapp} target="_blank" rel="noopener">
+						<Icono nombre="whatsapp-logo" />
+						<span><small>WhatsApp</small>{casa.telefono.visible}</span>
+					</a>
+				</li>
+				<li>
+					<a href={`tel:${casa.telefono.enlace}`}>
+						<Icono nombre="phone" />
+						<span><small>Teléfono</small>{casa.telefono.visible}</span>
+					</a>
+				</li>
+				<li>
+					<a href={`mailto:${casa.email}`}>
+						<Icono nombre="envelope-simple" />
+						<span><small>Email</small>{casa.email}</span>
+					</a>
+				</li>
+			</ul>
+			<div class="plataformas aparece">
+				<p>También nos encontrarás en</p>
+				<div>
+					<a href={casa.reservas.airbnb} target="_blank" rel="noopener"><Marca nombre="airbnb" /> Airbnb</a>
+					<a href={casa.reservas.booking} target="_blank" rel="noopener"><Marca nombre="bookingdotcom" /> Booking.com</a>
+					<a href={casa.reservas.vrbo} target="_blank" rel="noopener"><Icono nombre="house-line" /> Vrbo</a>
+				</div>
+			</div>
+		</div>
+
+		<form class="formulario aparece" method="POST" action="https://formspree.io/f/mreqdbjy" novalidate data-formulario>
+			<div class="campo">
+				<label for="f-nombre">Nombre *</label>
+				<input id="f-nombre" name="name" type="text" autocomplete="name" required aria-describedby="e-nombre" />
+				<p class="error" id="e-nombre" aria-live="polite"></p>
+			</div>
+			<div class="campo">
+				<label for="f-email">Email *</label>
+				<input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="e-email" />
+				<p class="error" id="e-email" aria-live="polite"></p>
+			</div>
+			<div class="dos">
+				<div class="campo">
+					<label for="f-telefono">Teléfono</label>
+					<input id="f-telefono" name="phone" type="tel" autocomplete="tel" />
+				</div>
+				<div class="campo">
+					<label for="f-fechas">Fechas de estancia</label>
+					<input id="f-fechas" name="dates" type="text" placeholder="p. ej. 12 al 14 de junio" aria-describedby="a-fechas" />
+					<p class="ayuda" id="a-fechas">Y cuántas personas sois, si lo sabes</p>
+				</div>
+			</div>
+			<div class="campo">
+				<label for="f-mensaje">Mensaje *</label>
+				<textarea id="f-mensaje" name="message" rows="4" required aria-describedby="e-mensaje"></textarea>
+				<p class="error" id="e-mensaje" aria-live="polite"></p>
+			</div>
+			<div class="campo campo--check">
+				<input id="f-privacidad" name="privacy" type="checkbox" required aria-describedby="e-privacidad" />
+				<label for="f-privacidad">Acepto que usen mis datos para responder a esta consulta *</label>
+				<p class="error" id="e-privacidad" aria-live="polite"></p>
+			</div>
+			<button class="btn btn--claro enviar" type="submit">Enviar consulta <Icono nombre="arrow-right" class="flecha" /></button>
+			<p class="estado" role="status" aria-live="polite" data-estado></p>
+		</form>
+	</div>
+</section>
+
+<style>
+	.contacto {
+		padding-block: var(--seccion);
+		background: var(--carbon);
+		color: var(--cal-suave);
+	}
+	.rejilla {
+		display: grid;
+		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+		gap: clamp(2.5rem, 7vw, 8rem);
+		align-items: start;
+	}
+	.lado {
+		display: grid;
+		gap: var(--s-5);
+	}
+	h2 {
+		color: var(--cal);
+		max-width: 11ch;
+		padding-bottom: 0.08em;
+	}
+	h2 em {
+		color: var(--oro);
+	}
+	.canales {
+		display: grid;
+		gap: var(--s-2);
+		margin: var(--s-3) 0 0;
+		padding: 0;
+		list-style: none;
+	}
+	.canales a {
+		display: flex;
+		align-items: center;
+		gap: var(--s-4);
+		padding-block: var(--s-3);
+		border-bottom: 1px solid color-mix(in oklch, var(--cal) 14%, transparent);
+		color: var(--cal);
+		text-decoration: none;
+		font: 500 var(--t-3) / 1.15 var(--f-display);
+		overflow-wrap: anywhere;
+		transition: color var(--d-media) var(--ease);
+	}
+	.canales a:hover {
+		color: var(--oro);
+	}
+	.canales :global(.icono) {
+		flex: none;
+		width: 28px;
+		height: 28px;
+		color: var(--oro);
+	}
+	.canales small {
+		display: block;
+		margin-bottom: 2px;
+		font: 600 var(--t-xs) / 1 var(--f-texto);
+		letter-spacing: 0.04em;
+		color: var(--cal-suave);
+	}
+	.plataformas {
+		display: grid;
+		gap: var(--s-3);
+		margin-top: var(--s-3);
+		font-size: var(--t-sm);
+	}
+	.plataformas div {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-2);
+	}
+	.plataformas a {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--s-2);
+		min-height: 44px;
+		padding: 0 1.1rem;
+		border: 1px solid color-mix(in oklch, var(--cal) 24%, transparent);
+		border-radius: var(--radio-boton);
+		color: var(--cal);
+		text-decoration: none;
+		font-weight: 600;
+		transition: border-color var(--d-media) var(--ease);
+	}
+	.plataformas a:hover {
+		border-color: var(--oro);
+	}
+	.plataformas :global(svg) {
+		width: 17px;
+		height: 17px;
+		color: var(--oro);
+	}
+
+	/* Formulario sobre carbón: etiquetas encima, ayuda y error debajo (contraste AA) */
+	.formulario {
+		display: grid;
+		gap: var(--s-5);
+		padding: clamp(1.5rem, 3.5vw, 3rem);
+		background: color-mix(in oklch, var(--cal) 5%, var(--carbon));
+		border: 1px solid color-mix(in oklch, var(--cal) 12%, transparent);
+	}
+	.dos {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--s-5);
+	}
+	.campo {
+		display: grid;
+		gap: var(--s-2);
+		align-content: start; /* en la fila de dos campos, que no se estire ninguno */
+	}
+	label {
+		font-size: var(--t-sm);
+		font-weight: 600;
+		color: var(--cal);
+	}
+	input,
+	textarea {
+		width: 100%;
+		min-height: 48px;
+		padding: 0.75rem 0.9rem;
+		border: 1px solid color-mix(in oklch, var(--cal) 28%, transparent);
+		border-radius: 0;
+		background: color-mix(in oklch, var(--cal) 6%, transparent);
+		color: var(--cal);
+		font: 400 1rem / 1.4 var(--f-texto);
+		transition: border-color var(--d-media) var(--ease);
+	}
+	input::placeholder {
+		color: color-mix(in oklch, var(--cal-suave) 75%, transparent);
+	}
+	input:focus,
+	textarea:focus {
+		outline: none;
+		border-color: var(--oro);
+	}
+	textarea {
+		resize: vertical;
+	}
+	.campo--check {
+		grid-template-columns: auto 1fr;
+		align-items: start;
+		column-gap: var(--s-3);
+	}
+	.campo--check input {
+		width: 22px;
+		height: 22px;
+		min-height: 0;
+		margin-top: 2px;
+		accent-color: var(--oro);
+	}
+	.campo--check label {
+		font-weight: 400;
+		color: var(--cal-suave);
+	}
+	.campo--check .error {
+		grid-column: 2;
+	}
+	.ayuda {
+		font-size: var(--t-xs);
+		color: var(--cal-suave);
+	}
+	.error {
+		font-size: var(--t-xs);
+		font-weight: 600;
+		color: var(--error-oscuro);
+	}
+	.error:empty,
+	.estado:empty {
+		display: none;
+	}
+	[aria-invalid='true'] {
+		border-color: var(--error-oscuro);
+	}
+	.enviar {
+		justify-self: start;
+	}
+	.enviar[disabled] {
+		opacity: 0.55;
+		cursor: progress;
+	}
+	.estado {
+		font-weight: 600;
+		color: var(--cal);
+	}
+	.estado.ok {
+		color: var(--oro);
+	}
+
+	@media (max-width: 900px) {
+		.rejilla {
+			grid-template-columns: 1fr;
+		}
+	}
+	@media (max-width: 560px) {
+		.dos {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
+
+<script>
+	const form = document.querySelector<HTMLFormElement>('[data-formulario]');
+	const estado = document.querySelector<HTMLElement>('[data-estado]');
+	const mensajes: Record<string, string> = {
+		name: 'Escribe tu nombre.',
+		email: 'Escribe un email válido para poder contestarte.',
+		message: 'Cuéntanos qué necesitas.',
+		privacy: 'Necesitamos tu permiso para responderte.',
+	};
+	const errorDe = (campo: HTMLInputElement | HTMLTextAreaElement) =>
+		document.getElementById(campo.getAttribute('aria-describedby') || '');
+
+	function validar(campo: HTMLInputElement | HTMLTextAreaElement) {
+		const ok = campo.checkValidity();
+		campo.setAttribute('aria-invalid', String(!ok));
+		const p = errorDe(campo);
+		if (p && p.classList.contains('error')) p.textContent = ok ? '' : mensajes[campo.name] || '';
+		return ok;
+	}
+
+	if (form && estado) {
+		const requeridos = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]')];
+		// Se valida al salir de cada campo, no mientras se escribe
+		requeridos.forEach((c) => c.addEventListener('blur', () => c.value && validar(c)));
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			const invalidos = requeridos.filter((c) => !validar(c));
+			if (invalidos.length) {
+				invalidos[0].focus();
+				return;
+			}
+			const boton = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+			boton.disabled = true;
+			estado.className = 'estado';
+			estado.textContent = 'Enviando…';
+			try {
+				const r = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+				if (!r.ok) throw new Error();
+				form.reset();
+				estado.classList.add('ok');
+				estado.textContent = '¡Gracias! Te contestaremos lo antes posible.';
+			} catch {
+				estado.textContent = 'No se ha podido enviar. Escríbenos por WhatsApp al 620 10 45 39 o inténtalo de nuevo.';
+			} finally {
+				boton.disabled = false;
+			}
+		});
+	}
+</script>
