@@ -19,7 +19,7 @@ export const preguntas = [
 	{
 		pregunta: '¿Se puede alquilar la casa rural para grupos grandes?',
 		respuesta:
-			'Sí, el alquiler es siempre de la casa completa, ideal para grupos de amigos, familias o celebraciones. Tiene barbacoa, zona de juegos, pista de fútbol y porches con arcos.',
+			'Sí, el alquiler es siempre de la casa completa, ideal para grupos de amigos, familias o celebraciones. Tiene barbacoa, zona de juegos, pista de fútbol y amplios porches cubiertos.',
 	},
 	{
 		pregunta: '¿Qué actividades se pueden hacer cerca de la casa rural?',

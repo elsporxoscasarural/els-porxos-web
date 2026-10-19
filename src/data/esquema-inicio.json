@@ -4,7 +4,7 @@
   "@type": "LodgingBusiness",
   "name": "Els Porxos Casa Rural",
   "alternateName": "Els Porxos Bellcaire d'Urgell",
-  "description": "Casa rural de 2 plantas con piscina privada, porches con arcos, jardín, barbacoa, zona de juegos infantil y pista de fútbol en Bellcaire d'Urgell, Lleida. Capacidad para hasta 19 personas en 6 habitaciones con 3 baños. Alquiler completo para grupos y familias.",
+  "description": "Casa rural de 2 plantas con piscina privada, amplios porches cubiertos, jardín, barbacoa, zona de juegos infantil y pista de fútbol en Bellcaire d'Urgell, Lleida. Capacidad para hasta 19 personas en 6 habitaciones con 3 baños. Alquiler completo para grupos y familias.",
   "url": "https://elsporxos.es/",
   "telephone": "+34620104539",
   "identifier": "HUTL-000401",
@@ -232,7 +232,7 @@
     "name": "¿Se puede alquilar la casa rural para grupos grandes?",
     "acceptedAnswer": {
      "@type": "Answer",
-     "text": "Sí, el alquiler es siempre de la casa completa, ideal para grupos de amigos, familias o celebraciones. Tiene barbacoa, zona de juegos, pista de fútbol y porches con arcos."
+     "text": "Sí, el alquiler es siempre de la casa completa, ideal para grupos de amigos, familias o celebraciones. Tiene barbacoa, zona de juegos, pista de fútbol y amplios porches cubiertos."
     }
    },
    {

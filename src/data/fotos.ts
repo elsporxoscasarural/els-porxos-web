@@ -14,12 +14,12 @@ export const grupos: { id: Grupo; nombre: string }[] = [
 
 const datos: { archivo: string; alt: string; grupo: Grupo }[] = [
 	// Porches
-	{ archivo: 'porche-futbolin-piscina', alt: 'Futbolín bajo los arcos del porche, con el jardín y la piscina al fondo', grupo: 'porches' },
+	{ archivo: 'porche-futbolin-piscina', alt: 'Futbolín en el porche cubierto, con el jardín y la piscina al fondo', grupo: 'porches' },
 	{ archivo: 'porche-ping-pong', alt: 'Porche alargado con mesa de ping-pong y vistas al jardín', grupo: 'porches' },
 	{ archivo: 'porche-futbolin', alt: 'Porche cubierto con futbolín clásico, mesa y sillas', grupo: 'porches' },
 	{ archivo: 'porche-barbacoa-futbolin', alt: 'Futbolín junto a la barbacoa de obra del porche', grupo: 'porches' },
 	{ archivo: 'barbacoa-mesa-porche', alt: 'Barbacoa de obra y mesa grande para comer todos juntos bajo el porche', grupo: 'porches' },
-	{ archivo: 'porche-arcos-jardin', alt: 'Porche con arcos y rosales junto al jardín', grupo: 'porches' },
+	{ archivo: 'porche-arcos-jardin', alt: 'Porche con rosales junto al jardín', grupo: 'porches' },
 	{ archivo: 'porche-banco-madera', alt: 'Porche con banco rústico de madera', grupo: 'porches' },
 	// Interior
 	{ archivo: 'salon-comedor-mesa', alt: 'Salón-comedor con gran mesa de madera y sofás de cuero', grupo: 'interior' },
@@ -53,7 +53,7 @@ const datos: { archivo: string; alt: string; grupo: Grupo }[] = [
 	// Jardín y piscina
 	{ archivo: 'casa-dron', alt: "Vista aérea de la casa con el jardín y la piscina, entre los campos de Bellcaire d'Urgell", grupo: 'exterior' },
 	{ archivo: 'piscina-seto', alt: 'Piscina privada junto al seto y la balaustrada', grupo: 'exterior' },
-	{ archivo: 'fachada-jardin-entrada', alt: 'La casa con sus porches de arcos, el magnolio y la piscina', grupo: 'exterior' },
+	{ archivo: 'fachada-jardin-entrada', alt: 'La casa con sus porches, el magnolio y la piscina', grupo: 'exterior' },
 	{ archivo: 'piscina', alt: 'Piscina privada rodeada de seto y jardín', grupo: 'exterior' },
 	{ archivo: 'piscina-escalera', alt: 'Piscina privada con escalera', grupo: 'exterior' },
 	{ archivo: 'jardin-piscina-campos', alt: 'Jardín y piscina vistos desde el balcón, con los campos al fondo', grupo: 'exterior' },
@@ -63,7 +63,7 @@ const datos: { archivo: string; alt: string; grupo: Grupo }[] = [
 	{ archivo: 'jardin-desde-balcon', alt: 'El jardín y el camino de entrada vistos desde el balcón', grupo: 'exterior' },
 	{ archivo: 'zona-juegos', alt: 'Zona de juegos infantil con canasta, casita y tobogán', grupo: 'exterior' },
 	{ archivo: 'pista-deportiva', alt: 'Pista deportiva privada con portería y la casa al fondo', grupo: 'exterior' },
-	{ archivo: 'fachada-panoramica', alt: 'Vista panorámica de la fachada con arcos y balcones', grupo: 'exterior' },
+	{ archivo: 'fachada-panoramica', alt: 'Vista panorámica de la fachada con porches y balcones', grupo: 'exterior' },
 	{ archivo: 'fachada-calle-olivos', alt: 'La casa vista desde la calle, entre olivos', grupo: 'exterior' },
 	{ archivo: 'fachada-calle-entrada', alt: 'Fachada de la casa vista desde la calle', grupo: 'exterior' },
 ];
