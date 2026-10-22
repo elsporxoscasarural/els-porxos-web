@@ -1,0 +1,84 @@
+---
+// Resumen citable: una definición de la casa con datos concretos, al principio de la página.
+// Es el bloque que un buscador de IA puede citar tal cual (GEO), y la respuesta rápida para quien compara.
+import { casa } from '../../data/casa';
+
+const datos = [
+	{ cifra: String(casa.capacidad), texto: 'personas como máximo' },
+	{ cifra: String(casa.habitaciones), texto: 'habitaciones' },
+	{ cifra: String(casa.banos), texto: 'baños completos' },
+	{ cifra: '1', texto: 'piscina privada' },
+	{ cifra: '2', texto: 'noches de estancia mínima' },
+	{ cifra: '1 h 50', texto: 'en coche desde Barcelona' },
+];
+---
+
+<section class="resumen" aria-labelledby="resumen-titulo">
+	<div class="envoltorio rejilla">
+		<h2 id="resumen-titulo" class="visualmente-oculto">Els Porxos en datos</h2>
+		<p class="definicion aparece">
+			<strong>Els Porxos</strong> es una casa rural de alquiler íntegro en {casa.direccion.localidad} ({casa.direccion.comarca}, {casa.direccion.provincia}) para grupos y familias de hasta {casa.capacidad} personas, con piscina privada, jardín
+			vallado, barbacoa bajo el porche, zona de juegos y pista deportiva. A 35 minutos de Lleida y 1 h 50 min de Barcelona.
+		</p>
+		<dl class="datos">
+			{
+				datos.map((d) => (
+					<div class="aparece">
+						<dt>{d.cifra}</dt>
+						<dd>{d.texto}</dd>
+					</div>
+				))
+			}
+		</dl>
+	</div>
+</section>
+
+<style>
+	.resumen {
+		padding-block: clamp(3.5rem, 7vw, 6rem);
+		border-bottom: var(--borde);
+	}
+	.rejilla {
+		display: grid;
+		grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+		gap: clamp(2rem, 6vw, 6rem);
+		align-items: center;
+	}
+	.definicion {
+		max-width: 34ch;
+		font: 400 clamp(1.35rem, 2.1vw, 1.9rem) / 1.35 var(--f-display);
+		color: var(--tinta);
+	}
+	.definicion strong {
+		font-weight: 600;
+	}
+	.datos {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		margin: 0;
+		border-top: var(--borde);
+	}
+	.datos div {
+		padding: var(--s-4) var(--s-3) var(--s-4) 0;
+		border-bottom: var(--borde);
+	}
+	.datos dt {
+		font: 500 clamp(1.8rem, 3vw, 2.6rem) / 1 var(--f-display);
+		color: var(--oro-texto);
+	}
+	.datos dd {
+		margin: var(--s-1) 0 0;
+		font-size: var(--t-sm);
+		color: var(--sec);
+	}
+	@media (max-width: 860px) {
+		.rejilla {
+			grid-template-columns: 1fr;
+		}
+	}
+	@media (max-width: 420px) {
+		.datos {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+</style>

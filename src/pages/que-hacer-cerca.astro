@@ -14,13 +14,13 @@ const lista = orden.map((id) => lugares.find((l) => l.id === id)!);
 const portada = lugares.find((l) => l.id === 'mont-rebei')!;
 
 // Minutos en coche (para colocar cada lugar en la línea de distancias)
-const minutos: Record<string, number> = { penelles: 5, 'castell-del-remei': 10, 'estany-ivars': 15, camarasa: 25, 'congost-de-mu': 30, 'mont-rebei': 60 };
+const minutos: Record<string, number> = { penelles: 10, 'castell-del-remei': 15, 'estany-ivars': 20, camarasa: 20, 'congost-de-mu': 50, 'mont-rebei': 60 };
 const corto: Record<string, string> = { 'estany-ivars': "Estany d'Ivars", 'mont-rebei': 'Mont-rebei' };
 const distancias = lugares
 	.filter((l) => minutos[l.id])
 	.map((l) => ({ id: l.id, nombre: corto[l.id] || l.nombre, min: minutos[l.id] }))
 	.sort((a, b) => a.min - b.min);
-const texto = (m: number) => (m >= 60 ? `${m / 60} h` : `${m} min`);
+const texto = (m: number) => (m >= 60 ? `${Math.floor(m / 60)} h${m % 60 ? ` ${m % 60} min` : ''}` : `${m} min`);
 ---
 
 <BaseLayout

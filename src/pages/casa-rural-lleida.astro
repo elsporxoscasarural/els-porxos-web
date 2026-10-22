@@ -34,8 +34,8 @@ const incluye = [
 ---
 
 <BaseLayout
-	title="Casa rural en Lleida para grupos · Els Porxos · Piscina privada, hasta 19 personas"
-	description="Busca una casa rural en Lleida para grupos? Els Porxos en Bellcaire d'Urgell: alquiler completo para hasta 19 personas con piscina privada, barbacoa, jardín y zona de juegos. Ideal para familias y amigos."
+	title="Casa rural en Lleida con piscina privada para grupos · Els Porxos · hasta 19 personas"
+	description="¿Buscas una casa rural en Lleida con piscina para grupos? Els Porxos, en Bellcaire d'Urgell: alquiler de la casa entera para hasta 19 personas, con piscina privada, barbacoa, jardín y zona de juegos. Ideal para familias y amigos."
 >
 	{esquema.map((bloque) => <script slot="head" type="application/ld+json" set:html={JSON.stringify(bloque)} />)}
 
@@ -46,7 +46,7 @@ const incluye = [
 		alt={portada.alt}
 		encuadre="28% 50%"
 	>
-		<Fragment slot="titulo">Casa rural en Lleida para <em>grupos y familias</em></Fragment>
+		<Fragment slot="titulo">Casa rural con piscina en Lleida para <em>grupos y familias</em></Fragment>
 	</CabeceraPagina>
 
 	<section class="grupos" aria-labelledby="grupos-titulo">
@@ -62,6 +62,10 @@ const incluye = [
 					La casa se alquila siempre completa, sin compartir con otros huéspedes. La piscina, el jardín, la barbacoa, la
 					pista de fútbol y todas las instalaciones son solo para vuestro grupo durante toda la estancia.
 				</p>
+			</div>
+			<div class="relacionados aparece">
+				<a class="btn btn--linea" href="/casa-rural-grupos-grandes/">Para grupos grandes</a>
+				<a class="btn btn--linea" href="/casa-rural-familias-ninos/">Para familias con niños</a>
 			</div>
 			<dl class="cifras">
 				{cifras.map((c) => <div class="aparece"><dt>{c.n}</dt><dd>{c.t}</dd></div>)}
@@ -119,8 +123,8 @@ const incluye = [
 			<div class="partida__texto">
 				<h2 id="ubicacion-titulo" class="aparece">En Bellcaire d'Urgell, <em>comarca de La Noguera</em></h2>
 				<p class="aparece">
-					Bellcaire d'Urgell es un pueblo tranquilo de la llanura de Urgell, en la provincia de Lleida. Está a 30 minutos
-					de Balaguer, 45 de Lleida capital y con fácil acceso por la C-12 y la C-26. Desde aquí puedes visitar el
+					Bellcaire d'Urgell es un pueblo tranquilo de la llanura de Urgell, en la provincia de Lleida. Está a 12 minutos
+					de Balaguer, 35 de Lleida capital y con fácil acceso por la C-12 y la C-26. Desde aquí puedes visitar el
 					Congost de Mont-rebei, las pasarelas del Congost de Mu, el embalse de Camarasa, el Estany d'Ivars y los murales
 					de Penelles.
 				</p>
@@ -174,6 +178,12 @@ const incluye = [
 		gap: var(--s-6);
 		margin-top: var(--s-6);
 		max-width: 64rem;
+	}
+	.relacionados {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-3);
+		margin-top: var(--s-6);
 	}
 	.cifras {
 		display: grid;

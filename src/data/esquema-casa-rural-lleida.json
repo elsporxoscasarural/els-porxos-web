@@ -2,6 +2,7 @@
  {
   "@context": "https://schema.org",
   "@type": "LodgingBusiness",
+  "@id": "https://elsporxos.es/#casa",
   "name": "Els Porxos Casa Rural",
   "alternateName": "Casa rural en Lleida para grupos",
   "description": "Casa rural de alquiler completo para grupos de hasta 19 personas en Bellcaire d'Urgell, Lleida. Piscina privada, amplios porches cubiertos, barbacoa, zona de juegos y pista de fútbol.",

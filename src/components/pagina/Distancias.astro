@@ -1,0 +1,38 @@
+---
+// Tabla de distancias en coche desde la casa (datos en src/data/distancias.ts).
+import { ciudades } from '../../data/distancias';
+---
+
+<table class="distancias">
+	<caption>Distancias en coche desde Els Porxos</caption>
+	<tbody>{ciudades.map((c) => <tr><th scope="row">{c.nombre}</th><td>{c.km} km</td><td>{c.tiempo}</td></tr>)}</tbody>
+</table>
+
+<style>
+	.distancias {
+		width: 100%;
+		max-width: 30rem;
+		border-collapse: collapse;
+		font-size: var(--t-sm);
+	}
+	caption {
+		text-align: left;
+		padding-bottom: var(--s-2);
+		font-weight: 600;
+		color: var(--tinta);
+	}
+	th,
+	td {
+		padding: 0.45rem 0;
+		border-bottom: var(--borde);
+		text-align: left;
+		font-weight: 400;
+		color: var(--tinta);
+	}
+	td {
+		text-align: right;
+		color: var(--sec);
+		font-variant-numeric: tabular-nums;
+		padding-left: var(--s-4);
+	}
+</style>

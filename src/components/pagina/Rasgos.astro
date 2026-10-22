@@ -1,0 +1,78 @@
+---
+// Lista de ventajas con icono, en dos columnas, con un titular (slot «titulo») y una entradilla opcional.
+import Icono from '../Icono.astro';
+
+interface Props {
+	items: { icono: string; titulo: string; texto: string }[];
+	entradilla?: string;
+	id: string;
+}
+const { items, entradilla, id } = Astro.props;
+---
+
+<section class="rasgos" aria-labelledby={id}>
+	<div class="envoltorio">
+		<h2 id={id} class="aparece"><slot name="titulo" /></h2>
+		{entradilla && <p class="entradilla aparece">{entradilla}</p>}
+		<ul class="lista">
+			{
+				items.map((i) => (
+					<li class="aparece">
+						<Icono nombre={i.icono} />
+						<h3>{i.titulo}</h3>
+						<p>{i.texto}</p>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.rasgos {
+		padding-block: var(--seccion);
+	}
+	h2 {
+		max-width: 18ch;
+		padding-bottom: 0.08em;
+	}
+	.entradilla {
+		margin-top: var(--s-5);
+		max-width: 56ch;
+	}
+	.lista {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--s-7) var(--s-6);
+		margin: clamp(2.5rem, 5vw, 4rem) 0 0;
+		padding: 0;
+		list-style: none;
+	}
+	.lista li {
+		display: grid;
+		gap: var(--s-2);
+		align-content: start;
+		padding-top: var(--s-5);
+		border-top: var(--borde);
+	}
+	.lista :global(.icono) {
+		width: 30px;
+		height: 30px;
+		color: var(--oro-texto);
+	}
+	.lista p {
+		font-size: var(--t-sm);
+		color: var(--sec);
+	}
+	@media (max-width: 960px) {
+		.lista {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (max-width: 600px) {
+		.lista {
+			grid-template-columns: 1fr;
+			gap: var(--s-5);
+		}
+	}
+</style>

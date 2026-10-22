@@ -4,6 +4,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Portada from '../components/inicio/Portada.astro';
 import Banda from '../components/inicio/Banda.astro';
+import Resumen from '../components/inicio/Resumen.astro';
 import LaCasa from '../components/inicio/LaCasa.astro';
 import PorDentro from '../components/inicio/PorDentro.astro';
 import Habitaciones from '../components/inicio/Habitaciones.astro';
@@ -16,7 +17,11 @@ import Ubicacion from '../components/inicio/Ubicacion.astro';
 import Preguntas from '../components/inicio/Preguntas.astro';
 import Contacto from '../components/inicio/Contacto.astro';
 import Visor from '../components/Visor.astro';
-import esquema from '../data/esquema-inicio.json';
+import esquemaBase from '../data/esquema-inicio.json';
+import { preguntas, esquemaPreguntas } from '../data/preguntas';
+
+// FAQPage se genera desde las preguntas visibles (el resto de bloques, tal cual)
+const esquema = [...esquemaBase.filter((b) => b['@type'] !== 'FAQPage'), esquemaPreguntas(preguntas)];
 ---
 
 <BaseLayout
@@ -26,6 +31,7 @@ import esquema from '../data/esquema-inicio.json';
 	{esquema.map((bloque) => <script slot="head" type="application/ld+json" set:html={JSON.stringify(bloque)} />)}
 	<Portada />
 	<Banda />
+	<Resumen />
 	<LaCasa />
 	<PorDentro />
 	<Habitaciones />

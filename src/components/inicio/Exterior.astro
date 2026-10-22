@@ -36,6 +36,7 @@ const celdas = [
 			<ul class="servicios">
 				{servicios.map((s) => <li><Icono nombre={s.icono} />{s.texto}</li>)}
 			</ul>
+			<a class="enlace-familias" href="/casa-rural-familias-ninos/">Casa rural para familias con niños <Icono nombre="arrow-right" /></a>
 		</div>
 		{
 			celdas.map((c) => (
@@ -113,6 +114,23 @@ const celdas = [
 		color: var(--oro);
 	}
 
+	.enlace-familias {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--s-2);
+		color: var(--oro);
+		font-weight: 600;
+		font-size: var(--t-sm);
+		text-decoration: none;
+	}
+	.enlace-familias :global(.icono) {
+		width: 18px;
+		height: 18px;
+		transition: transform var(--d-media) var(--ease);
+	}
+	.enlace-familias:hover :global(.icono) {
+		transform: translateX(3px);
+	}
 	.celda--foto {
 		display: block;
 		padding: 0;
