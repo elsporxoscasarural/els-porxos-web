@@ -4,39 +4,65 @@
 import Icono from '../Icono.astro';
 import { casa } from '../../data/casa';
 
-const meses = ['E', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
-const nombresMeses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+import { idiomaDe } from '../../i18n';
+
+const lang = idiomaDe(Astro.currentLocale);
+const T = {
+	es: {
+		meses: ['E', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+		nombresMeses: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
+		temporadas: [
+			['Temporada alta', 'De abril a septiembre', 'La mejor época para disfrutar de la piscina privada y el exterior.'],
+			['Temporada baja', 'De octubre a marzo', 'Ideal para escapadas en grupo con chimenea y tranquilidad.'],
+			['Puentes y festivos', 'Semana Santa, Navidad, puentes', 'Consulta disponibilidad con antelación, se llena rápido para grupos.'],
+		],
+		titulo: 'Precio del alquiler de la casa rural <em>completa</em>',
+		intro: 'El alquiler de Els Porxos es siempre de la casa rural completa, con acceso exclusivo a la piscina, el jardín, la barbacoa y todas las instalaciones para tu grupo.',
+		incluye: ['Mínimo 2 noches', `Hasta ${casa.capacidad} personas`, 'Sábanas y toallas incluidas', 'Limpieza final incluida'],
+		reservar: 'Reservar',
+		consulta: 'Enviar consulta',
+		anyo: 'Temporada alta de abril a septiembre; temporada baja de octubre a marzo',
+		aviso: 'Precios por noche para la casa rural completa. Consulta precios exactos para las fechas de tu grupo.',
+	},
+	ca: {
+		meses: ['G', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+		nombresMeses: ['gener', 'febrer', 'març', 'abril', 'maig', 'juny', 'juliol', 'agost', 'setembre', 'octubre', 'novembre', 'desembre'],
+		temporadas: [
+			['Temporada alta', "D'abril a setembre", "La millor època per gaudir de la piscina privada i l'exterior."],
+			['Temporada baixa', "D'octubre a març", 'Ideal per a escapades en grup amb llar de foc i tranquil·litat.'],
+			['Ponts i festius', 'Setmana Santa, Nadal, ponts', "Consulta la disponibilitat amb antelació: s'omple ràpid per a grups."],
+		],
+		titulo: 'Preu del lloguer de la casa rural <em>sencera</em>',
+		intro: "El lloguer d'Els Porxos és sempre de la casa rural sencera, amb accés exclusiu a la piscina, el jardí, la barbacoa i totes les instal·lacions per al teu grup.",
+		incluye: ['Mínim 2 nits', `Fins a ${casa.capacidad} persones`, 'Llençols i tovalloles inclosos', 'Neteja final inclosa'],
+		reservar: 'Reserva',
+		consulta: 'Envia una consulta',
+		anyo: "Temporada alta d'abril a setembre; temporada baixa d'octubre a març",
+		aviso: 'Preus per nit per a la casa rural sencera. Consulta els preus exactes per a les dates del teu grup.',
+	},
+}[lang];
 const alta = (i: number) => i >= 3 && i <= 8; // de abril a septiembre
-const temporadas = [
-	{ nombre: 'Temporada alta', meses: 'De abril a septiembre', texto: 'La mejor época para disfrutar de la piscina privada y el exterior.', clase: 'alta' },
-	{ nombre: 'Temporada baja', meses: 'De octubre a marzo', texto: 'Ideal para escapadas en grupo con chimenea y tranquilidad.', clase: 'baja' },
-	{ nombre: 'Puentes y festivos', meses: 'Semana Santa, Navidad, puentes', texto: 'Consulta disponibilidad con antelación, se llena rápido para grupos.', clase: 'festivos' },
-];
+const clases = ['alta', 'baja', 'festivos'];
+const temporadas = T.temporadas.map(([nombre, meses, texto], i) => ({ nombre, meses, texto, clase: clases[i] }));
 ---
 
 <section class="tarifas" id="tarifas" aria-labelledby="tarifas-titulo">
 	<div class="envoltorio rejilla">
 		<div class="texto">
-			<h2 id="tarifas-titulo" class="aparece">Precio del alquiler de la casa rural <em>completa</em></h2>
-			<p class="aparece">
-				El alquiler de Els Porxos es siempre de la casa rural completa, con acceso exclusivo a la piscina, el jardín, la
-				barbacoa y todas las instalaciones para tu grupo.
-			</p>
+			<h2 id="tarifas-titulo" class="aparece" set:html={T.titulo} />
+			<p class="aparece">{T.intro}</p>
 			<ul class="incluye aparece">
-				<li><Icono nombre="moon-stars" /> Mínimo 2 noches</li>
-				<li><Icono nombre="users" /> Hasta {casa.capacidad} personas</li>
-				<li><Icono nombre="bed" /> Sábanas y toallas incluidas</li>
-				<li><Icono nombre="sparkle" /> Limpieza final incluida</li>
+				{['moon-stars', 'users', 'bed', 'sparkle'].map((ic, i) => <li><Icono nombre={ic} /> {T.incluye[i]}</li>)}
 			</ul>
 			<div class="acciones aparece">
-				<a class="btn" href={casa.whatsapp} target="_blank" rel="noopener"><Icono nombre="whatsapp-logo" /> Reservar</a>
-				<a class="btn btn--linea" href="#contacto">Enviar consulta</a>
+				<a class="btn" href={casa.whatsapp} target="_blank" rel="noopener"><Icono nombre="whatsapp-logo" /> {T.reservar}</a>
+				<a class="btn btn--linea" href="#contacto">{T.consulta}</a>
 			</div>
 		</div>
 
 		<div class="temporadas">
-			<div class="anyo aparece" role="img" aria-label="Temporada alta de abril a septiembre; temporada baja de octubre a marzo">
-				{meses.map((m, i) => <span class:list={['mes', { 'mes--alta': alta(i) }]} title={nombresMeses[i]}>{m}</span>)}
+			<div class="anyo aparece" role="img" aria-label={T.anyo}>
+				{T.meses.map((m, i) => <span class:list={['mes', { 'mes--alta': alta(i) }]} title={T.nombresMeses[i]}>{m}</span>)}
 			</div>
 			<ul>
 				{
@@ -52,9 +78,7 @@ const temporadas = [
 					))
 				}
 			</ul>
-			<p class="aviso aparece">
-				Precios por noche para la casa rural completa. Consulta precios exactos para las fechas de tu grupo.
-			</p>
+			<p class="aviso aparece">{T.aviso}</p>
 		</div>
 	</div>
 </section>

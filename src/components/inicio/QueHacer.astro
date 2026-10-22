@@ -3,22 +3,38 @@
 // teclado) por un lugar, su foto aparece en el arco fijo de la derecha. En móvil, cada lugar con su foto.
 import { Picture } from 'astro:assets';
 import Icono from '../Icono.astro';
-import { lugares } from '../../data/zona';
+import { lugaresEn } from '../../data/zona';
+import { idiomaDe, ruta } from '../../i18n';
+
+const lang = idiomaDe(Astro.currentLocale);
+const lugares = lugaresEn(lang);
+const T = {
+	es: {
+		titulo: 'Qué hacer cerca de nuestra casa rural en <em>Lleida</em>',
+		intro: 'Els Porxos es el campamento base perfecto para grupos y familias que quieren descubrir algunos de los rincones más espectaculares de La Noguera y la provincia de Lleida: congostos, embalses, humedales y pueblos con mucho arte.',
+		todas: 'Ver todas las excursiones',
+		creditos: 'Fotos de los lugares: Wikimedia Commons.',
+	},
+	ca: {
+		titulo: 'Què fer a prop de la nostra casa rural a <em>Lleida</em>',
+		intro: "Els Porxos és el camp base perfecte per a grups i famílies que volen descobrir alguns dels racons més espectaculars de la Noguera i la província de Lleida: congostos, embassaments, zones humides i pobles amb molt d'art.",
+		todas: 'Mira totes les excursions',
+		creditos: 'Fotos dels llocs: Wikimedia Commons.',
+	},
+}[lang];
+const pagina = ruta('/que-hacer-cerca/', lang);
 ---
 
 <section class="que-hacer" id="que-hacer" aria-labelledby="que-hacer-titulo" data-que-hacer>
 	<div class="envoltorio rejilla">
 		<div class="lista-col">
-			<h2 id="que-hacer-titulo" class="aparece">Qué hacer cerca de nuestra casa rural en <em>Lleida</em></h2>
-			<p class="intro aparece">
-				Els Porxos es el campamento base perfecto para grupos y familias que quieren descubrir algunos de los rincones más
-				espectaculares de La Noguera y la provincia de Lleida: congostos, embalses, humedales y pueblos con mucho arte.
-			</p>
+			<h2 id="que-hacer-titulo" class="aparece" set:html={T.titulo} />
+			<p class="intro aparece">{T.intro}</p>
 			<ol class="lista">
 				{
 					lugares.map((l, i) => (
 						<li class="aparece">
-							<a href={`/que-hacer-cerca/#${l.id}`} data-lugar={i} class:list={{ activo: i === 0 }}>
+							<a href={`${pagina}#${l.id}`} data-lugar={i} class:list={{ activo: i === 0 }}>
 								<span class="lugar__foto arco" aria-hidden="true">
 									<Picture formats={['avif', 'webp']} src={l.foto} alt="" widths={[360, 640]} sizes="40vw" />
 								</span>
@@ -31,7 +47,7 @@ import { lugares } from '../../data/zona';
 					))
 				}
 			</ol>
-			<a class="btn btn--linea todas aparece" href="/que-hacer-cerca/">Ver todas las excursiones</a>
+			<a class="btn btn--linea todas aparece" href={pagina}>{T.todas}</a>
 		</div>
 
 		<div class="vista" aria-hidden="true">
@@ -56,7 +72,7 @@ import { lugares } from '../../data/zona';
 		</div>
 	</div>
 	<p class="envoltorio creditos">
-		Fotos de los lugares: Wikimedia Commons.
+		{T.creditos}
 		{
 			lugares.map((l, i) => (
 				<>

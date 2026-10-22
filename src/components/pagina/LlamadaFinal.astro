@@ -2,6 +2,7 @@
 // Cierre de las páginas interiores: invitación a reservar, sobre carbón.
 import Icono from '../Icono.astro';
 import { casa } from '../../data/casa';
+import { idiomaDe } from '../../i18n';
 
 interface Props {
 	titulo: string;
@@ -10,6 +11,7 @@ interface Props {
 	secundario: { texto: string; href: string };
 }
 const { titulo, texto, secundario } = Astro.props;
+const lang = idiomaDe(Astro.currentLocale);
 ---
 
 <section class="llamada sobre-oscuro" aria-labelledby="llamada-titulo">
@@ -18,7 +20,7 @@ const { titulo, texto, secundario } = Astro.props;
 		<div class="lado aparece">
 			<p>{texto}</p>
 			<div class="acciones">
-				<a class="btn btn--claro" href={casa.whatsapp} target="_blank" rel="noopener"><Icono nombre="whatsapp-logo" /> Reservar</a>
+				<a class="btn btn--claro" href={casa.whatsapp} target="_blank" rel="noopener"><Icono nombre="whatsapp-logo" /> {lang === 'ca' ? 'Reserva' : 'Reservar'}</a>
 				<a class="btn btn--linea-claro" href={secundario.href}>{secundario.texto}</a>
 			</div>
 		</div>

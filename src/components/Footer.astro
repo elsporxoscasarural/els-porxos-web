@@ -3,38 +3,40 @@
 import { Image } from 'astro:assets';
 import logoClaro from '../assets/brand/logo-claro.png';
 import { casa } from '../data/casa';
+import { idiomaDe, ruta } from '../i18n';
 
-const enlaces = [
-	{ texto: 'La casa', href: '/#la-casa' },
-	{ texto: 'Habitaciones', href: '/#habitaciones' },
-	{ texto: 'Fotos', href: '/#fotos' },
-	{ texto: 'Tarifas', href: '/#tarifas' },
-	{ texto: 'Opiniones', href: '/#opiniones' },
-	{ texto: 'Casa rural en Lleida', href: '/casa-rural-lleida/' },
-	{ texto: 'Para grupos grandes', href: '/casa-rural-grupos-grandes/' },
-	{ texto: 'Para familias con niños', href: '/casa-rural-familias-ninos/' },
-	{ texto: 'Qué hacer cerca', href: '/que-hacer-cerca/' },
-	{ texto: 'Contacto', href: '/#contacto' },
-];
+const lang = idiomaDe(Astro.currentLocale);
+const T = {
+	es: {
+		enlaces: ['La casa', 'Habitaciones', 'Fotos', 'Tarifas', 'Opiniones', 'Casa rural en Lleida', 'Para grupos grandes', 'Para familias con niños', 'Qué hacer cerca', 'Contacto'],
+		inicio: 'inicio', pie: 'Pie de página', casaRural: 'Casa rural en', registro: 'Nº de registro turístico',
+	},
+	ca: {
+		enlaces: ['La casa', 'Habitacions', 'Fotos', 'Tarifes', 'Opinions', 'Casa rural a Lleida', 'Per a grups grans', 'Per a famílies amb nens', 'Què fer a prop', 'Contacte'],
+		inicio: 'inici', pie: 'Peu de pàgina', casaRural: 'Casa rural a', registro: 'Núm. de registre turístic',
+	},
+}[lang];
+const destinos = ['/#la-casa', '/#habitaciones', '/#fotos', '/#tarifas', '/#opiniones', '/casa-rural-lleida/', '/casa-rural-grupos-grandes/', '/casa-rural-familias-ninos/', '/que-hacer-cerca/', '/#contacto'];
+const enlaces = destinos.map((d, i) => ({ texto: T.enlaces[i], href: ruta(d, lang) }));
 const anyo = new Date().getFullYear();
 ---
 
 <footer class="pie sobre-oscuro">
 	<div class="envoltorio rejilla">
-		<a class="logo" href="/" aria-label={`${casa.nombre}, inicio`}>
+		<a class="logo" href={ruta('/', lang)} aria-label={`${casa.nombre}, ${T.inicio}`}>
 			<Image src={logoClaro} alt="" width={180} densities={[1, 2]} loading="lazy" />
 		</a>
-		<nav aria-label="Pie de página">
+		<nav aria-label={T.pie}>
 			<ul>{enlaces.map((e) => <li><a href={e.href}>{e.texto}</a></li>)}</ul>
 		</nav>
 		<div class="datos">
-			<p>Casa rural en {casa.direccion.localidad}, {casa.direccion.comarca} ({casa.direccion.provincia})</p>
+			<p>{T.casaRural} {casa.direccion.localidad}, {lang === 'ca' ? casa.direccion.comarca.replace('La ', 'la ') : casa.direccion.comarca} ({casa.direccion.provincia})</p>
 			<p><a href={casa.whatsapp} target="_blank" rel="noopener">WhatsApp {casa.telefono.visible}</a> · <a href={`mailto:${casa.email}`}>{casa.email}</a></p>
 		</div>
 	</div>
 	<div class="envoltorio base">
 		<p>© {anyo} {casa.nombre}</p>
-		<p>Nº de registro turístico: {casa.registroTuristico}</p>
+		<p>{T.registro}: {casa.registroTuristico}</p>
 	</div>
 </footer>
 

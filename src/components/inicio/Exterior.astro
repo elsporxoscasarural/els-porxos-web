@@ -4,43 +4,50 @@ import { Picture } from 'astro:assets';
 import Icono from '../Icono.astro';
 import { foto } from '../../data/fotos';
 
-const servicios = [
-	{ icono: 'swimming-pool', texto: 'Piscina privada' },
-	{ icono: 'campfire', texto: 'Barbacoa equipada' },
-	{ icono: 'soccer-ball', texto: 'Pista de fútbol privada' },
-	{ icono: 'basketball', texto: 'Zona de juegos infantil' },
-	{ icono: 'ping-pong', texto: 'Futbolín y ping-pong' },
-	{ icono: 'fire', texto: 'Chimenea interior' },
-	{ icono: 'tree', texto: 'Jardín con árboles y flores' },
-];
+import { idiomaDe, ruta } from '../../i18n';
+
+const lang = idiomaDe(Astro.currentLocale);
+const T = {
+	es: {
+		titulo: 'Piscina privada, jardín y <em>zona de juegos</em>',
+		texto: 'El exterior de esta casa rural con piscina en Lleida es un paraíso para las familias. El jardín está rodeado de árboles, plantas y flores, y cuenta con una piscina privada de uso exclusivo. Los más pequeños tienen su propia zona de juegos, y para los futboleros hay una pista privada con dos porterías, un futbolín clásico y una mesa de ping-pong bajo los porches. Todo el espacio exterior es solo para vosotros durante el alquiler.',
+		servicios: ['Piscina privada', 'Barbacoa equipada', 'Pista de fútbol privada', 'Zona de juegos infantil', 'Futbolín y ping-pong', 'Chimenea interior', 'Jardín con árboles y flores'],
+		enlace: 'Casa rural para familias con niños',
+		ampliar: 'Ampliar',
+	},
+	ca: {
+		titulo: 'Piscina privada, jardí i <em>zona de jocs</em>',
+		texto: "L'exterior d'aquesta casa rural amb piscina a Lleida és un paradís per a les famílies. El jardí està envoltat d'arbres, plantes i flors, i té una piscina privada d'ús exclusiu. Els més petits tenen la seva pròpia zona de jocs, i per als futbolers hi ha una pista privada amb dues porteries, un futbolí clàssic i una taula de ping-pong sota els porxos. Tot l'espai exterior és només per a vosaltres durant el lloguer.",
+		servicios: ['Piscina privada', 'Barbacoa equipada', 'Pista de futbol privada', 'Zona de jocs infantil', 'Futbolí i ping-pong', 'Llar de foc interior', 'Jardí amb arbres i flors'],
+		enlace: 'Casa rural per a famílies amb nens',
+		ampliar: 'Amplia',
+	},
+}[lang];
+const iconos = ['swimming-pool', 'campfire', 'soccer-ball', 'basketball', 'ping-pong', 'fire', 'tree'];
+const servicios = iconos.map((icono, i) => ({ icono, texto: T.servicios[i] }));
 const celdas = [
-	{ zona: 'piscina', foto: foto('piscina-seto'), sizes: '(max-width: 820px) 100vw, 25vw', anchos: [480, 800, 1200] },
-	{ zona: 'campos', foto: foto('jardin-piscina-campos'), sizes: '(max-width: 820px) 50vw, 25vw', anchos: [400, 800] },
-	{ zona: 'juegos', foto: foto('zona-juegos'), sizes: '(max-width: 820px) 50vw, 25vw', anchos: [400, 800] },
-	{ zona: 'barbacoa', foto: foto('barbacoa-mesa-porche'), sizes: '(max-width: 820px) 100vw, 25vw', anchos: [400, 800] },
-	{ zona: 'pista', foto: foto('pista-deportiva'), sizes: '(max-width: 820px) 100vw, 50vw', anchos: [480, 800] },
-	{ zona: 'camino', foto: foto('jardin-camino-entrada'), sizes: '(max-width: 820px) 50vw, 25vw', anchos: [400, 800] },
+	{ zona: 'piscina', foto: foto('piscina-seto', lang), sizes: '(max-width: 820px) 100vw, 25vw', anchos: [480, 800, 1200] },
+	{ zona: 'campos', foto: foto('jardin-piscina-campos', lang), sizes: '(max-width: 820px) 50vw, 25vw', anchos: [400, 800] },
+	{ zona: 'juegos', foto: foto('zona-juegos', lang), sizes: '(max-width: 820px) 50vw, 25vw', anchos: [400, 800] },
+	{ zona: 'barbacoa', foto: foto('barbacoa-mesa-porche', lang), sizes: '(max-width: 820px) 100vw, 25vw', anchos: [400, 800] },
+	{ zona: 'pista', foto: foto('pista-deportiva', lang), sizes: '(max-width: 820px) 100vw, 50vw', anchos: [480, 800] },
+	{ zona: 'camino', foto: foto('jardin-camino-entrada', lang), sizes: '(max-width: 820px) 50vw, 25vw', anchos: [400, 800] },
 ];
 ---
 
 <section class="exterior" id="exterior" aria-labelledby="exterior-titulo">
 	<div class="envoltorio mosaico">
 		<div class="celda celda--texto sobre-oscuro">
-			<h2 id="exterior-titulo">Piscina privada, jardín y <em>zona de juegos</em></h2>
-			<p>
-				El exterior de esta casa rural con piscina en Lleida es un paraíso para las familias. El jardín está rodeado de
-				árboles, plantas y flores, y cuenta con una piscina privada de uso exclusivo. Los más pequeños tienen su propia
-				zona de juegos, y para los futboleros hay una pista privada con dos porterías, un futbolín clásico y una mesa de
-				ping-pong bajo los porches. Todo el espacio exterior es solo para vosotros durante el alquiler.
-			</p>
+			<h2 id="exterior-titulo" set:html={T.titulo} />
+			<p>{T.texto}</p>
 			<ul class="servicios">
 				{servicios.map((s) => <li><Icono nombre={s.icono} />{s.texto}</li>)}
 			</ul>
-			<a class="enlace-familias" href="/casa-rural-familias-ninos/">Casa rural para familias con niños <Icono nombre="arrow-right" /></a>
+			<a class="enlace-familias" href={ruta('/casa-rural-familias-ninos/', lang)}>{T.enlace} <Icono nombre="arrow-right" /></a>
 		</div>
 		{
 			celdas.map((c) => (
-				<button class:list={['celda', 'celda--foto', `celda--${c.zona}`, 'aparece']} type="button" data-ampliar="casa" data-id={c.foto.id} aria-label={`Ampliar: ${c.foto.alt}`}>
+				<button class:list={['celda', 'celda--foto', `celda--${c.zona}`, 'aparece']} type="button" data-ampliar="casa" data-id={c.foto.id} aria-label={`${T.ampliar}: ${c.foto.alt}`}>
 					<Picture formats={['avif', 'webp']} src={c.foto.src} alt={c.foto.alt} widths={c.anchos} sizes={c.sizes} />
 				</button>
 			))

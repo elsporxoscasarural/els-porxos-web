@@ -3,8 +3,16 @@
 // y de un grupo de 13. El resto, en una fila que se desliza.
 import Icono from '../Icono.astro';
 import Marca from '../Marca.astro';
-import { opiniones, destacada } from '../../data/opiniones';
+import { opinionesEn } from '../../data/opiniones';
+import { idiomaDe } from '../../i18n';
 import { casa } from '../../data/casa';
+
+const lang = idiomaDe(Astro.currentLocale);
+const { opiniones, destacada } = opinionesEn(lang);
+const T = {
+	es: { estrellas: '5 de 5 estrellas', media: 'Valoración media en Airbnb y Google', titulo: 'Lo que dicen nuestros huéspedes', huesped: 'huésped en', mas: 'Más opiniones de grupos y familias', ant: 'Opiniones anteriores', sig: 'Más opiniones', todas: 'Ver todas las opiniones en Airbnb' },
+	ca: { estrellas: '5 de 5 estrelles', media: 'Valoració mitjana a Airbnb i Google', titulo: 'El que diuen els nostres hostes', huesped: 'hoste a', mas: 'Més opinions de grups i famílies', ant: 'Opinions anteriors', sig: 'Més opinions', todas: 'Mira totes les opinions a Airbnb' },
+}[lang];
 ---
 
 <section class="opiniones" id="opiniones" aria-labelledby="opiniones-titulo">
@@ -12,36 +20,36 @@ import { casa } from '../../data/casa';
 		<div class="cabeza">
 			<div class="nota aparece">
 				<p class="nota__cifra">5,0</p>
-				<p class="estrellas" role="img" aria-label="5 de 5 estrellas">
+				<p class="estrellas" role="img" aria-label={T.estrellas}>
 					{[1, 2, 3, 4, 5].map(() => <Icono nombre="star" peso="fill" />)}
 				</p>
-				<p class="nota__texto">Valoración media en Airbnb y Google</p>
+				<p class="nota__texto">{T.media}</p>
 			</div>
 
 			<figure class="destacada aparece">
-				<h2 id="opiniones-titulo" class="visualmente-oculto">Lo que dicen nuestros huéspedes</h2>
+				<h2 id="opiniones-titulo" class="visualmente-oculto">{T.titulo}</h2>
 				<blockquote>
 					<p>«{destacada.texto}»</p>
 				</blockquote>
 				<figcaption>
 					<span class="avatar" aria-hidden="true">{destacada.nombre.charAt(0)}</span>
-					<span><strong>{destacada.nombre}</strong>, huésped en {destacada.fuente} · {destacada.fecha}</span>
+					<span><strong>{destacada.nombre}</strong>, {T.huesped} {destacada.fuente} · {destacada.fecha}</span>
 				</figcaption>
 			</figure>
 		</div>
 
 		<div class="fila-cabeza">
-			<p class="fila-titulo">Más opiniones de grupos y familias</p>
+			<p class="fila-titulo">{T.mas}</p>
 			<div class="flechas">
-				<button type="button" aria-label="Opiniones anteriores" data-opiniones-ant><Icono nombre="caret-left" /></button>
-				<button type="button" aria-label="Más opiniones" data-opiniones-sig><Icono nombre="caret-right" /></button>
+				<button type="button" aria-label={T.ant} data-opiniones-ant><Icono nombre="caret-left" /></button>
+				<button type="button" aria-label={T.sig} data-opiniones-sig><Icono nombre="caret-right" /></button>
 			</div>
 		</div>
 		<ul class="fila" data-opiniones-fila>
 			{
 				opiniones.map((o) => (
 					<li class="tarjeta">
-						<p class="estrellas estrellas--peq" role="img" aria-label="5 de 5 estrellas">
+						<p class="estrellas estrellas--peq" role="img" aria-label={T.estrellas}>
 							{[1, 2, 3, 4, 5].map(() => <Icono nombre="star" peso="fill" />)}
 						</p>
 						<blockquote>
@@ -63,7 +71,7 @@ import { casa } from '../../data/casa';
 			<li class="tarjeta tarjeta--enlace">
 				<a href={casa.reservas.airbnb} target="_blank" rel="noopener">
 					<Marca nombre="airbnb" />
-					<span>Ver todas las opiniones en Airbnb</span>
+					<span>{T.todas}</span>
 					<Icono nombre="arrow-right" class="flecha" />
 				</a>
 			</li>

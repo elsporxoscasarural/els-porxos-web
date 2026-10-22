@@ -3,6 +3,7 @@
 // El titular va en el slot «titulo» para poder usar <em> (cursiva dorada) en una palabra.
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import { idiomaDe, ruta } from '../../i18n';
 
 interface Props {
 	miga: string;
@@ -13,14 +14,15 @@ interface Props {
 	encuadre?: string;
 }
 const { miga, entradilla, foto, alt, encuadre = '50% 50%' } = Astro.props;
+const lang = idiomaDe(Astro.currentLocale);
 ---
 
 <header class="cabecera-pagina">
 	<div class="envoltorio rejilla">
 		<div class="texto">
-			<nav class="migas entra" aria-label="Estás en">
+			<nav class="migas entra" aria-label={lang === 'ca' ? "Ets a" : 'Estás en'}>
 				<ol>
-					<li><a href="/">Inicio</a></li>
+					<li><a href={ruta('/', lang)}>{lang === 'ca' ? 'Inici' : 'Inicio'}</a></li>
 					<li aria-current="page">{miga}</li>
 				</ol>
 			</nav>

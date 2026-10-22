@@ -2,17 +2,20 @@
 // Preguntas frecuentes en acordeón (<details> nativo: funciona sin JS y con teclado).
 // Por defecto, las de la portada; las páginas interiores pasan su propia lista.
 import Icono from '../Icono.astro';
-import { preguntas as generales, type Pregunta } from '../../data/preguntas';
+import { preguntasEn, type Pregunta } from '../../data/preguntas';
+import { idiomaDe } from '../../i18n';
 
 interface Props {
 	lista?: Pregunta[];
 }
-const { lista = generales } = Astro.props;
+const lang = idiomaDe(Astro.currentLocale);
+const { lista = preguntasEn(lang) } = Astro.props;
+const titulo = lang === 'ca' ? 'Preguntes <em>freqüents</em>' : 'Preguntas <em>frecuentes</em>';
 ---
 
 <section class="preguntas" id="preguntas" aria-labelledby="preguntas-titulo">
 	<div class="envoltorio rejilla">
-		<h2 id="preguntas-titulo" class="aparece">Preguntas <em>frecuentes</em></h2>
+		<h2 id="preguntas-titulo" class="aparece" set:html={titulo} />
 		<div class="lista">
 			{
 				lista.map((p, i) => (

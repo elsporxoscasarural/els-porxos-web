@@ -1,0 +1,279 @@
+---
+// Página «Casa rural para familias con niños» (SEO), en castellano y en catalán (el idioma sale de la URL):
+// familias con niños y varias familias juntas. Incluye la opinión real de una familia.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CabeceraPagina from '../pagina/CabeceraPagina.astro';
+import BloqueFoto from '../pagina/BloqueFoto.astro';
+import Rasgos from '../pagina/Rasgos.astro';
+import LlamadaFinal from '../pagina/LlamadaFinal.astro';
+import Preguntas from '../inicio/Preguntas.astro';
+import Visor from '../Visor.astro';
+import Icono from '../Icono.astro';
+import { foto } from '../../data/fotos';
+import { lugaresEn } from '../../data/zona';
+import { opinionesEn } from '../../data/opiniones';
+import { esquemaPreguntas } from '../../data/preguntas';
+import { migas, paginaSobreLaCasa } from '../../data/esquema';
+import { idiomaDe, ruta } from '../../i18n';
+
+const lang = idiomaDe(Astro.currentLocale);
+const T = ({
+	"es": {
+		"url": "https://elsporxos.es/casa-rural-familias-ninos/",
+		"title": "Casa rural para familias con niños en Lleida · Piscina y zona de juegos · Els Porxos",
+		"description": "Casa rural en Lleida para familias con niños y varias familias juntas: recinto vallado, piscina privada, zona de juegos, pista de fútbol, futbolín y habitación con literas. Alquiler de la casa entera para hasta 20 personas.",
+		"miga": "Casa rural para familias con niños",
+		"entradilla": "Un recinto vallado con piscina privada, zona de juegos y pista de fútbol, y una casa con seis habitaciones para que varias familias se alojen juntas. En Bellcaire d'Urgell (Lleida), con la casa entera solo para vosotros.",
+		"h1": "Casa rural para <em>familias con niños</em> en Lleida",
+		"jueganT": "Pensada para que los niños <em>jueguen</em>",
+		"juegan": "Los niños tienen sitio para correr y jugar sin salir del recinto, y los mayores pueden estar tranquilos en el porche viéndolos jugar.",
+		"rasgos": [
+			[
+				"Recinto vallado",
+				"Todo el jardín está cerrado: los niños juegan fuera mientras los mayores están en el porche."
+			],
+			[
+				"Piscina con balaustrada",
+				"Piscina privada separada del jardín por una balaustrada. Los niños, siempre con un adulto en el agua."
+			],
+			[
+				"Zona de juegos",
+				"Canasta, casita, tobogán y columpio sobre el césped, dentro del recinto de la casa."
+			],
+			[
+				"Pista con dos porterías",
+				"Una pista privada para jugar a fútbol sin salir de casa, de la mañana a la noche."
+			],
+			[
+				"Futbolín y ping-pong",
+				"Bajo el porche cubierto: el plan de las horas de más calor y de los días de lluvia."
+			],
+			[
+				"Habitación de literas",
+				"Seis plazas en literas: la habitación favorita de los niños, todos juntos."
+			]
+		],
+		"variasT": "Varias familias, <em>una sola casa</em>",
+		"varias": "Es habitual que vengan tres o cuatro familias juntas: abuelos, primos o amigos con sus hijos. Cada pareja tiene su habitación y los niños duermen juntos, que es lo que más les gusta.",
+		"habs": [
+			"2 habitaciones de matrimonio, una de ellas suite con baño",
+			"2 habitaciones dobles con camas individuales",
+			"1 habitación triple y 1 séxtuple con literas",
+			"3 baños completos y cocina totalmente equipada"
+		],
+		"dicenT": "Lo que dicen las <em>familias</em>",
+		"huesped": "huésped en",
+		"mas": "Más opiniones",
+		"planesT": "Planes con niños <em>cerca de la casa</em>",
+		"todas": "Todas las excursiones",
+		"preguntas": [
+			[
+				"¿Caben varias familias juntas?",
+				"Sí. Con 6 habitaciones y 3 baños, la casa acoge hasta 20 personas: cada pareja puede tener su habitación (dos de matrimonio, una de ellas suite con baño, y dos dobles) y los niños dormir juntos en la habitación de literas y en la triple."
+			],
+			[
+				"¿Es segura la casa para niños pequeños?",
+				"El recinto está vallado y la piscina está separada del jardín por una balaustrada. Aun así, los niños deben estar siempre acompañados de un adulto en la zona de la piscina."
+			],
+			[
+				"¿Qué pueden hacer los niños en la casa?",
+				"Tienen zona de juegos con canasta, casita, tobogán y columpio, una pista con dos porterías, futbolín, mesa de ping-pong, piscina y un jardín amplio con césped."
+			],
+			[
+				"¿Se admiten mascotas?",
+				"No, en Els Porxos no se admiten mascotas."
+			]
+		],
+		"finT": "Reserva la casa para tus familias",
+		"finTexto": "Dinos cuántos adultos y niños sois y las fechas, y te respondemos con disponibilidad y precio para la casa completa.",
+		"finBoton": "Ver la casa"
+	},
+	"ca": {
+		"url": "https://elsporxos.es/ca/casa-rural-families-amb-nens/",
+		"title": "Casa rural per a famílies amb nens a Lleida · Piscina i zona de jocs · Els Porxos",
+		"description": "Casa rural a Lleida per a famílies amb nens i diverses famílies juntes: recinte tancat, piscina privada, zona de jocs, pista de futbol, futbolí i habitació amb lliteres. Lloguer de la casa sencera per a fins a 20 persones.",
+		"miga": "Casa rural per a famílies amb nens",
+		"entradilla": "Un recinte tancat amb piscina privada, zona de jocs i pista de futbol, i una casa amb sis habitacions perquè diverses famílies s'hi allotgin juntes. A Bellcaire d'Urgell (Lleida), amb la casa sencera només per a vosaltres.",
+		"h1": "Casa rural per a <em>famílies amb nens</em> a Lleida",
+		"jueganT": "Pensada perquè els nens <em>juguin</em>",
+		"juegan": "Els nens tenen espai per córrer i jugar sense sortir del recinte, i els grans poden estar tranquils al porxo mirant-los jugar.",
+		"rasgos": [
+			[
+				"Recinte tancat",
+				"Tot el jardí està tancat: els nens juguen fora mentre els grans són al porxo."
+			],
+			[
+				"Piscina amb balustrada",
+				"Piscina privada separada del jardí per una balustrada. Els nens, sempre amb un adult a l'aigua."
+			],
+			[
+				"Zona de jocs",
+				"Cistella, caseta, tobogan i gronxador sobre la gespa, dins del recinte de la casa."
+			],
+			[
+				"Pista amb dues porteries",
+				"Una pista privada per jugar a futbol sense sortir de casa, del matí al vespre."
+			],
+			[
+				"Futbolí i ping-pong",
+				"Sota el porxo cobert: el pla de les hores de més calor i dels dies de pluja."
+			],
+			[
+				"Habitació de lliteres",
+				"Sis places en lliteres: l'habitació preferida dels nens, tots junts."
+			]
+		],
+		"variasT": "Diverses famílies, <em>una sola casa</em>",
+		"varias": "És habitual que vinguin tres o quatre famílies juntes: avis, cosins o amics amb els fills. Cada parella té la seva habitació i els nens dormen junts, que és el que més els agrada.",
+		"habs": [
+			"2 habitacions de matrimoni, una d'elles suite amb bany",
+			"2 habitacions dobles amb llits individuals",
+			"1 habitació triple i 1 sèxtuple amb lliteres",
+			"3 banys complets i cuina totalment equipada"
+		],
+		"dicenT": "El que diuen les <em>famílies</em>",
+		"huesped": "hoste a",
+		"mas": "Més opinions",
+		"planesT": "Plans amb nens <em>a prop de la casa</em>",
+		"todas": "Totes les excursions",
+		"preguntas": [
+			[
+				"Hi caben diverses famílies juntes?",
+				"Sí. Amb 6 habitacions i 3 banys, la casa acull fins a 20 persones: cada parella pot tenir la seva habitació (dues de matrimoni, una d'elles suite amb bany, i dues dobles) i els nens poden dormir junts a l'habitació de lliteres i a la triple."
+			],
+			[
+				"És segura la casa per a nens petits?",
+				"El recinte està tancat i la piscina està separada del jardí per una balustrada. Tot i així, els nens han d'anar sempre acompanyats d'un adult a la zona de la piscina."
+			],
+			[
+				"Què poden fer els nens a la casa?",
+				"Tenen zona de jocs amb cistella, caseta, tobogan i gronxador, una pista amb dues porteries, futbolí, taula de ping-pong, piscina i un jardí ampli amb gespa."
+			],
+			[
+				"S'admeten mascotes?",
+				"No, a Els Porxos no s'admeten mascotes."
+			]
+		],
+		"finT": "Reserva la casa per a les teves famílies",
+		"finTexto": "Digues-nos quants adults i nens sou i les dates, i et responem amb la disponibilitat i el preu de la casa sencera.",
+		"finBoton": "Mira la casa"
+	}
+})[lang];
+
+const iconos = ['shield-check', 'swimming-pool', 'basketball', 'soccer-ball', 'ping-pong', 'bed'];
+const ninos = T.rasgos.map(([titulo, texto], i) => ({ icono: iconos[i], titulo, texto }));
+const lugares = lugaresEn(lang);
+const planes = ['estany-ivars', 'penelles', 'camarasa', 'congost-de-mu'].map((id) => lugares.find((l) => l.id === id)!);
+const familia = opinionesEn(lang).opiniones.find((o) => o.nombre === 'Dary')!;
+const preguntas = T.preguntas.map(([pregunta, respuesta]) => ({ pregunta, respuesta }));
+const portada = foto('zona-juegos', lang);
+const esquema = [paginaSobreLaCasa(T.url, T.title, T.description, lang), migas(T.miga, T.url, lang), esquemaPreguntas(preguntas, lang)];
+---
+
+<BaseLayout title={T.title} description={T.description}>
+	{esquema.map((b) => <script slot="head" type="application/ld+json" set:html={JSON.stringify(b)} />)}
+
+	<CabeceraPagina miga={T.miga} entradilla={T.entradilla} foto={portada.src} alt={portada.alt}>
+		<Fragment slot="titulo" set:html={T.h1} />
+	</CabeceraPagina>
+
+	<Rasgos id="rasgos-titulo" items={ninos} entradilla={T.juegan}>
+		<Fragment slot="titulo" set:html={T.jueganT} />
+	</Rasgos>
+
+	<BloqueFoto foto={foto('habitacion-b-literas', lang)} fondo>
+		<h2 class="aparece" set:html={T.variasT} />
+		<p class="aparece">{T.varias}</p>
+		<ul class="aparece">{T.habs.map((h) => <li>{h}</li>)}</ul>
+	</BloqueFoto>
+
+	<BloqueFoto foto={foto('piscina', lang)} alterna arco>
+		<h2 class="aparece" set:html={T.dicenT} />
+		<blockquote class="cita aparece">
+			<p>«{familia.texto}»</p>
+			<footer>{familia.nombre}, {T.huesped} {familia.fuente} · {familia.fecha}</footer>
+		</blockquote>
+		<a class="btn btn--linea aparece" href={ruta('/#opiniones', lang)}>{T.mas} <Icono nombre="arrow-right" class="flecha" /></a>
+	</BloqueFoto>
+
+	<section class="planes" aria-labelledby="planes-titulo">
+		<div class="envoltorio">
+			<h2 id="planes-titulo" class="aparece" set:html={T.planesT} />
+			<ul class="planes__lista">
+				{
+					planes.map((l) => (
+						<li class="aparece">
+							<p class="planes__distancia">{l.distancia}</p>
+							<h3>{l.nombre}</h3>
+							<p>{l.texto}</p>
+						</li>
+					))
+				}
+			</ul>
+			<a class="btn btn--linea aparece" href={ruta('/que-hacer-cerca/', lang)}>{T.todas} <Icono nombre="arrow-right" class="flecha" /></a>
+		</div>
+	</section>
+
+	<Preguntas lista={preguntas} />
+
+	<LlamadaFinal titulo={T.finT} texto={T.finTexto} secundario={{ texto: T.finBoton, href: ruta('/#la-casa', lang) }} />
+	<Visor />
+</BaseLayout>
+
+<style>
+	.cita {
+		margin: 0;
+		display: grid;
+		gap: var(--s-3);
+	}
+	.cita p {
+		font: italic 400 clamp(1.25rem, 1.9vw, 1.7rem) / 1.35 var(--f-display);
+		color: var(--tinta);
+		max-width: 40ch;
+	}
+	.cita footer {
+		font-size: var(--t-sm);
+		color: var(--sec);
+	}
+	.planes {
+		padding-block: var(--seccion);
+	}
+	.planes h2 {
+		max-width: 16ch;
+		padding-bottom: 0.08em;
+	}
+	.planes__lista {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: var(--s-6);
+		margin: clamp(2.5rem, 5vw, 4rem) 0 var(--s-7);
+		padding: 0;
+		list-style: none;
+	}
+	.planes__lista li {
+		display: grid;
+		gap: var(--s-2);
+		align-content: start;
+		padding-top: var(--s-5);
+		border-top: var(--borde);
+	}
+	.planes__distancia {
+		font-size: var(--t-xs);
+		font-weight: 600;
+		color: var(--oro-texto);
+	}
+	.planes__lista p:last-child {
+		font-size: var(--t-sm);
+		color: var(--sec);
+	}
+	@media (max-width: 960px) {
+		.planes__lista {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (max-width: 560px) {
+		.planes__lista {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

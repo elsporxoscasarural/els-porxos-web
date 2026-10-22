@@ -4,26 +4,38 @@
 import { Image } from 'astro:assets';
 import logo from '../assets/brand/logo-color.png';
 import { casa } from '../data/casa';
+import { idiomaDe, ruta, equivalente } from '../i18n';
 
+const lang = idiomaDe(Astro.currentLocale);
+const T = {
+	es: { casa: 'La casa', habitaciones: 'Habitaciones', fotos: 'Fotos', cerca: 'Qué hacer cerca', contacto: 'Contacto', reservar: 'Reservar', inicio: 'inicio', principal: 'Principal', principalMovil: 'Principal (móvil)', idioma: 'Idioma' },
+	ca: { casa: 'La casa', habitaciones: 'Habitacions', fotos: 'Fotos', cerca: 'Què fer a prop', contacto: 'Contacte', reservar: 'Reserva', inicio: 'inici', principal: 'Principal', principalMovil: 'Principal (mòbil)', idioma: 'Idioma' },
+}[lang];
 const menu = [
-	{ texto: 'La casa', href: '/#la-casa' },
-	{ texto: 'Habitaciones', href: '/#habitaciones' },
-	{ texto: 'Fotos', href: '/#fotos' },
-	{ texto: 'Qué hacer cerca', href: '/que-hacer-cerca/' },
-	{ texto: 'Contacto', href: '/#contacto' },
+	{ texto: T.casa, href: ruta('/#la-casa', lang) },
+	{ texto: T.habitaciones, href: ruta('/#habitaciones', lang) },
+	{ texto: T.fotos, href: ruta('/#fotos', lang) },
+	{ texto: T.cerca, href: ruta('/que-hacer-cerca/', lang) },
+	{ texto: T.contacto, href: ruta('/#contacto', lang) },
 ];
+// Enlace a esta misma página en el otro idioma
+const otro = lang === 'ca' ? 'es' : 'ca';
+const enlaceIdioma = equivalente(Astro.url.pathname, otro);
 ---
 
 <header class="cabecera" data-cabecera>
-	<a class="marca" href="/" aria-label={`${casa.nombre}, inicio`}>
+	<a class="marca" href={ruta('/', lang)} aria-label={`${casa.nombre}, ${T.inicio}`}>
 		<Image src={logo} alt="" width={74} densities={[1, 2]} loading="eager" />
 	</a>
 
-	<nav class="menu" aria-label="Principal">
+	<nav class="menu" aria-label={T.principal}>
 		<ul>{menu.map((item) => <li><a href={item.href}>{item.texto}</a></li>)}</ul>
 	</nav>
 
-	<a class="btn cta" href={casa.whatsapp} target="_blank" rel="noopener">Reservar</a>
+	<a class="idioma" href={enlaceIdioma} hreflang={otro} lang={otro} aria-label={otro === 'ca' ? 'Versió en català' : 'Versión en castellano'}>
+		<span class:list={{ activo: lang === 'es' }}>ES</span><span class:list={{ activo: lang === 'ca' }}>CA</span>
+	</a>
+	<a class="btn cta" href={casa.whatsapp} target="_blank" rel="noopener">{T.reservar}</a>
 
 	<button class="boton-menu" type="button" aria-expanded="false" aria-controls="menu-movil" data-boton-menu>
 		<span>Menú</span>
@@ -32,12 +44,13 @@ const menu = [
 </header>
 
 <div class="menu-movil sobre-oscuro" id="menu-movil" data-menu-movil hidden>
-	<nav aria-label="Principal (móvil)">
+	<nav aria-label={T.principalMovil}>
 		<ul>{menu.map((item) => <li><a href={item.href}>{item.texto}</a></li>)}</ul>
 	</nav>
 	<div class="menu-movil__contacto">
 		<a class="menu-movil__tel" href={`tel:${casa.telefono.enlace}`}>{casa.telefono.visible}</a>
-		<a class="btn btn--claro" href={casa.whatsapp} target="_blank" rel="noopener">Reservar</a>
+		<a class="btn btn--claro" href={casa.whatsapp} target="_blank" rel="noopener">{T.reservar}</a>
+		<a class="menu-movil__idioma" href={enlaceIdioma} hreflang={otro} lang={otro}>{otro === 'ca' ? 'Català' : 'Castellano'}</a>
 	</div>
 </div>
 
@@ -101,6 +114,36 @@ const menu = [
 	}
 	.cta {
 		flex: none;
+	}
+	/* Selector de idioma: ES · CA, el activo en tinta y el otro atenuado */
+	.idioma {
+		flex: none;
+		display: inline-flex;
+		gap: 0.45rem;
+		align-items: center;
+		min-height: 44px;
+		padding-inline: var(--s-2);
+		font-size: var(--t-xs);
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-decoration: none;
+		color: var(--sec);
+	}
+	.idioma span + span::before {
+		content: '·';
+		margin-right: 0.45rem;
+		color: var(--linea);
+	}
+	.idioma .activo {
+		color: var(--tinta);
+	}
+	.idioma:hover span:not(.activo) {
+		color: var(--oro-texto);
+	}
+	.menu-movil__idioma {
+		font-size: var(--t-sm);
+		font-weight: 600;
+		color: var(--cal-suave);
 	}
 
 	/* Botón de menú (solo móvil y tableta) */
@@ -202,6 +245,10 @@ const menu = [
 		}
 		.boton-menu {
 			display: inline-flex;
+		}
+		/* En móvil el idioma se cambia desde el menú */
+		.idioma {
+			display: none;
 		}
 		.cta {
 			order: 3;

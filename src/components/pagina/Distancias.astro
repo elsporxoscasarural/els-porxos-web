@@ -1,11 +1,14 @@
 ---
 // Tabla de distancias en coche desde la casa (datos en src/data/distancias.ts).
 import { ciudades } from '../../data/distancias';
+import { idiomaDe } from '../../i18n';
+
+const lang = idiomaDe(Astro.currentLocale);
 ---
 
 <table class="distancias">
-	<caption>Distancias en coche desde Els Porxos</caption>
-	<tbody>{ciudades.map((c) => <tr><th scope="row">{c.nombre}</th><td>{c.km} km</td><td>{c.tiempo}</td></tr>)}</tbody>
+	<caption>{lang === 'ca' ? "Distàncies en cotxe des d'Els Porxos" : 'Distancias en coche desde Els Porxos'}</caption>
+	<tbody>{ciudades.map((c) => <tr><th scope="row">{lang === 'ca' ? (c.nombreCa ?? c.nombre) : c.nombre}</th><td>{c.km} km</td><td>{c.tiempo}</td></tr>)}</tbody>
 </table>
 
 <style>

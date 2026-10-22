@@ -1,0 +1,242 @@
+---
+// Página «Casa rural para grupos grandes» (SEO), en castellano y en catalán (el idioma sale de la URL):
+// grupos grandes, 18-20 personas, grupos de amigos y celebraciones en Lleida y Cataluña.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CabeceraPagina from '../pagina/CabeceraPagina.astro';
+import BloqueFoto from '../pagina/BloqueFoto.astro';
+import Rasgos from '../pagina/Rasgos.astro';
+import Distancias from '../pagina/Distancias.astro';
+import LlamadaFinal from '../pagina/LlamadaFinal.astro';
+import Preguntas from '../inicio/Preguntas.astro';
+import Visor from '../Visor.astro';
+import Icono from '../Icono.astro';
+import { foto } from '../../data/fotos';
+import { esquemaPreguntas } from '../../data/preguntas';
+import { migas, paginaSobreLaCasa } from '../../data/esquema';
+import { idiomaDe, ruta } from '../../i18n';
+
+const lang = idiomaDe(Astro.currentLocale);
+const T = ({
+	"es": {
+		"url": "https://elsporxos.es/casa-rural-grupos-grandes/",
+		"title": "Casa rural para grupos grandes en Lleida · A una hora y media de Barcelona · Els Porxos",
+		"description": "Casa rural para grupos grandes en Lleida: alquiler de la casa entera para hasta 20 personas, con 6 habitaciones, piscina privada, barbacoa y una mesa para comer todos juntos. Ideal para grupos de amigos y celebraciones, a una hora y media de Barcelona.",
+		"miga": "Casa rural para grupos grandes",
+		"entradilla": "Els Porxos se alquila siempre entera: seis habitaciones, piscina privada y un porche con barbacoa donde comer todos juntos, en Bellcaire d'Urgell (Lleida). Para grupos de amigos, familias grandes y celebraciones de hasta 20 personas.",
+		"h1": "Casa rural para <em>grupos grandes</em> en Lleida",
+		"techoT": "Hasta 20 personas bajo <em>el mismo techo</em>",
+		"techo": "Cuando el grupo es grande, lo difícil es encontrar una casa donde quepáis todos sin repartiros en varios alojamientos. En Els Porxos dormís todos en la misma casa, con sitio de sobra en las zonas comunes.",
+		"habs": [
+			"2 habitaciones de matrimonio, una de ellas suite con baño",
+			"2 habitaciones dobles con camas individuales",
+			"1 habitación triple",
+			"1 habitación séxtuple con literas",
+			"3 baños completos"
+		],
+		"juntosT": "Pensada para estar <em>todos juntos</em>",
+		"juntos": "La casa está pensada para pasar el día juntos: se cocina, se come y se juega en los mismos espacios, sin que nadie se quede aparte.",
+		"rasgos": [
+			[
+				"Barbacoa de obra",
+				"Bajo el porche cubierto, con una mesa larga donde cabe todo el grupo para comer y cenar al aire libre."
+			],
+			[
+				"Salón-comedor para todos",
+				"Una gran mesa de madera, sofás de cuero y chimenea para las sobremesas y las noches de invierno."
+			],
+			[
+				"Cocina completa",
+				"Nevera, horno, vitrocerámica, microondas, lavavajillas y menaje para cocinar para todo el grupo."
+			],
+			[
+				"Piscina privada",
+				"Solo para vuestro grupo, rodeada de jardín y con acceso directo desde los porches."
+			],
+			[
+				"Pista con porterías",
+				"Una pista privada con dos porterías para los partidos del grupo, a cualquier hora."
+			],
+			[
+				"Futbolín y ping-pong",
+				"Bajo el porche, para los ratos entre la piscina y la barbacoa."
+			]
+		],
+		"celebT": "Cumpleaños, aniversarios y <em>reuniones</em>",
+		"celeb1": "Muchos grupos vienen a celebrar algo: un cumpleaños redondo, un aniversario, la reunión anual de la familia o unos días de equipo con la empresa. Los porches cubiertos y el jardín dan sitio para una comida larga, y la piscina y la pista llenan las horas de después.",
+		"celeb2": "Se admiten celebraciones tranquilas dentro del grupo alojado, sin música alta por la noche: la casa está en un pueblo y se respeta el descanso de los vecinos.",
+		"amigosT": "Un fin de semana con <em>amigos</em> en Lleida",
+		"amigos": "Viernes de barbacoa, sábado de piscina y partido en la pista, y si os apetece salir: kayak en el embalse de Camarasa, las pasarelas del Congost de Mu, el Congost de Mont-rebei o una cata de vinos en el Castell del Remei, a 15 minutos.",
+		"cerca": "Qué hacer cerca",
+		"llegarT": "A una hora y media de <em>Barcelona</em>",
+		"llegar": "Bellcaire d'Urgell está en la llanura de Urgell, en la comarca de La Noguera. Se llega por autovía y carretera desde Barcelona, Lleida, Tarragona, Zaragoza y Andorra: un buen punto de encuentro para grupos que vienen de sitios distintos. La casa tiene aparcamiento gratuito.",
+		"preguntas": [
+			[
+				"¿Para cuántas personas es la casa?",
+				"Para un máximo de 20 personas. Funciona igual de bien para grupos de 10, 12 o 15 personas: siempre se alquila la casa entera."
+			],
+			[
+				"¿Podemos celebrar un cumpleaños o una reunión de empresa?",
+				"Sí, celebraciones tranquilas dentro del grupo alojado: cumpleaños, aniversarios, reuniones familiares o de empresa. La única condición es no poner música alta por la noche."
+			],
+			[
+				"¿Cómo nos repartimos en las habitaciones?",
+				"Hay 2 habitaciones de matrimonio (una es suite con baño), 2 dobles con camas individuales, 1 triple y 1 séxtuple con literas, y 3 baños completos en total."
+			],
+			[
+				"¿Cuántas noches hay que reservar?",
+				"El mínimo es de 2 noches. El precio es por la casa completa e incluye sábanas, toallas y la limpieza final."
+			]
+		],
+		"finT": "Reserva la casa para tu grupo",
+		"finTexto": "Dinos cuántos sois y las fechas, y te respondemos con disponibilidad y precio para la casa completa.",
+		"finBoton": "Ver la casa"
+	},
+	"ca": {
+		"url": "https://elsporxos.es/ca/casa-rural-grups-grans/",
+		"title": "Casa rural per a grups grans a Lleida · A una hora i mitja de Barcelona · Els Porxos",
+		"description": "Casa rural per a grups grans a Lleida: lloguer de la casa sencera per a fins a 20 persones, amb 6 habitacions, piscina privada, barbacoa i una taula per menjar tots junts. Ideal per a grups d'amics i celebracions, a una hora i mitja de Barcelona.",
+		"miga": "Casa rural per a grups grans",
+		"entradilla": "Els Porxos es lloga sempre sencera: sis habitacions, piscina privada i un porxo amb barbacoa per menjar tots junts, a Bellcaire d'Urgell (Lleida). Per a grups d'amics, famílies grans i celebracions de fins a 20 persones.",
+		"h1": "Casa rural per a <em>grups grans</em> a Lleida",
+		"techoT": "Fins a 20 persones sota <em>el mateix sostre</em>",
+		"techo": "Quan el grup és gran, el difícil és trobar una casa on hi càpiguen tots sense repartir-vos en diversos allotjaments. A Els Porxos dormiu tots a la mateixa casa, amb espai de sobres a les zones comunes.",
+		"habs": [
+			"2 habitacions de matrimoni, una d'elles suite amb bany",
+			"2 habitacions dobles amb llits individuals",
+			"1 habitació triple",
+			"1 habitació sèxtuple amb lliteres",
+			"3 banys complets"
+		],
+		"juntosT": "Pensada per estar <em>tots junts</em>",
+		"juntos": "La casa està pensada per passar el dia junts: es cuina, es menja i es juga als mateixos espais, sense que ningú es quedi apart.",
+		"rasgos": [
+			[
+				"Barbacoa d'obra",
+				"Sota el porxo cobert, amb una taula llarga on hi cap tot el grup per dinar i sopar a l'aire lliure."
+			],
+			[
+				"Sala d'estar i menjador per a tothom",
+				"Una gran taula de fusta, sofàs de pell i llar de foc per a les sobretaules i les nits d'hivern."
+			],
+			[
+				"Cuina completa",
+				"Nevera, forn, vitroceràmica, microones, rentaplats i parament per cuinar per a tot el grup."
+			],
+			[
+				"Piscina privada",
+				"Només per al vostre grup, envoltada de jardí i amb accés directe des dels porxos."
+			],
+			[
+				"Pista amb porteries",
+				"Una pista privada amb dues porteries per als partits del grup, a qualsevol hora."
+			],
+			[
+				"Futbolí i ping-pong",
+				"Sota el porxo, per a les estones entre la piscina i la barbacoa."
+			]
+		],
+		"celebT": "Aniversaris, celebracions i <em>trobades</em>",
+		"celeb1": "Molts grups vénen a celebrar alguna cosa: un aniversari rodó, unes noces d'argent, la trobada anual de la família o uns dies d'equip amb l'empresa. Els porxos coberts i el jardí donen espai per a un dinar llarg, i la piscina i la pista omplen les hores de després.",
+		"celeb2": "S'admeten celebracions tranquil·les dins del grup allotjat, sense música alta a la nit: la casa és en un poble i es respecta el descans dels veïns.",
+		"amigosT": "Un cap de setmana amb <em>amics</em> a Lleida",
+		"amigos": "Divendres de barbacoa, dissabte de piscina i partit a la pista, i si us ve de gust sortir: caiac a l'embassament de Camarasa, les passarel·les del Congost de Mu, el Congost de Mont-rebei o un tast de vins al Castell del Remei, a 15 minuts.",
+		"cerca": "Què fer a prop",
+		"llegarT": "A una hora i mitja de <em>Barcelona</em>",
+		"llegar": "Bellcaire d'Urgell és a la plana d'Urgell, a la comarca de la Noguera. S'hi arriba per autovia i carretera des de Barcelona, Lleida, Tarragona, Saragossa i Andorra: un bon punt de trobada per a grups que vénen de llocs diferents. La casa té aparcament gratuït.",
+		"preguntas": [
+			[
+				"Per a quantes persones és la casa?",
+				"Per a un màxim de 20 persones. Funciona igual de bé per a grups de 10, 12 o 15 persones: sempre es lloga la casa sencera."
+			],
+			[
+				"Podem celebrar un aniversari o una trobada d'empresa?",
+				"Sí, celebracions tranquil·les dins del grup allotjat: aniversaris, trobades familiars o d'empresa. L'única condició és no posar música alta a la nit."
+			],
+			[
+				"Com ens repartim a les habitacions?",
+				"Hi ha 2 habitacions de matrimoni (una és suite amb bany), 2 dobles amb llits individuals, 1 triple i 1 sèxtuple amb lliteres, i 3 banys complets en total."
+			],
+			[
+				"Quantes nits cal reservar?",
+				"El mínim és de 2 nits. El preu és per la casa sencera i inclou llençols, tovalloles i la neteja final."
+			]
+		],
+		"finT": "Reserva la casa per al teu grup",
+		"finTexto": "Digues-nos quants sou i les dates, i et responem amb la disponibilitat i el preu de la casa sencera.",
+		"finBoton": "Mira la casa"
+	}
+})[lang];
+
+const iconos = ['campfire', 'fork-knife', 'cooking-pot', 'swimming-pool', 'soccer-ball', 'ping-pong'];
+const rasgos = T.rasgos.map(([titulo, texto], i) => ({ icono: iconos[i], titulo, texto }));
+const preguntas = T.preguntas.map(([pregunta, respuesta]) => ({ pregunta, respuesta }));
+const portada = foto('barbacoa-mesa-porche', lang);
+const esquema = [paginaSobreLaCasa(T.url, T.title, T.description, lang), migas(T.miga, T.url, lang), esquemaPreguntas(preguntas, lang)];
+---
+
+<BaseLayout title={T.title} description={T.description}>
+	{esquema.map((b) => <script slot="head" type="application/ld+json" set:html={JSON.stringify(b)} />)}
+
+	<CabeceraPagina miga={T.miga} entradilla={T.entradilla} foto={portada.src} alt={portada.alt}>
+		<Fragment slot="titulo" set:html={T.h1} />
+	</CabeceraPagina>
+
+	<BloqueFoto foto={foto('salon-comedor-mesa', lang)} fondo>
+		<h2 class="aparece" set:html={T.techoT} />
+		<p class="aparece">{T.techo}</p>
+		<ul class="aparece">{T.habs.map((h) => <li>{h}</li>)}</ul>
+	</BloqueFoto>
+
+	<Rasgos id="rasgos-titulo" items={rasgos} entradilla={T.juntos}>
+		<Fragment slot="titulo" set:html={T.juntosT} />
+	</Rasgos>
+
+	<BloqueFoto foto={foto('porche-futbolin-piscina', lang)} alterna arco fondo>
+		<h2 class="aparece" set:html={T.celebT} />
+		<p class="aparece">{T.celeb1}</p>
+		<p class="aparece">{T.celeb2}</p>
+	</BloqueFoto>
+
+	<BloqueFoto foto={foto('porche-ping-pong', lang)}>
+		<h2 class="aparece" set:html={T.amigosT} />
+		<p class="aparece">{T.amigos}</p>
+		<a class="btn btn--linea aparece" href={ruta('/que-hacer-cerca/', lang)}>{T.cerca} <Icono nombre="arrow-right" class="flecha" /></a>
+	</BloqueFoto>
+
+	<section class="llegar" aria-labelledby="llegar-titulo">
+		<div class="envoltorio rejilla">
+			<div>
+				<h2 id="llegar-titulo" class="aparece" set:html={T.llegarT} />
+				<p class="aparece">{T.llegar}</p>
+			</div>
+			<div class="aparece"><Distancias /></div>
+		</div>
+	</section>
+
+	<Preguntas lista={preguntas} />
+
+	<LlamadaFinal titulo={T.finT} texto={T.finTexto} secundario={{ texto: T.finBoton, href: ruta('/#la-casa', lang) }} />
+	<Visor />
+</BaseLayout>
+
+<style>
+	.llegar {
+		padding-block: var(--seccion);
+	}
+	.rejilla {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: clamp(2rem, 6vw, 7rem);
+		align-items: center;
+	}
+	.llegar h2 {
+		max-width: 14ch;
+		padding-bottom: 0.08em;
+		margin-bottom: var(--s-5);
+	}
+	@media (max-width: 820px) {
+		.rejilla {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

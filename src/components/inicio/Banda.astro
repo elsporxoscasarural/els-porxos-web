@@ -1,19 +1,16 @@
 ---
 // Banda con lo que tiene la casa. Se desliza sola y responde al scroll: acelera al bajar rápido
 // y cambia de sentido al subir. Es la única banda en movimiento de la web.
-const servicios = [
-	'Piscina privada',
-	'Barbacoa de obra',
-	'Futbolín',
-	'Ping-pong',
-	'Zona de juegos',
-	'Pista deportiva',
-	'Chimenea',
-	'Jardín con magnolio',
-];
+import { idiomaDe } from '../../i18n';
+
+const lang = idiomaDe(Astro.currentLocale);
+const servicios = {
+	es: ['Piscina privada', 'Barbacoa de obra', 'Futbolín', 'Ping-pong', 'Zona de juegos', 'Pista deportiva', 'Chimenea', 'Jardín con magnolio'],
+	ca: ["Piscina privada", "Barbacoa d'obra", 'Futbolí', 'Ping-pong', 'Zona de jocs', 'Pista esportiva', 'Llar de foc', 'Jardí amb magnoli'],
+}[lang];
 ---
 
-<section class="banda sobre-oscuro" aria-label="Lo que tiene la casa">
+<section class="banda sobre-oscuro" aria-label={lang === 'ca' ? 'El que té la casa' : 'Lo que tiene la casa'}>
 	<ul class="visualmente-oculto">{servicios.map((s) => <li>{s}</li>)}</ul>
 	<div class="pista" data-banda aria-hidden="true">
 		{

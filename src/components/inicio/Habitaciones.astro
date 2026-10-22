@@ -5,37 +5,58 @@ import { Picture } from 'astro:assets';
 import { foto } from '../../data/fotos';
 import { casa } from '../../data/casa';
 
-// Tipos y textos de la web actual
-const habitaciones = [
-	{ nombre: 'Suite de matrimonio', texto: 'Espaciosa y luminosa, con baño en la habitación.', foto: 'habitacion-d-suite' },
-	{ nombre: 'Habitación de matrimonio', texto: 'Espaciosa y luminosa, pensada para las parejas.', foto: 'habitacion-e-matrimonio' },
-	{ nombre: 'Habitación doble', texto: 'Con camas individuales, perfecta para niños o amigos.', foto: 'habitacion-c-doble' },
-	{ nombre: 'Habitación doble', texto: 'Con camas individuales, perfecta para niños o amigos.', foto: 'habitacion-f-doble' },
-	{ nombre: 'Habitación triple', texto: 'Ideal para una pequeña familia o tres amigos.', foto: 'habitacion-a-triple' },
-	{ nombre: 'Habitación séxtuple', texto: 'Con literas: la favorita de los más pequeños de la casa.', foto: 'habitacion-b-literas' },
-].map((h) => ({ ...h, foto: foto(h.foto) }));
+import { idiomaDe, ruta } from '../../i18n';
+
+const lang = idiomaDe(Astro.currentLocale);
+const T = {
+	es: {
+		titulo: `${casa.habitaciones} habitaciones para familias y <em>grupos</em>`,
+		intro: `Nuestra casa rural en Lleida tiene habitaciones para todas las combinaciones: parejas, familias con niños y grupos grandes de amigos. Capacidad total de ${casa.capacidad} plazas.`,
+		resumen: ['de matrimonio', 'dobles', 'triple', 'séxtuple'],
+		nota: `Los ${casa.banos} cuartos de baño están totalmente equipados con lo imprescindible para que no te falte de nada en ningún momento.`,
+		enlace: 'Casa rural para grupos grandes',
+		ampliar: 'Ampliar',
+		lista: [
+			['Suite de matrimonio', 'Espaciosa y luminosa, con baño en la habitación.'],
+			['Habitación de matrimonio', 'Espaciosa y luminosa, pensada para las parejas.'],
+			['Habitación doble', 'Con camas individuales, perfecta para niños o amigos.'],
+			['Habitación doble', 'Con camas individuales, perfecta para niños o amigos.'],
+			['Habitación triple', 'Ideal para una pequeña familia o tres amigos.'],
+			['Habitación séxtuple', 'Con literas: la favorita de los más pequeños de la casa.'],
+		],
+	},
+	ca: {
+		titulo: `${casa.habitaciones} habitacions per a famílies i <em>grups</em>`,
+		intro: `La nostra casa rural de Lleida té habitacions per a totes les combinacions: parelles, famílies amb nens i grups grans d'amics. Capacitat total de ${casa.capacidad} places.`,
+		resumen: ['de matrimoni', 'dobles', 'triple', 'sèxtuple'],
+		nota: `Els ${casa.banos} banys estan totalment equipats amb tot el que cal perquè no et falti res en cap moment.`,
+		enlace: 'Casa rural per a grups grans',
+		ampliar: 'Amplia',
+		lista: [
+			['Suite de matrimoni', 'Espaiosa i lluminosa, amb bany a l\'habitació.'],
+			['Habitació de matrimoni', 'Espaiosa i lluminosa, pensada per a les parelles.'],
+			['Habitació doble', 'Amb llits individuals, perfecta per a nens o amics.'],
+			['Habitació doble', 'Amb llits individuals, perfecta per a nens o amics.'],
+			['Habitació triple', 'Ideal per a una família petita o tres amics.'],
+			['Habitació sèxtuple', 'Amb lliteres: la preferida dels més petits de la casa.'],
+		],
+	},
+}[lang];
+const idsFotos = ['habitacion-d-suite', 'habitacion-e-matrimonio', 'habitacion-c-doble', 'habitacion-f-doble', 'habitacion-a-triple', 'habitacion-b-literas'];
+const habitaciones = T.lista.map(([nombre, texto], i) => ({ nombre, texto, foto: foto(idsFotos[i], lang) }));
 ---
 
 <section class="habitaciones" id="habitaciones" aria-labelledby="habitaciones-titulo">
 	<div class="envoltorio rejilla">
 		<div class="lateral">
 			<div class="lateral__fijo">
-				<h2 id="habitaciones-titulo" class="aparece">{casa.habitaciones} habitaciones para familias y <em>grupos</em></h2>
-				<p class="aparece">
-					Nuestra casa rural en Lleida tiene habitaciones para todas las combinaciones: parejas, familias con niños y
-					grupos grandes de amigos. Capacidad total de {casa.capacidad} plazas.
-				</p>
+				<h2 id="habitaciones-titulo" class="aparece" set:html={T.titulo} />
+				<p class="aparece">{T.intro}</p>
 				<dl class="resumen aparece">
-					<div><dt>2</dt><dd>de matrimonio</dd></div>
-					<div><dt>2</dt><dd>dobles</dd></div>
-					<div><dt>1</dt><dd>triple</dd></div>
-					<div><dt>1</dt><dd>séxtuple</dd></div>
+					{['2', '2', '1', '1'].map((n, i) => <div><dt>{n}</dt><dd>{T.resumen[i]}</dd></div>)}
 				</dl>
-				<p class="nota aparece">
-					Los {casa.banos} cuartos de baño están totalmente equipados con lo imprescindible para que no te falte de nada en
-					ningún momento.
-				</p>
-				<a class="btn btn--linea aparece" href="/casa-rural-grupos-grandes/">Casa rural para grupos grandes</a>
+				<p class="nota aparece">{T.nota}</p>
+				<a class="btn btn--linea aparece" href={ruta('/casa-rural-grupos-grandes/', lang)}>{T.enlace}</a>
 			</div>
 		</div>
 
@@ -43,7 +64,7 @@ const habitaciones = [
 			{
 				habitaciones.map((h) => (
 					<li class="habitacion aparece">
-						<button class="habitacion__foto arco" type="button" data-ampliar="casa" data-id={h.foto.id} aria-label={`Ampliar: ${h.foto.alt}`}>
+						<button class="habitacion__foto arco" type="button" data-ampliar="casa" data-id={h.foto.id} aria-label={`${T.ampliar}: ${h.foto.alt}`}>
 							<Picture formats={['avif', 'webp']} src={h.foto.src} alt={h.foto.alt} widths={[400, 640, 800]} sizes="(max-width: 820px) 46vw, 24vw" />
 						</button>
 						<h3>{h.nombre}</h3>

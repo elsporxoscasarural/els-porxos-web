@@ -2,24 +2,30 @@
 // Resumen citable: una definición de la casa con datos concretos, al principio de la página.
 // Es el bloque que un buscador de IA puede citar tal cual (GEO), y la respuesta rápida para quien compara.
 import { casa } from '../../data/casa';
+import { idiomaDe } from '../../i18n';
 
-const datos = [
-	{ cifra: String(casa.capacidad), texto: 'personas como máximo' },
-	{ cifra: String(casa.habitaciones), texto: 'habitaciones' },
-	{ cifra: String(casa.banos), texto: 'baños completos' },
-	{ cifra: '1', texto: 'piscina privada' },
-	{ cifra: '2', texto: 'noches de estancia mínima' },
-	{ cifra: '1 h 50', texto: 'en coche desde Barcelona' },
-];
+const lang = idiomaDe(Astro.currentLocale);
+const d = casa.direccion;
+const T = {
+	es: {
+		titulo: 'Els Porxos en datos',
+		definicion: `<strong>Els Porxos</strong> es una casa rural de alquiler íntegro en ${d.localidad} (${d.comarca}, ${d.provincia}) para grupos y familias de hasta ${casa.capacidad} personas, con piscina privada, jardín vallado, barbacoa bajo el porche, zona de juegos y pista deportiva. A 35 minutos de Lleida y una hora y media de Barcelona.`,
+		datos: ['personas como máximo', 'habitaciones', 'baños completos', 'plantas', 'piscina privada', 'pista deportiva'],
+	},
+	ca: {
+		titulo: 'Els Porxos en dades',
+		definicion: `<strong>Els Porxos</strong> és una casa rural de lloguer íntegre a ${d.localidad} (${d.comarca.replace('La ', 'la ')}, ${d.provincia}) per a grups i famílies de fins a ${casa.capacidad} persones, amb piscina privada, jardí tancat, barbacoa sota el porxo, zona de jocs i pista esportiva. A 35 minuts de Lleida i una hora i mitja de Barcelona.`,
+		datos: ['persones com a màxim', 'habitacions', 'banys complets', 'plantes', 'piscina privada', 'pista esportiva'],
+	},
+}[lang];
+const cifras = [String(casa.capacidad), String(casa.habitaciones), String(casa.banos), '2', '1', '1'];
+const datos = cifras.map((cifra, i) => ({ cifra, texto: T.datos[i] }));
 ---
 
 <section class="resumen" aria-labelledby="resumen-titulo">
 	<div class="envoltorio rejilla">
-		<h2 id="resumen-titulo" class="visualmente-oculto">Els Porxos en datos</h2>
-		<p class="definicion aparece">
-			<strong>Els Porxos</strong> es una casa rural de alquiler íntegro en {casa.direccion.localidad} ({casa.direccion.comarca}, {casa.direccion.provincia}) para grupos y familias de hasta {casa.capacidad} personas, con piscina privada, jardín
-			vallado, barbacoa bajo el porche, zona de juegos y pista deportiva. A 35 minutos de Lleida y 1 h 50 min de Barcelona.
-		</p>
+		<h2 id="resumen-titulo" class="visualmente-oculto">{T.titulo}</h2>
+		<p class="definicion aparece" set:html={T.definicion} />
 		<dl class="datos">
 			{
 				datos.map((d) => (

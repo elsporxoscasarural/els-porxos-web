@@ -5,7 +5,15 @@
 // Flechas, teclado (← → Esc) y deslizar con el dedo. <dialog> nativo: atrapa el foco y se cierra con Esc.
 import { getImage } from 'astro:assets';
 import Icono from './Icono.astro';
-import { fotos } from '../data/fotos';
+import { fotosEn } from '../data/fotos';
+import { idiomaDe } from '../i18n';
+
+const lang = idiomaDe(Astro.currentLocale);
+const fotos = fotosEn(lang);
+const T = {
+	es: { visor: 'Visor de fotos', cerrar: 'Cerrar', anterior: 'Foto anterior', siguiente: 'Foto siguiente' },
+	ca: { visor: 'Visor de fotos', cerrar: 'Tanca', anterior: 'Foto anterior', siguiente: 'Foto següent' },
+}[lang];
 
 const datos = await Promise.all(
 	fotos.map(async (f) => {
@@ -15,7 +23,7 @@ const datos = await Promise.all(
 );
 ---
 
-<dialog class="visor" aria-label="Visor de fotos" data-visor>
+<dialog class="visor" aria-label={T.visor} data-visor>
 	<figure>
 		<img src="" alt="" data-visor-img />
 		<figcaption>
@@ -23,9 +31,9 @@ const datos = await Promise.all(
 			<span data-visor-texto></span>
 		</figcaption>
 	</figure>
-	<button class="boton boton--cerrar" type="button" aria-label="Cerrar" data-visor-cerrar><Icono nombre="x" /></button>
-	<button class="boton boton--anterior" type="button" aria-label="Foto anterior" data-visor-anterior><Icono nombre="caret-left" /></button>
-	<button class="boton boton--siguiente" type="button" aria-label="Foto siguiente" data-visor-siguiente><Icono nombre="caret-right" /></button>
+	<button class="boton boton--cerrar" type="button" aria-label={T.cerrar} data-visor-cerrar><Icono nombre="x" /></button>
+	<button class="boton boton--anterior" type="button" aria-label={T.anterior} data-visor-anterior><Icono nombre="caret-left" /></button>
+	<button class="boton boton--siguiente" type="button" aria-label={T.siguiente} data-visor-siguiente><Icono nombre="caret-right" /></button>
 </dialog>
 <script type="application/json" id="visor-datos" set:html={JSON.stringify(datos)} />
 

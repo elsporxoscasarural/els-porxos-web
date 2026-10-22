@@ -11,5 +11,16 @@ export default defineConfig({
 	devToolbar: { enabled: false },
 	// CSS dentro del HTML: sin peticiones que bloqueen el primer pintado (la web es pequeña, compensa)
 	build: { inlineStylesheets: 'always' },
-	integrations: [sitemap({ filter: (pagina) => !pagina.includes('/404') })],
+	// Castellano en la raíz (/) y catalán en /ca/
+	i18n: {
+		defaultLocale: 'es',
+		locales: ['es', 'ca'],
+		routing: { prefixDefaultLocale: false },
+	},
+	integrations: [
+		sitemap({
+			filter: (pagina) => !pagina.includes('/404'),
+			i18n: { defaultLocale: 'es', locales: { es: 'es-ES', ca: 'ca-ES' } },
+		}),
+	],
 });

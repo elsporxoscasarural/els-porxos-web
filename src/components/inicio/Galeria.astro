@@ -2,19 +2,27 @@
 // Galería completa: todas las fotos del catálogo (src/data/fotos.ts), con filtros por zona de la casa.
 // Las fotos se abren en el visor común (Visor.astro).
 import { Picture } from 'astro:assets';
-import { fotos, grupos } from '../../data/fotos';
+import { fotosEn, grupos } from '../../data/fotos';
+import { idiomaDe } from '../../i18n';
+
+const lang = idiomaDe(Astro.currentLocale);
+const fotos = fotosEn(lang);
+const T = {
+	es: { titulo: 'Recorre la <em>casa</em>', filtrar: 'Filtrar fotos', todas: 'Todas', ampliar: 'Ampliar' },
+	ca: { titulo: 'Recorre la <em>casa</em>', filtrar: 'Filtra les fotos', todas: 'Totes', ampliar: 'Amplia' },
+}[lang];
 ---
 
 <section class="galeria" id="fotos" aria-labelledby="galeria-titulo" data-galeria>
 	<div class="envoltorio">
 		<div class="cabeza">
-			<h2 id="galeria-titulo" class="aparece">Recorre la <em>casa</em></h2>
-			<div class="filtros aparece" role="group" aria-label="Filtrar fotos">
-				<button type="button" aria-pressed="true" data-filtro="todas">Todas <span>{fotos.length}</span></button>
+			<h2 id="galeria-titulo" class="aparece" set:html={T.titulo} />
+			<div class="filtros aparece" role="group" aria-label={T.filtrar}>
+				<button type="button" aria-pressed="true" data-filtro="todas">{T.todas} <span>{fotos.length}</span></button>
 				{
 					grupos.map((g) => (
 						<button type="button" aria-pressed="false" data-filtro={g.id}>
-							{g.nombre} <span>{fotos.filter((f) => f.grupo === g.id).length}</span>
+							{lang === 'ca' ? g.nombreCa : g.nombre} <span>{fotos.filter((f) => f.grupo === g.id).length}</span>
 						</button>
 					))
 				}
@@ -25,7 +33,7 @@ import { fotos, grupos } from '../../data/fotos';
 			{
 				fotos.map((f) => (
 					<li data-grupo={f.grupo}>
-						<button type="button" data-ampliar="galeria" data-id={f.id} aria-label={`Ampliar: ${f.alt}`}>
+						<button type="button" data-ampliar="galeria" data-id={f.id} aria-label={`${T.ampliar}: ${f.alt}`}>
 							<Picture
 								formats={['avif', 'webp']}
 								src={f.src}

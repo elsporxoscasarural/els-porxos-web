@@ -2,7 +2,7 @@
 export const casa = {
 	nombre: 'Els Porxos Casa Rural',
 	nombreCorto: 'Els Porxos',
-	capacidad: 19,
+	capacidad: 20,
 	habitaciones: 6,
 	banos: 3,
 	registroTuristico: 'HUTL-000401',

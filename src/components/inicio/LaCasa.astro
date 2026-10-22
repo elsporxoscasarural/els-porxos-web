@@ -2,45 +2,42 @@
 // «La casa»: el texto a la izquierda y dos fotos en arco a distinta altura que se desplazan
 // a distinto ritmo con el scroll (dan profundidad, como mirar a través de los porches).
 import { Picture } from 'astro:assets';
-import pingPong from '../../assets/img/casa/porche-ping-pong.jpg';
-import barbacoa from '../../assets/img/casa/porche-barbacoa-futbolin.jpg';
+import { idiomaDe } from '../../i18n';
+import { foto } from '../../data/fotos';
+
+const lang = idiomaDe(Astro.currentLocale);
+const pingPong = foto('porche-ping-pong', lang);
+const barbacoa = foto('porche-barbacoa-futbolin', lang);
+const T = {
+	es: {
+		titulo: 'Casa rural con porches y <em>jardín</em> en Lleida',
+		p1: 'Els Porxos es una casa rural ideal para grupos grandes y familias que buscan alquilar un alojamiento con encanto en la comarca de La Noguera, Lleida. La vivienda de dos plantas está rodeada de un amplio jardín repleto de porches cubiertos, amueblados y decorados para vivir al aire libre durante todo el día. En uno de ellos encontrarás la barbacoa completamente equipada y una gran mesa donde comer todos juntos.',
+		p2: 'La casa también dispone de piscina privada, ideal para los meses de verano, una zona de juegos para los más pequeños y una gran pista con dos porterías de fútbol. Todo privado y para uso exclusivo del grupo que alquila la casa rural.',
+		ampliar: 'Ampliar',
+	},
+	ca: {
+		titulo: 'Casa rural amb porxos i <em>jardí</em> a Lleida',
+		p1: "Els Porxos és una casa rural ideal per a grups grans i famílies que volen llogar un allotjament amb encant a la comarca de la Noguera, Lleida. L'habitatge, de dues plantes, està envoltat d'un ampli jardí ple de porxos coberts, moblats i decorats per viure a l'aire lliure tot el dia. En un d'ells hi trobaràs la barbacoa totalment equipada i una gran taula per menjar tots junts.",
+		p2: "La casa també disposa de piscina privada, ideal per als mesos d'estiu, una zona de jocs per als més petits i una gran pista amb dues porteries de futbol. Tot privat i d'ús exclusiu per al grup que lloga la casa rural.",
+		ampliar: 'Amplia',
+	},
+}[lang];
 ---
 
 <section class="la-casa" id="la-casa" aria-labelledby="la-casa-titulo">
 	<div class="envoltorio rejilla">
 		<div class="texto">
-			<h2 id="la-casa-titulo" class="aparece">Casa rural con porches y <em>jardín</em> en Lleida</h2>
-			<p class="aparece">
-				Els Porxos es una casa rural ideal para grupos grandes y familias que buscan alquilar un alojamiento con encanto
-				en la comarca de La Noguera, Lleida. La vivienda de dos plantas está rodeada de un amplio jardín repleto de
-				porches cubiertos, amueblados y decorados para vivir al aire libre durante todo el día. En uno de ellos
-				encontrarás la barbacoa completamente equipada y una gran mesa donde comer todos juntos.
-			</p>
-			<p class="aparece">
-				La casa también dispone de piscina privada, ideal para los meses de verano, una zona de juegos para los más
-				pequeños y una gran pista con dos porterías de fútbol. Todo privado y para uso exclusivo del grupo que alquila la
-				casa rural.
-			</p>
+			<h2 id="la-casa-titulo" class="aparece" set:html={T.titulo} />
+			<p class="aparece">{T.p1}</p>
+			<p class="aparece">{T.p2}</p>
 		</div>
 
 		<div class="fotos">
-			<button class="foto foto--alta arco" type="button" data-paralaje="-6" data-ampliar="casa" data-id="porche-ping-pong" aria-label="Ampliar: porche con la mesa de ping-pong">
-				<Picture
-					formats={['avif', 'webp']}
-					src={pingPong}
-					alt="La mesa de ping-pong bajo el porche, junto al jardín"
-					widths={[480, 720, 960]}
-					sizes="(max-width: 820px) 60vw, 26vw"
-				/>
+			<button class="foto foto--alta arco" type="button" data-paralaje="-6" data-ampliar="casa" data-id={pingPong.id} aria-label={`${T.ampliar}: ${pingPong.alt}`}>
+				<Picture formats={['avif', 'webp']} src={pingPong.src} alt={pingPong.alt} widths={[480, 720, 960]} sizes="(max-width: 820px) 60vw, 26vw" />
 			</button>
-			<button class="foto foto--ancha arco" type="button" data-paralaje="8" data-ampliar="casa" data-id="porche-barbacoa-futbolin" aria-label="Ampliar: futbolín y barbacoa del porche">
-				<Picture
-					formats={['avif', 'webp']}
-					src={barbacoa}
-					alt="El futbolín y la barbacoa de obra en el porche cubierto"
-					widths={[640, 960, 1280]}
-					sizes="(max-width: 820px) 80vw, 30vw"
-				/>
+			<button class="foto foto--ancha arco" type="button" data-paralaje="8" data-ampliar="casa" data-id={barbacoa.id} aria-label={`${T.ampliar}: ${barbacoa.alt}`}>
+				<Picture formats={['avif', 'webp']} src={barbacoa.src} alt={barbacoa.alt} widths={[640, 960, 1280]} sizes="(max-width: 820px) 80vw, 30vw" />
 			</button>
 		</div>
 	</div>

@@ -1,0 +1,449 @@
+---
+// Página «Casa rural en Lleida (con piscina)», en castellano y en catalán (el idioma sale de la URL).
+// Se usa desde src/pages/casa-rural-lleida.astro y src/pages/ca/casa-rural-lleida.astro.
+import { Picture } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CabeceraPagina from '../pagina/CabeceraPagina.astro';
+import LlamadaFinal from '../pagina/LlamadaFinal.astro';
+import Icono from '../Icono.astro';
+import Visor from '../Visor.astro';
+import { casa } from '../../data/casa';
+import { foto } from '../../data/fotos';
+import { idiomaDe, ruta } from '../../i18n';
+import esquemaBase from '../../data/esquema-casa-rural-lleida.json';
+
+const lang = idiomaDe(Astro.currentLocale);
+const T = ({
+	"es": {
+		"title": "Casa rural en Lleida con piscina privada para grupos · Els Porxos · hasta 20 personas",
+		"description": "¿Buscas una casa rural en Lleida con piscina para grupos? Els Porxos, en Bellcaire d'Urgell: alquiler de la casa entera para hasta 20 personas, con piscina privada, barbacoa, jardín y zona de juegos. Ideal para familias y amigos.",
+		"miga": "Casa rural en Lleida",
+		"entradilla": "Els Porxos es una casa rural de alquiler completo en Bellcaire d'Urgell, comarca de La Noguera (Lleida). Con capacidad para hasta 20 personas, piscina privada y un extenso jardín con porches, es el alojamiento rural ideal para escapadas en grupo en la provincia de Lleida.",
+		"h1": "Casa rural con piscina en Lleida para <em>grupos y familias</em>",
+		"gruposT": "Una casa rural en Lleida pensada para <em>grupos grandes</em>",
+		"g1": "Si buscas una casa rural en Lleida donde quepan todos, Els Porxos es tu sitio. Con 6 habitaciones, 3 baños y dos plantas completas, puedes venir con tu grupo de amigos, tu familia extendida o tu equipo de trabajo y tener espacio de sobra.",
+		"g2": "La casa se alquila siempre completa, sin compartir con otros huéspedes. La piscina, el jardín, la barbacoa, la pista de fútbol y todas las instalaciones son solo para vuestro grupo durante toda la estancia.",
+		"relGrupos": "Para grupos grandes",
+		"relFamilias": "Para familias con niños",
+		"cifras": [
+			"Huéspedes",
+			"Habitaciones",
+			"Baños",
+			"Plantas"
+		],
+		"incluyeT": "Todo lo que incluye el alquiler de esta casa rural en <em>Lleida</em>",
+		"incluye": [
+			[
+				"Piscina privada",
+				"Piscina de uso exclusivo para el grupo, rodeada de jardín. Ideal para los meses de verano en Lleida."
+			],
+			[
+				"Barbacoa y porches",
+				"Barbacoa equipada bajo el porche cubierto, con una gran mesa para comer todos juntos al aire libre."
+			],
+			[
+				"Zona deportiva",
+				"Pista de fútbol con porterías, futbolín y mesa de ping-pong. Los niños y los no tan niños no pararán."
+			],
+			[
+				"Zona de juegos infantil",
+				"Canasta, casita, tobogán y columpio dentro del recinto vallado de la casa rural. Seguro para los pequeños."
+			],
+			[
+				"Chimenea",
+				"El salón tiene chimenea para las noches de invierno. Una casa rural en Lleida para disfrutar todo el año."
+			],
+			[
+				"Cocina completa",
+				"Nevera, horno, vitrocerámica, microondas, lavavajillas y utensilios para cocinar para todo el grupo."
+			]
+		],
+		"piscinaT": "Piscina privada y jardín <em>solo para vosotros</em>",
+		"p1": "Una de las mejores cosas de alquilar una casa rural en Lleida con piscina es no compartirla con nadie. En Els Porxos, la piscina es de uso exclusivo para el grupo que alquila la casa. Está rodeada de jardín con seto, árboles y flores, y tiene acceso directo desde los porches.",
+		"p2": "El jardín es amplio y seguro: los niños pueden jugar libremente en la zona infantil mientras los adultos disfrutan de la barbacoa y el sol. El recinto está completamente vallado.",
+		"ubiT": "En Bellcaire d'Urgell, <em>comarca de La Noguera</em>",
+		"u1": "Bellcaire d'Urgell es un pueblo tranquilo de la llanura de Urgell, en la provincia de Lleida. Está a 12 minutos de Balaguer, 35 de Lleida capital y con fácil acceso por la C-12 y la C-26. Desde aquí puedes visitar el Congost de Mont-rebei, las pasarelas del Congost de Mu, el embalse de Camarasa, el Estany d'Ivars y los murales de Penelles.",
+		"u2": "Es el punto de partida perfecto para combinar descanso rural con excursiones por la naturaleza de Lleida, sin salir de una zona de campos, canales y pueblos con encanto.",
+		"cerca": "Descubre qué hacer cerca",
+		"galT": "Conoce la casa rural por dentro y por <em>fuera</em>",
+		"todas": "Ver todas las fotos",
+		"ampliar": "Ampliar",
+		"finT": "Reserva tu casa rural en Lleida",
+		"finTexto": "Consulta disponibilidad y precios para tu grupo. El alquiler mínimo es de 2 noches e incluye sábanas, toallas y limpieza final.",
+		"finBoton": "Enviar formulario"
+	},
+	"ca": {
+		"title": "Casa rural a Lleida amb piscina privada per a grups · Els Porxos · fins a 20 persones",
+		"description": "Busques una casa rural a Lleida amb piscina per a grups? Els Porxos, a Bellcaire d'Urgell: lloguer de la casa sencera per a fins a 20 persones, amb piscina privada, barbacoa, jardí i zona de jocs. Ideal per a famílies i amics.",
+		"miga": "Casa rural a Lleida",
+		"entradilla": "Els Porxos és una casa rural de lloguer sencer a Bellcaire d'Urgell, comarca de la Noguera (Lleida). Amb capacitat per a fins a 20 persones, piscina privada i un ampli jardí amb porxos, és l'allotjament rural ideal per a escapades en grup a la província de Lleida.",
+		"h1": "Casa rural amb piscina a Lleida per a <em>grups i famílies</em>",
+		"gruposT": "Una casa rural a Lleida pensada per a <em>grups grans</em>",
+		"g1": "Si busques una casa rural a Lleida on hi càpiguen tots, Els Porxos és el teu lloc. Amb 6 habitacions, 3 banys i dues plantes senceres, pots venir amb el teu grup d'amics, la família o l'equip de feina i tenir espai de sobres.",
+		"g2": "La casa es lloga sempre sencera, sense compartir-la amb altres hostes. La piscina, el jardí, la barbacoa, la pista de futbol i totes les instal·lacions són només per al vostre grup durant tota l'estada.",
+		"relGrupos": "Per a grups grans",
+		"relFamilias": "Per a famílies amb nens",
+		"cifras": [
+			"Hostes",
+			"Habitacions",
+			"Banys",
+			"Plantes"
+		],
+		"incluyeT": "Tot el que inclou el lloguer d'aquesta casa rural a <em>Lleida</em>",
+		"incluye": [
+			[
+				"Piscina privada",
+				"Piscina d'ús exclusiu per al grup, envoltada de jardí. Ideal per als mesos d'estiu a Lleida."
+			],
+			[
+				"Barbacoa i porxos",
+				"Barbacoa equipada sota el porxo cobert, amb una gran taula per menjar tots junts a l'aire lliure."
+			],
+			[
+				"Zona esportiva",
+				"Pista de futbol amb porteries, futbolí i taula de ping-pong. Els nens, i els no tan nens, no pararan."
+			],
+			[
+				"Zona de jocs infantil",
+				"Cistella, caseta, tobogan i gronxador dins del recinte tancat de la casa rural. Segur per als petits."
+			],
+			[
+				"Llar de foc",
+				"La sala té llar de foc per a les nits d'hivern. Una casa rural a Lleida per gaudir-la tot l'any."
+			],
+			[
+				"Cuina completa",
+				"Nevera, forn, vitroceràmica, microones, rentaplats i estris per cuinar per a tot el grup."
+			]
+		],
+		"piscinaT": "Piscina privada i jardí <em>només per a vosaltres</em>",
+		"p1": "Una de les millors coses de llogar una casa rural a Lleida amb piscina és no compartir-la amb ningú. A Els Porxos, la piscina és d'ús exclusiu per al grup que lloga la casa. Està envoltada de jardí amb bardissa, arbres i flors, i té accés directe des dels porxos.",
+		"p2": "El jardí és ampli i segur: els nens poden jugar lliurement a la zona infantil mentre els adults gaudeixen de la barbacoa i el sol. El recinte està completament tancat.",
+		"ubiT": "A Bellcaire d'Urgell, <em>comarca de la Noguera</em>",
+		"u1": "Bellcaire d'Urgell és un poble tranquil de la plana d'Urgell, a la província de Lleida. És a 12 minuts de Balaguer i a 35 de Lleida ciutat, amb accés fàcil per la C-12 i la C-26. Des d'aquí pots visitar el Congost de Mont-rebei, les passarel·les del Congost de Mu, l'embassament de Camarasa, l'Estany d'Ivars i els murals de Penelles.",
+		"u2": "És el punt de partida perfecte per combinar descans rural amb excursions per la natura de Lleida, en una zona de camps, canals i pobles amb encant.",
+		"cerca": "Descobreix què fer a prop",
+		"galT": "Coneix la casa rural per dins i per <em>fora</em>",
+		"todas": "Mira totes les fotos",
+		"ampliar": "Amplia",
+		"finT": "Reserva la teva casa rural a Lleida",
+		"finTexto": "Consulta la disponibilitat i els preus per al teu grup. El lloguer mínim és de 2 nits i inclou llençols, tovalloles i neteja final.",
+		"finBoton": "Envia el formulari"
+	}
+})[lang];
+
+// Datos para Google: en catalán, la descripción y las migas en catalán
+const esquema = esquemaBase.map((b) => {
+	if (lang !== 'ca') return b;
+	if (b['@type'] === 'BreadcrumbList')
+		return { ...b, itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Inici', item: 'https://elsporxos.es/ca/' }, { '@type': 'ListItem', position: 2, name: T.miga, item: 'https://elsporxos.es/ca/casa-rural-lleida/' }] };
+	return { ...b, description: T.description };
+});
+
+const portada = foto('fachada-jardin-entrada', lang);
+const pingPong = foto('porche-ping-pong', lang);
+const piscina = foto('piscina-seto', lang);
+const camino = foto('jardin-camino-entrada', lang);
+const galeria = ['porche-arcos-jardin', 'salon-comedor-mesa', 'pista-deportiva', 'habitacion-d-suite', 'porche-futbolin-piscina'].map((id) => foto(id, lang));
+const cifras = [casa.capacidad, casa.habitaciones, casa.banos, 2].map((n, i) => ({ n, t: T.cifras[i] }));
+const iconos = ['swimming-pool', 'campfire', 'soccer-ball', 'basketball', 'fire', 'cooking-pot'];
+const incluye = T.incluye.map(([titulo, texto], i) => ({ icono: iconos[i], titulo, texto }));
+---
+
+<BaseLayout title={T.title} description={T.description}>
+	{esquema.map((bloque) => <script slot="head" type="application/ld+json" set:html={JSON.stringify(bloque)} />)}
+
+	<CabeceraPagina miga={T.miga} entradilla={T.entradilla} foto={portada.src} alt={portada.alt} encuadre="28% 50%">
+		<Fragment slot="titulo" set:html={T.h1} />
+	</CabeceraPagina>
+
+	<section class="grupos" aria-labelledby="grupos-titulo">
+		<div class="envoltorio">
+			<h2 id="grupos-titulo" class="aparece" set:html={T.gruposT} />
+			<div class="parrafos aparece">
+				<p>{T.g1}</p>
+				<p>{T.g2}</p>
+			</div>
+			<div class="relacionados aparece">
+				<a class="btn btn--linea" href={ruta('/casa-rural-grupos-grandes/', lang)}>{T.relGrupos}</a>
+				<a class="btn btn--linea" href={ruta('/casa-rural-familias-ninos/', lang)}>{T.relFamilias}</a>
+			</div>
+			<dl class="cifras">
+				{cifras.map((c) => <div class="aparece"><dt>{c.n}</dt><dd>{c.t}</dd></div>)}
+			</dl>
+		</div>
+	</section>
+
+	<section class="incluye" aria-labelledby="incluye-titulo">
+		<div class="envoltorio rejilla">
+			<div class="incluye__foto arco aparece">
+				<Picture formats={['avif', 'webp']} src={pingPong.src} alt={pingPong.alt} widths={[480, 800, 1200]} sizes="(max-width: 820px) 100vw, 36vw" />
+			</div>
+			<div>
+				<h2 id="incluye-titulo" class="aparece" set:html={T.incluyeT} />
+				<ul class="lista">
+					{
+						incluye.map((i) => (
+							<li class="aparece">
+								<Icono nombre={i.icono} />
+								<h3>{i.titulo}</h3>
+								<p>{i.texto}</p>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<section class="partida" aria-labelledby="piscina-titulo">
+		<div class="envoltorio partida__rejilla">
+			<div class="partida__foto aparece">
+				<Picture formats={['avif', 'webp']} src={piscina.src} alt={piscina.alt} widths={[640, 960, 1440]} sizes="(max-width: 820px) 100vw, 56vw" />
+			</div>
+			<div class="partida__texto">
+				<h2 id="piscina-titulo" class="aparece" set:html={T.piscinaT} />
+				<p class="aparece">{T.p1}</p>
+				<p class="aparece">{T.p2}</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="partida partida--alterna" aria-labelledby="ubicacion-titulo">
+		<div class="envoltorio partida__rejilla">
+			<div class="partida__foto arco aparece">
+				<Picture formats={['avif', 'webp']} src={camino.src} alt={camino.alt} widths={[480, 800]} sizes="(max-width: 820px) 100vw, 40vw" />
+			</div>
+			<div class="partida__texto">
+				<h2 id="ubicacion-titulo" class="aparece" set:html={T.ubiT} />
+				<p class="aparece">{T.u1}</p>
+				<p class="aparece">{T.u2}</p>
+				<a class="btn btn--linea aparece" href={ruta('/que-hacer-cerca/', lang)}>{T.cerca} <Icono nombre="arrow-right" class="flecha" /></a>
+			</div>
+		</div>
+	</section>
+
+	<section class="galeria" aria-labelledby="galeria-titulo">
+		<div class="envoltorio">
+			<div class="galeria__cabeza">
+				<h2 id="galeria-titulo" class="aparece" set:html={T.galT} />
+				<a class="btn btn--linea aparece" href={ruta('/#fotos', lang)}>{T.todas}</a>
+			</div>
+			<div class="mosaico">
+				{
+					galeria.map((f, i) => (
+						<button class:list={['celda', `celda--${i}`, 'aparece']} type="button" data-ampliar="casa" data-id={f.id} aria-label={`${T.ampliar}: ${f.alt}`}>
+							<Picture formats={['avif', 'webp']} src={f.src} alt={f.alt} widths={[400, 800]} sizes="(max-width: 820px) 50vw, 33vw" />
+						</button>
+					))
+				}
+			</div>
+		</div>
+	</section>
+
+	<LlamadaFinal titulo={T.finT} texto={T.finTexto} secundario={{ texto: T.finBoton, href: ruta('/#contacto', lang) }} />
+	<Visor />
+</BaseLayout>
+
+<style>
+	.grupos {
+		padding-block: var(--seccion);
+		background: var(--cal-2);
+	}
+	.grupos h2 {
+		max-width: 16ch;
+		padding-bottom: 0.08em;
+	}
+	.parrafos {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--s-6);
+		margin-top: var(--s-6);
+		max-width: 64rem;
+	}
+	.relacionados {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-3);
+		margin-top: var(--s-6);
+	}
+	.cifras {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		margin: clamp(3rem, 6vw, 5rem) 0 0;
+		border-top: var(--borde);
+	}
+	.cifras div {
+		padding: var(--s-5) var(--s-4) 0 0;
+	}
+	.cifras div + div {
+		padding-left: var(--s-5);
+		border-left: var(--borde);
+	}
+	.cifras dt {
+		font: 500 clamp(3rem, 7vw, 6rem) / 1 var(--f-display);
+		color: var(--tinta);
+	}
+	.cifras dd {
+		margin: var(--s-1) 0 0;
+		color: var(--oro-texto);
+		font-weight: 600;
+	}
+
+	.incluye {
+		padding-block: var(--seccion);
+	}
+	.rejilla {
+		display: grid;
+		grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+		gap: clamp(2rem, 6vw, 7rem);
+		align-items: start;
+	}
+	.incluye__foto {
+		position: sticky;
+		top: calc(var(--alto-cabecera) + var(--s-6));
+		aspect-ratio: 3 / 4;
+	}
+	.incluye__foto :global(img),
+	.partida__foto :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.incluye__foto :global(picture),
+	.partida__foto :global(picture) {
+		display: block;
+		height: 100%;
+	}
+	.incluye h2 {
+		max-width: 15ch;
+		padding-bottom: 0.08em;
+	}
+	.lista {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--s-7) var(--s-6);
+		margin: var(--s-7) 0 0;
+		padding: 0;
+		list-style: none;
+	}
+	.lista li {
+		display: grid;
+		gap: var(--s-2);
+		padding-top: var(--s-5);
+		border-top: var(--borde);
+	}
+	.lista :global(.icono) {
+		width: 30px;
+		height: 30px;
+		color: var(--oro-texto);
+	}
+	.lista p {
+		font-size: var(--t-sm);
+		color: var(--sec);
+	}
+
+	.partida {
+		padding-block: var(--seccion);
+	}
+	.partida:not(.partida--alterna) {
+		background: var(--cal-2);
+	}
+	.partida__rejilla {
+		display: grid;
+		grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+		gap: clamp(2rem, 6vw, 7rem);
+		align-items: center;
+	}
+	.partida--alterna .partida__rejilla {
+		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+	}
+	.partida__foto {
+		aspect-ratio: 16 / 11;
+	}
+	.partida--alterna .partida__foto {
+		aspect-ratio: 4 / 5;
+	}
+	.partida__texto {
+		display: grid;
+		gap: var(--s-5);
+		justify-items: start;
+	}
+	.partida__texto h2 {
+		max-width: 14ch;
+		padding-bottom: 0.08em;
+	}
+
+	.galeria {
+		padding-block: var(--seccion);
+	}
+	.galeria__cabeza {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: end;
+		justify-content: space-between;
+		gap: var(--s-5);
+		margin-bottom: clamp(2rem, 4vw, 3rem);
+	}
+	.galeria h2 {
+		max-width: 16ch;
+		padding-bottom: 0.08em;
+	}
+	.mosaico {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		grid-auto-rows: clamp(10rem, 17vw, 15rem);
+		gap: clamp(0.6rem, 1.2vw, 1rem);
+	}
+	.celda {
+		padding: 0;
+		border: 0;
+		background: var(--linea);
+		overflow: hidden;
+		cursor: zoom-in;
+	}
+	.celda :global(picture),
+	.celda :global(img) {
+		width: 100%;
+		height: 100%;
+	}
+	.celda :global(img) {
+		object-fit: cover;
+		transition: transform 900ms var(--ease);
+	}
+	.celda:hover :global(img) {
+		transform: scale(1.05);
+	}
+	.celda--0 {
+		grid-column: span 2;
+		grid-row: span 2;
+		border-radius: 9999px 9999px 0 0;
+	}
+
+	@media (max-width: 820px) {
+		.parrafos,
+		.rejilla,
+		.partida__rejilla,
+		.partida--alterna .partida__rejilla {
+			grid-template-columns: 1fr;
+		}
+		.cifras {
+			grid-template-columns: repeat(2, 1fr);
+		}
+		.cifras div:nth-child(3) {
+			padding-left: 0;
+			border-left: 0;
+		}
+		.incluye__foto {
+			position: static;
+			aspect-ratio: 4 / 3;
+		}
+		.lista {
+			grid-template-columns: 1fr;
+			gap: var(--s-5);
+		}
+		.mosaico {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+</style>

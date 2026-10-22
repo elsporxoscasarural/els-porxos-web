@@ -4,16 +4,17 @@
 import Icono from '../Icono.astro';
 import Marca from '../Marca.astro';
 import { casa } from '../../data/casa';
+import { idiomaDe } from '../../i18n';
+
+const lang = idiomaDe(Astro.currentLocale);
+const T = ({"es": {"titulo": "Reserva tu estancia en <em>Els Porxos</em>", "intro": "Escríbenos por WhatsApp para consultar disponibilidad y precios de alquiler, o envíanos el formulario y te contestaremos lo antes posible.", "tambien": "También nos encontrarás en", "nombre": "Nombre *", "email": "Email *", "telefono": "Teléfono", "fechas": "Fechas de estancia", "ejemplo": "p. ej. 12 al 14 de junio", "ayuda": "Y cuántas personas sois, si lo sabes", "mensaje": "Mensaje *", "privacidad": "Acepto que usen mis datos para responder a esta consulta *", "enviar": "Enviar consulta", "m": {"name": "Escribe tu nombre.", "email": "Escribe un email válido para poder contestarte.", "message": "Cuéntanos qué necesitas.", "privacy": "Necesitamos tu permiso para responderte.", "enviando": "Enviando…", "ok": "¡Gracias! Te contestaremos lo antes posible.", "error": "No se ha podido enviar. Escríbenos por WhatsApp al 620 10 45 39 o inténtalo de nuevo."}}, "ca": {"titulo": "Reserva la teva estada a <em>Els Porxos</em>", "intro": "Escriu-nos per WhatsApp per consultar la disponibilitat i els preus del lloguer, o envia'ns el formulari i et respondrem com més aviat millor.", "tambien": "També ens trobaràs a", "nombre": "Nom *", "email": "Correu electrònic *", "telefono": "Telèfon", "fechas": "Dates de l'estada", "ejemplo": "p. ex. del 12 al 14 de juny", "ayuda": "I quantes persones sou, si ho saps", "mensaje": "Missatge *", "privacidad": "Accepto que facin servir les meves dades per respondre aquesta consulta *", "enviar": "Envia la consulta", "m": {"name": "Escriu el teu nom.", "email": "Escriu un correu electrònic vàlid perquè et puguem respondre.", "message": "Explica'ns què necessites.", "privacy": "Necessitem el teu permís per respondre't.", "enviando": "Enviant…", "ok": "Gràcies! Et respondrem com més aviat millor.", "error": "No s'ha pogut enviar. Escriu-nos per WhatsApp al 620 10 45 39 o torna-ho a provar."}}})[lang];
 ---
 
 <section class="contacto sobre-oscuro" id="contacto" aria-labelledby="contacto-titulo">
 	<div class="envoltorio rejilla">
 		<div class="lado">
-			<h2 id="contacto-titulo" class="aparece">Reserva tu estancia en <em>Els Porxos</em></h2>
-			<p class="aparece">
-				Escríbenos por WhatsApp para consultar disponibilidad y precios de alquiler, o envíanos el formulario y te
-				contestaremos lo antes posible.
-			</p>
+			<h2 id="contacto-titulo" class="aparece" set:html={T.titulo} />
+			<p class="aparece">{T.intro}</p>
 			<ul class="canales aparece">
 				<li>
 					<a href={casa.whatsapp} target="_blank" rel="noopener">
@@ -24,12 +25,12 @@ import { casa } from '../../data/casa';
 				<li>
 					<a href={`mailto:${casa.email}`}>
 						<Icono nombre="envelope-simple" />
-						<span><small>Email</small>{casa.email}</span>
+						<span><small>{lang === 'ca' ? 'Correu' : 'Email'}</small>{casa.email}</span>
 					</a>
 				</li>
 			</ul>
 			<div class="plataformas aparece">
-				<p>También nos encontrarás en</p>
+				<p>{T.tambien}</p>
 				<div>
 					<a href={casa.reservas.airbnb} target="_blank" rel="noopener"><Marca nombre="airbnb" /> Airbnb</a>
 					<a href={casa.reservas.booking} target="_blank" rel="noopener"><Marca nombre="bookingdotcom" /> Booking.com</a>
@@ -38,39 +39,39 @@ import { casa } from '../../data/casa';
 			</div>
 		</div>
 
-		<form class="formulario aparece" method="POST" action="https://formspree.io/f/mreqdbjy" novalidate data-formulario>
+		<form class="formulario aparece" method="POST" action="https://formspree.io/f/mreqdbjy" novalidate data-formulario data-mensajes={JSON.stringify(T.m)}>
 			<div class="campo">
-				<label for="f-nombre">Nombre *</label>
+				<label for="f-nombre">{T.nombre}</label>
 				<input id="f-nombre" name="name" type="text" autocomplete="name" required aria-describedby="e-nombre" />
 				<p class="error" id="e-nombre" aria-live="polite"></p>
 			</div>
 			<div class="campo">
-				<label for="f-email">Email *</label>
+				<label for="f-email">{T.email}</label>
 				<input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="e-email" />
 				<p class="error" id="e-email" aria-live="polite"></p>
 			</div>
 			<div class="dos">
 				<div class="campo">
-					<label for="f-telefono">Teléfono</label>
+					<label for="f-telefono">{T.telefono}</label>
 					<input id="f-telefono" name="phone" type="tel" autocomplete="tel" />
 				</div>
 				<div class="campo">
-					<label for="f-fechas">Fechas de estancia</label>
-					<input id="f-fechas" name="dates" type="text" placeholder="p. ej. 12 al 14 de junio" aria-describedby="a-fechas" />
-					<p class="ayuda" id="a-fechas">Y cuántas personas sois, si lo sabes</p>
+					<label for="f-fechas">{T.fechas}</label>
+					<input id="f-fechas" name="dates" type="text" placeholder={T.ejemplo} aria-describedby="a-fechas" />
+					<p class="ayuda" id="a-fechas">{T.ayuda}</p>
 				</div>
 			</div>
 			<div class="campo">
-				<label for="f-mensaje">Mensaje *</label>
+				<label for="f-mensaje">{T.mensaje}</label>
 				<textarea id="f-mensaje" name="message" rows="4" required aria-describedby="e-mensaje"></textarea>
 				<p class="error" id="e-mensaje" aria-live="polite"></p>
 			</div>
 			<div class="campo campo--check">
 				<input id="f-privacidad" name="privacy" type="checkbox" required aria-describedby="e-privacidad" />
-				<label for="f-privacidad">Acepto que usen mis datos para responder a esta consulta *</label>
+				<label for="f-privacidad">{T.privacidad}</label>
 				<p class="error" id="e-privacidad" aria-live="polite"></p>
 			</div>
-			<button class="btn btn--claro enviar" type="submit">Enviar consulta <Icono nombre="arrow-right" class="flecha" /></button>
+			<button class="btn btn--claro enviar" type="submit">{T.enviar} <Icono nombre="arrow-right" class="flecha" /></button>
 			<p class="estado" role="status" aria-live="polite" data-estado></p>
 		</form>
 	</div>
@@ -279,12 +280,8 @@ import { casa } from '../../data/casa';
 <script>
 	const form = document.querySelector<HTMLFormElement>('[data-formulario]');
 	const estado = document.querySelector<HTMLElement>('[data-estado]');
-	const mensajes: Record<string, string> = {
-		name: 'Escribe tu nombre.',
-		email: 'Escribe un email válido para poder contestarte.',
-		message: 'Cuéntanos qué necesitas.',
-		privacy: 'Necesitamos tu permiso para responderte.',
-	};
+	// Textos en el idioma de la página (vienen en data-mensajes del formulario)
+	const mensajes: Record<string, string> = JSON.parse(form?.dataset.mensajes || '{}');
 	const errorDe = (campo: HTMLInputElement | HTMLTextAreaElement) =>
 		document.getElementById(campo.getAttribute('aria-describedby') || '');
 
@@ -310,15 +307,15 @@ import { casa } from '../../data/casa';
 			const boton = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
 			boton.disabled = true;
 			estado.className = 'estado';
-			estado.textContent = 'Enviando…';
+			estado.textContent = mensajes.enviando;
 			try {
 				const r = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
 				if (!r.ok) throw new Error();
 				form.reset();
 				estado.classList.add('ok');
-				estado.textContent = '¡Gracias! Te contestaremos lo antes posible.';
+				estado.textContent = mensajes.ok;
 			} catch {
-				estado.textContent = 'No se ha podido enviar. Escríbenos por WhatsApp al 620 10 45 39 o inténtalo de nuevo.';
+				estado.textContent = mensajes.error;
 			} finally {
 				boton.disabled = false;
 			}

@@ -1,0 +1,74 @@
+---
+// Portada, en castellano y en catalán (el idioma sale de la URL). Título, descripción y datos
+// estructurados de la web original en castellano (no se pierde posicionamiento).
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Portada from '../inicio/Portada.astro';
+import Banda from '../inicio/Banda.astro';
+import Resumen from '../inicio/Resumen.astro';
+import LaCasa from '../inicio/LaCasa.astro';
+import PorDentro from '../inicio/PorDentro.astro';
+import Habitaciones from '../inicio/Habitaciones.astro';
+import Exterior from '../inicio/Exterior.astro';
+import Galeria from '../inicio/Galeria.astro';
+import Tarifas from '../inicio/Tarifas.astro';
+import Opiniones from '../inicio/Opiniones.astro';
+import QueHacer from '../inicio/QueHacer.astro';
+import Ubicacion from '../inicio/Ubicacion.astro';
+import Preguntas from '../inicio/Preguntas.astro';
+import Contacto from '../inicio/Contacto.astro';
+import Visor from '../Visor.astro';
+import esquemaBase from '../../data/esquema-inicio.json';
+import { preguntasEn, esquemaPreguntas } from '../../data/preguntas';
+import { lugaresEn } from '../../data/zona';
+import { idiomaDe } from '../../i18n';
+
+const lang = idiomaDe(Astro.currentLocale);
+const T = {
+	es: {
+		title: "Els Porxos — Casa rural en Bellcaire d'Urgell, Lleida · Piscina privada · hasta 20 personas",
+		description:
+			"Casa rural para grupos de hasta 20 personas en Bellcaire d'Urgell (La Noguera, Lleida). 6 habitaciones, piscina privada, amplios porches, barbacoa y zona de juegos. Alquiler completo ideal para familias y amigos. Cerca de Mont-rebei, Camarasa y el Estany d'Ivars. Reserva ahora.",
+		casa: "Casa rural de 2 plantas con piscina privada, amplios porches cubiertos, jardín, barbacoa, zona de juegos infantil y pista de fútbol en Bellcaire d'Urgell, Lleida. Capacidad para hasta 20 personas en 6 habitaciones con 3 baños. Alquiler completo para grupos y familias.",
+		lista: 'Qué hacer cerca de Els Porxos Casa Rural',
+	},
+	ca: {
+		title: "Els Porxos — Casa rural a Bellcaire d'Urgell, Lleida · Piscina privada · fins a 20 persones",
+		description:
+			"Casa rural per a grups de fins a 20 persones a Bellcaire d'Urgell (la Noguera, Lleida). 6 habitacions, piscina privada, porxos amplis, barbacoa i zona de jocs. Lloguer de la casa sencera, ideal per a famílies i amics. A prop de Mont-rebei, Camarasa i l'Estany d'Ivars.",
+		casa: "Casa rural de 2 plantes amb piscina privada, porxos coberts amplis, jardí, barbacoa, zona de jocs infantil i pista de futbol a Bellcaire d'Urgell, Lleida. Capacitat per a fins a 20 persones en 6 habitacions amb 3 banys. Lloguer de la casa sencera per a grups i famílies.",
+		lista: "Què fer a prop d'Els Porxos Casa Rural",
+	},
+}[lang];
+
+// Datos para Google: el alojamiento (descripción en el idioma de la página), las atracciones
+// cercanas (generadas de los lugares) y las preguntas frecuentes visibles.
+const alojamiento = { ...esquemaBase.find((b) => b['@type'] === 'LodgingBusiness')!, description: T.casa };
+const atracciones = {
+	'@context': 'https://schema.org',
+	'@type': 'ItemList',
+	name: T.lista,
+	itemListElement: lugaresEn(lang)
+		.filter((l) => l.id !== 'rutas-bici')
+		.map((l, i) => ({ '@type': 'ListItem', position: i + 1, item: { '@type': 'TouristAttraction', name: l.nombre, description: l.texto } })),
+};
+const esquema = [alojamiento, atracciones, esquemaPreguntas(preguntasEn(lang), lang)];
+---
+
+<BaseLayout title={T.title} description={T.description}>
+	{esquema.map((bloque) => <script slot="head" type="application/ld+json" set:html={JSON.stringify(bloque)} />)}
+	<Portada />
+	<Banda />
+	<Resumen />
+	<LaCasa />
+	<PorDentro />
+	<Habitaciones />
+	<Exterior />
+	<Galeria />
+	<Tarifas />
+	<Opiniones />
+	<QueHacer />
+	<Ubicacion />
+	<Preguntas />
+	<Contacto />
+	<Visor />
+</BaseLayout>
