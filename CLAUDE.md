@@ -13,7 +13,7 @@
 ## Dirección visual «Bajo los arcos»
 - Base técnica de Rodaments Segrià (`~/Desktop/Web Rodaments segria`): Astro estático, GSAP + ScrollTrigger, Lenis.
 - Paleta de la casa: cal (fondo), carbón de los capiteles (oscuros), oro del logo como único acento. Terracota y turquesa solo en fotos. Valores y contrastes en `src/styles/tokens.css`.
-- Tipografía: EB Garamond (titulares, como el «Porxos» del logo) + Figtree (texto). Alojadas con `@fontsource-variable`.
+- Tipografía (cambiada el 2026-10-23, la eligió el usuario): Zilla Slab (titulares, pesos 400-600 normal y cursiva, `@fontsource/zilla-slab`) + Karla (texto, `@fontsource-variable/karla`).
 - Forma: fotos en arco, botones píldora, el resto recto. Iconos de Phosphor (`Icono.astro`, grosor light).
 - Portada: la casa en un arco → el arco se abre → entras al porche por un arco pequeño → líneas con lo que tiene la casa.
 - Siempre: animar solo `transform`, `opacity` y `clip-path`; respetar `prefers-reduced-motion` (versión estática completa). Sin rayas largas (—) en los textos visibles.

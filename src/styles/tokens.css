@@ -26,9 +26,9 @@
 	/* Velos para leer texto sobre foto: color-mix(in oklch, var(--carbon) N%, transparent) */
 
 	/* --- Tipografía --- */
-	/* EB Garamond: serif caligráfica clásica, como el «Porxos» del logo. Figtree: sans cálida y muy legible. */
-	--f-display: 'EB Garamond Variable', Garamond, 'Times New Roman', serif;
-	--f-texto: 'Figtree Variable', 'Helvetica Neue', Arial, sans-serif;
+	/* Zilla Slab: serif de remate cuadrado, sólida y con aire de masía. Karla: sans cálida y muy legible. */
+	--f-display: 'Zilla Slab', Rockwell, Georgia, serif;
+	--f-texto: 'Karla Variable', 'Helvetica Neue', Arial, sans-serif;
 
 	/* Escala fluida (≥1,25 entre pasos) */
 	--t-mega: clamp(2.9rem, 5.4vw, 5.5rem); /* titular de portada */
@@ -40,7 +40,7 @@
 	--t-sm: 0.9375rem; /* 15 px */
 	--t-xs: 0.8125rem; /* 13 px: etiquetas */
 
-	--lh-display: 1.04; /* Garamond tiene descendentes largas (p, g, y): nunca por debajo de 1 */
+	--lh-display: 1.04; /* titulares compactos, sin que se toquen las líneas */
 	--lh-texto: 1.6;
 	--medida: 62ch; /* ancho máximo de párrafo */
 

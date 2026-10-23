@@ -1,7 +1,11 @@
 /* Estilos base. Se importan una sola vez desde el layout. */
-@import '@fontsource-variable/eb-garamond';
-@import '@fontsource-variable/eb-garamond/wght-italic.css';
-@import '@fontsource-variable/figtree';
+@import '@fontsource/zilla-slab/400.css';
+@import '@fontsource/zilla-slab/500.css';
+@import '@fontsource/zilla-slab/600.css';
+@import '@fontsource/zilla-slab/400-italic.css';
+@import '@fontsource/zilla-slab/500-italic.css';
+@import '@fontsource/zilla-slab/600-italic.css';
+@import '@fontsource-variable/karla';
 @import './tokens.css';
 
 *,
@@ -48,7 +52,7 @@ h3,
 .display {
 	margin: 0;
 	font-family: var(--f-display);
-	font-weight: 500;
+	font-weight: 600;
 	line-height: var(--lh-display);
 	letter-spacing: -0.012em;
 	color: var(--tinta);
@@ -64,11 +68,11 @@ h3 {
 	font-size: var(--t-3);
 	font-weight: 600;
 }
-/* Énfasis dentro de un titular: la cursiva de la misma Garamond, en el oro del logo */
+/* Énfasis dentro de un titular: la cursiva de la misma Zilla Slab, en el oro del logo */
 h1 em,
 h2 em {
 	font-style: italic;
-	font-weight: 500;
+	font-weight: 600;
 	color: var(--oro-texto);
 }
 
