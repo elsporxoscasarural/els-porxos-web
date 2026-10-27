@@ -1,9 +1,13 @@
 # Els Porxos Casa Rural — Web
 
 ## Estado
-- **`main`** = web publicada en https://elsporxos.es (HTML estático, Netlify despliega `main` sola). Etiqueta `v1-legacy`.
-- **`rediseno`** = nueva web en Astro, en construcción. No se publica hasta que el cliente la apruebe.
-- Lanzamiento: fusionar en `main`, configurar Netlify (build `npm run build`, publicar `dist/`) y poner `indexable = true` en `src/data/sitio.ts`.
+- **`main`** = web publicada en https://elsporxos.es (Astro desde el 2026-10-19; Netlify compila `main` sola con `netlify.toml`). La web antigua está en la etiqueta `v1-legacy`.
+- **`rediseno`** = rama de trabajo. Los cambios se agrupan y se pasan a `main` solo cuando el usuario lo pide (plan gratuito de Netlify: cada publicación gasta minutos de compilación).
+
+## Calendario de disponibilidad
+- `src/components/inicio/Disponibilidad.astro` (portada, después de Tarifas, `#disponibilidad`): sin precios; al elegir fechas rellena el campo «Fechas» del formulario.
+- Datos: `netlify/functions/disponibilidad.mts` → `/api/disponibilidad`. Lee los iCal de exportación de las variables de entorno de Netlify `ICAL_AIRBNB`, `ICAL_BOOKING`, `ICAL_VRBO` (nunca en el repo) y devuelve solo rangos `[entrada, salida)`; la salida queda libre. Caché de 1 h en la red de Netlify.
+- Si no se lee ningún iCal, la web muestra «Consulta por WhatsApp», nunca un calendario vacío. En `npm run dev` usa `src/scripts/disponibilidad-prueba.ts`; `?calendario=error` prueba el aviso.
 
 ## SEO (no perder posicionamiento)
 - Mantener las URLs: `/`, `/casa-rural-lleida/`, `/que-hacer-cerca/` (con barra final: `trailingSlash: 'always'`).

@@ -1,0 +1,669 @@
+---
+// Calendario de disponibilidad (sin precios). Los días ocupados llegan de /api/disponibilidad
+// (netlify/functions/disponibilidad.mts, que junta los iCal de Airbnb, Booking y Vrbo).
+// Al elegir llegada y salida, «Consultar estas fechas» rellena el formulario de contacto.
+// Si no hay datos, se pide consultar por WhatsApp: nunca se enseña un calendario vacío que parezca todo libre.
+import Icono from '../Icono.astro';
+import { casa } from '../../data/casa';
+import { idiomaDe } from '../../i18n';
+
+const lang = idiomaDe(Astro.currentLocale);
+const T = {
+	es: {
+		titulo: 'Consulta la <em>disponibilidad</em>',
+		intro: 'Los días libres y ocupados de la casa, actualizados cada hora desde Airbnb, Booking y Vrbo. Elige tu llegada y tu salida, y te contestamos con el precio para tu grupo.',
+		libre: 'Libre',
+		ocupado: 'Ocupado',
+		seleccion: 'Tu selección',
+		llegada: 'Llegada',
+		salida: 'Salida',
+		elige: 'Elige día',
+		consultar: 'Consultar estas fechas',
+		nota: 'Disponibilidad orientativa: te la confirmamos al responder tu consulta.',
+		anterior: 'Mes anterior',
+		siguiente: 'Mes siguiente',
+		cargando: 'Cargando la disponibilidad…',
+		sinDatosTitulo: 'Consulta la disponibilidad con nosotros',
+		sinDatos: 'Ahora mismo no podemos mostrar el calendario. Escríbenos por WhatsApp o con el formulario y te decimos al momento qué fechas están libres.',
+		formulario: 'Ir al formulario',
+		dias: ['L', 'M', 'X', 'J', 'V', 'S', 'D'],
+		m: {
+			locale: 'es-ES',
+			libre: 'libre',
+			ocupado: 'ocupado',
+			pasado: 'no disponible',
+			soloSalida: 'libre solo para salir',
+			esLlegada: 'tu llegada',
+			esSalida: 'tu salida',
+			eligeLlegada: 'Elige el día de llegada.',
+			eligeSalida: 'Ahora elige el día de salida.',
+			minimo: 'La estancia mínima es de 2 noches.',
+			noche: 'noche',
+			noches: 'noches',
+			minimoNota: 'mínimo 2 noches',
+			del: 'Del',
+			al: 'al',
+		},
+	},
+	ca: {
+		titulo: 'Consulta la <em>disponibilitat</em>',
+		intro: "Els dies lliures i ocupats de la casa, actualitzats cada hora des d'Airbnb, Booking i Vrbo. Tria l'arribada i la sortida, i et responem amb el preu per al teu grup.",
+		libre: 'Lliure',
+		ocupado: 'Ocupat',
+		seleccion: 'La teva selecció',
+		llegada: 'Arribada',
+		salida: 'Sortida',
+		elige: 'Tria el dia',
+		consultar: 'Consulta aquestes dates',
+		nota: 'Disponibilitat orientativa: te la confirmem quan responguem la teva consulta.',
+		anterior: 'Mes anterior',
+		siguiente: 'Mes següent',
+		cargando: 'Carregant la disponibilitat…',
+		sinDatosTitulo: 'Consulta la disponibilitat amb nosaltres',
+		sinDatos: 'Ara mateix no podem mostrar el calendari. Escriu-nos per WhatsApp o amb el formulari i et diem de seguida quines dates estan lliures.',
+		formulario: 'Ves al formulari',
+		dias: ['Dl', 'Dt', 'Dc', 'Dj', 'Dv', 'Ds', 'Dg'],
+		m: {
+			locale: 'ca-ES',
+			libre: 'lliure',
+			ocupado: 'ocupat',
+			pasado: 'no disponible',
+			soloSalida: 'lliure només per sortir',
+			esLlegada: 'la teva arribada',
+			esSalida: 'la teva sortida',
+			eligeLlegada: "Tria el dia d'arribada.",
+			eligeSalida: 'Ara tria el dia de sortida.',
+			minimo: "L'estada mínima és de 2 nits.",
+			noche: 'nit',
+			noches: 'nits',
+			minimoNota: 'mínim 2 nits',
+			del: 'Del',
+			al: 'al',
+		},
+	},
+}[lang];
+---
+
+<section class="disponibilidad" id="disponibilidad" aria-labelledby="disponibilidad-titulo" data-disponibilidad data-mensajes={JSON.stringify(T.m)}>
+	<div class="envoltorio rejilla">
+		<div class="cabeza">
+			<h2 id="disponibilidad-titulo" class="aparece" set:html={T.titulo} />
+			<p class="aparece">{T.intro}</p>
+			<ul class="leyenda aparece" data-leyenda>
+				<li><span class="muestra" aria-hidden="true"></span>{T.libre}</li>
+				<li><span class="muestra muestra--ocupado" aria-hidden="true"></span>{T.ocupado}</li>
+				<li><span class="muestra muestra--seleccion" aria-hidden="true"></span>{T.seleccion}</li>
+			</ul>
+		</div>
+
+		<div class="calendario aparece" data-calendario>
+			<div class="navegacion">
+				<button class="flecha" type="button" data-mes="-1" aria-label={T.anterior}><Icono nombre="caret-left" /></button>
+				<button class="flecha" type="button" data-mes="1" aria-label={T.siguiente}><Icono nombre="caret-right" /></button>
+			</div>
+			<div class="meses" data-meses data-dias={JSON.stringify(T.dias)}>
+				<p class="cargando">{T.cargando}</p>
+			</div>
+		</div>
+
+		<div class="sin-datos" data-sin-datos hidden>
+			<Icono nombre="calendar-blank" />
+			<h3>{T.sinDatosTitulo}</h3>
+			<p>{T.sinDatos}</p>
+			<div class="acciones">
+				<a class="btn" href={casa.whatsapp} target="_blank" rel="noopener"><Icono nombre="whatsapp-logo" /> WhatsApp</a>
+				<a class="btn btn--linea" href="#contacto">{T.formulario}</a>
+			</div>
+		</div>
+
+		<div class="pie aparece" data-pie>
+			<dl class="resumen">
+				<div>
+					<dt>{T.llegada}</dt>
+					<dd data-llegada>{T.elige}</dd>
+				</div>
+				<div>
+					<dt>{T.salida}</dt>
+					<dd data-salida>{T.elige}</dd>
+				</div>
+			</dl>
+			<p class="aviso" data-aviso aria-live="polite">{T.m.eligeLlegada}</p>
+			<button class="btn consultar" type="button" data-consultar disabled>{T.consultar} <Icono nombre="arrow-right" class="flecha" /></button>
+			<p class="nota">{T.nota}</p>
+		</div>
+	</div>
+</section>
+
+<style>
+	.disponibilidad {
+		padding-block: var(--seccion);
+	}
+	.rejilla {
+		display: grid;
+		grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+		grid-template-areas:
+			'cabeza calendario'
+			'pie calendario';
+		grid-template-rows: auto 1fr;
+		gap: var(--s-6) clamp(2.5rem, 6vw, 6rem);
+		align-items: start;
+	}
+	.cabeza {
+		grid-area: cabeza;
+		display: grid;
+		gap: var(--s-5);
+	}
+	h2 {
+		max-width: 12ch;
+		padding-bottom: 0.08em;
+	}
+	.leyenda {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-3) var(--s-5);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		font-size: var(--t-sm);
+		color: var(--sec);
+	}
+	.leyenda[hidden] {
+		display: none;
+	}
+	.leyenda li {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--s-2);
+	}
+	.muestra {
+		width: 18px;
+		height: 18px;
+		border: 1.5px solid var(--linea);
+		border-radius: 5px;
+		background: var(--cal);
+	}
+	.muestra--ocupado {
+		background: repeating-linear-gradient(135deg, var(--cal-2) 0 3px, var(--linea) 3px 5px);
+	}
+	.muestra--seleccion {
+		border-color: var(--tinta);
+		background: var(--tinta);
+	}
+
+	/* --- Calendario --- */
+	.calendario {
+		grid-area: calendario;
+		position: relative;
+	}
+	.navegacion {
+		position: absolute;
+		inset: 0 0 auto;
+		display: flex;
+		justify-content: space-between;
+		pointer-events: none;
+	}
+	.flecha {
+		display: grid;
+		place-items: center;
+		width: 44px;
+		height: 44px;
+		padding: 0;
+		border: 1.5px solid var(--linea);
+		border-radius: 999px;
+		background: var(--cal);
+		color: var(--tinta);
+		cursor: pointer;
+		pointer-events: auto;
+		transition:
+			border-color var(--d-media) var(--ease),
+			transform var(--d-rapida) var(--ease);
+	}
+	.flecha :global(svg) {
+		width: 18px;
+		height: 18px;
+	}
+	.flecha:hover:not(:disabled) {
+		border-color: var(--tinta);
+	}
+	.flecha:active:not(:disabled) {
+		transform: scale(0.94);
+	}
+	.flecha:disabled {
+		opacity: 0.35;
+		cursor: default;
+	}
+	.meses {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: clamp(2rem, 4vw, 3.5rem);
+		/* Alto reservado mientras carga: la página no salta */
+		min-height: 25rem;
+	}
+	.cargando {
+		grid-column: 1 / -1;
+		align-self: center;
+		justify-self: center;
+		color: var(--sec);
+		font-size: var(--t-sm);
+	}
+	.meses :global(.mes) {
+		margin: 0;
+	}
+	.meses :global(.mes h3) {
+		display: grid;
+		place-items: center;
+		min-height: 44px;
+		margin-bottom: var(--s-4);
+		font-size: clamp(1.3rem, 1.6vw, 1.6rem);
+	}
+	.meses :global(.semana) {
+		display: grid;
+		grid-template-columns: repeat(7, 1fr);
+	}
+	.meses :global(.dias-semana) {
+		margin-bottom: var(--s-2);
+		font-size: var(--t-xs);
+		font-weight: 600;
+		text-align: center;
+		color: var(--sec);
+	}
+	.meses :global(.dia) {
+		position: relative;
+		display: grid;
+		place-items: center;
+		width: 100%;
+		aspect-ratio: 1;
+		min-height: 40px;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: var(--tinta);
+		font: 500 var(--t-base) / 1 var(--f-texto);
+		font-variant-numeric: tabular-nums;
+		cursor: pointer;
+	}
+	.meses :global(.dia:hover:not([aria-disabled])) {
+		box-shadow: inset 0 0 0 1.5px var(--tinta);
+		border-radius: 999px;
+	}
+	.meses :global(.dia[aria-disabled]) {
+		cursor: default;
+	}
+	.meses :global(.dia--pasado) {
+		color: color-mix(in oklch, var(--sec) 45%, transparent);
+	}
+	.meses :global(.dia--ocupado) {
+		color: color-mix(in oklch, var(--sec) 75%, transparent);
+		text-decoration: line-through;
+		background: repeating-linear-gradient(135deg, transparent 0 4px, color-mix(in oklch, var(--tinta) 6%, transparent) 4px 6px);
+	}
+	.meses :global(.dia--hoy)::after {
+		content: '';
+		position: absolute;
+		bottom: 16%;
+		width: 4px;
+		height: 4px;
+		border-radius: 999px;
+		background: var(--oro-texto);
+	}
+	.meses :global(.dia--rango) {
+		background: color-mix(in oklch, var(--oro) 30%, var(--cal));
+	}
+	.meses :global(.dia--llegada),
+	.meses :global(.dia--salida) {
+		background: var(--tinta);
+		color: var(--cal);
+		text-decoration: none;
+	}
+	.meses :global(.dia--llegada) {
+		border-radius: 999px 0 0 999px;
+	}
+	.meses :global(.dia--salida) {
+		border-radius: 0 999px 999px 0;
+	}
+	.meses :global(.dia--llegada.dia--solo) {
+		border-radius: 999px;
+	}
+	.meses :global(.dia--llegada)::after,
+	.meses :global(.dia--salida)::after {
+		background: var(--oro);
+	}
+
+	/* --- Sin datos --- */
+	.sin-datos {
+		grid-area: calendario;
+		display: grid;
+		justify-items: start;
+		gap: var(--s-4);
+		padding: clamp(1.75rem, 4vw, 3rem);
+		background: var(--cal-2);
+	}
+	.sin-datos[hidden] {
+		display: none;
+	}
+	.sin-datos > :global(.icono) {
+		width: 36px;
+		height: 36px;
+		color: var(--oro-texto);
+	}
+	.sin-datos p {
+		max-width: 48ch;
+	}
+	.acciones {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-3);
+		margin-top: var(--s-2);
+	}
+
+	/* --- Resumen y botón --- */
+	.pie {
+		grid-area: pie;
+		display: grid;
+		justify-items: start;
+		gap: var(--s-4);
+	}
+	.pie[hidden] {
+		display: none;
+	}
+	.resumen {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--s-5);
+		width: 100%;
+		margin: 0;
+		padding: var(--s-5) 0;
+		border-block: 1px solid var(--linea);
+	}
+	.resumen dt {
+		font-size: var(--t-xs);
+		color: var(--sec);
+	}
+	.resumen dd {
+		margin: var(--s-1) 0 0;
+		font: 600 clamp(1.25rem, 1.6vw, 1.45rem) / 1.2 var(--f-display);
+		color: var(--tinta);
+	}
+	.resumen dd.vacio {
+		color: color-mix(in oklch, var(--sec) 70%, transparent);
+		font-weight: 500;
+	}
+	.aviso {
+		min-height: 1.5em;
+		font-size: var(--t-sm);
+		font-weight: 600;
+		color: var(--oro-texto);
+	}
+	.consultar:disabled {
+		opacity: 0.4;
+		cursor: not-allowed;
+		transform: none;
+	}
+	.nota {
+		max-width: 40ch;
+		font-size: var(--t-xs);
+		color: var(--sec);
+	}
+
+	@media (max-width: 960px) {
+		.rejilla {
+			grid-template-columns: 1fr;
+			grid-template-areas:
+				'cabeza'
+				'calendario'
+				'pie';
+			grid-template-rows: auto;
+		}
+	}
+	@media (max-width: 720px) {
+		.meses {
+			grid-template-columns: 1fr;
+			min-height: 22rem;
+		}
+	}
+</style>
+
+<script>
+	import { lenis } from '../../scripts/movimiento';
+
+	type Rango = [string, string];
+	const seccion = document.querySelector<HTMLElement>('[data-disponibilidad]');
+
+	if (seccion) {
+		const m: Record<string, string> = JSON.parse(seccion.dataset.mensajes || '{}');
+		const cont = seccion.querySelector<HTMLElement>('[data-meses]')!;
+		const diasSemana: string[] = JSON.parse(cont.dataset.dias || '[]');
+		const calendario = seccion.querySelector<HTMLElement>('[data-calendario]')!;
+		const sinDatos = seccion.querySelector<HTMLElement>('[data-sin-datos]')!;
+		const pie = seccion.querySelector<HTMLElement>('[data-pie]')!;
+		const flechas = [...seccion.querySelectorAll<HTMLButtonElement>('[data-mes]')];
+		const elLlegada = seccion.querySelector<HTMLElement>('[data-llegada]')!;
+		const elSalida = seccion.querySelector<HTMLElement>('[data-salida]')!;
+		const aviso = seccion.querySelector<HTMLElement>('[data-aviso]')!;
+		const consultar = seccion.querySelector<HTMLButtonElement>('[data-consultar]')!;
+		const textoElige = elLlegada.textContent || '';
+
+		// --- Fechas como texto AAAA-MM-DD (sin husos horarios de por medio) ---
+		const iso = (a: number, mes: number, d: number) => new Date(Date.UTC(a, mes, d)).toISOString().slice(0, 10);
+		const ahora = new Date();
+		const hoy = iso(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
+		const sumar = (f: string, n: number) => {
+			const d = new Date(`${f}T00:00:00Z`);
+			d.setUTCDate(d.getUTCDate() + n);
+			return d.toISOString().slice(0, 10);
+		};
+		const noches = (a: string, b: string) => Math.round((Date.parse(b) - Date.parse(a)) / 864e5);
+		const fecha = (f: string) => new Date(`${f}T12:00:00Z`);
+		const fmt = (opciones: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat(m.locale, { timeZone: 'UTC', ...opciones });
+		const fCorta = fmt({ weekday: 'short', day: 'numeric', month: 'short' });
+		const fLarga = fmt({ weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+		const fMes = fmt({ month: 'long', year: 'numeric' });
+		const fNumerica = fmt({ weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' });
+
+		const MESES_VISIBLES_MAX = 12;
+		const dosMeses = window.matchMedia('(min-width: 721px)');
+		let ocupadas = new Set<string>(); // noches ocupadas
+		let primerMes = 0; // desplazamiento desde el mes actual
+		let llegada: string | null = null;
+		let salida: string | null = null;
+		let foco = hoy;
+
+		const libre = (f: string) => f >= hoy && !ocupadas.has(f);
+		// ¿Se puede salir el día f habiendo llegado el día «llegada»? Todas las noches intermedias libres.
+		function salidaValida(f: string) {
+			if (!llegada || f <= llegada) return false;
+			for (let d = llegada; d < f; d = sumar(d, 1)) if (ocupadas.has(d)) return false;
+			return true;
+		}
+
+		function estadoDe(f: string) {
+			if (f < hoy) return 'pasado';
+			if (llegada && !salida && f > llegada) return salidaValida(f) ? (ocupadas.has(f) ? 'soloSalida' : 'libre') : ocupadas.has(f) ? 'ocupado' : 'bloqueado';
+			return ocupadas.has(f) ? 'ocupado' : 'libre';
+		}
+
+		function pintar() {
+			const visibles = dosMeses.matches ? 2 : 1;
+			primerMes = Math.max(0, Math.min(primerMes, MESES_VISIBLES_MAX - visibles));
+			flechas[0].disabled = primerMes === 0;
+			flechas[1].disabled = primerMes + visibles >= MESES_VISIBLES_MAX;
+			cont.innerHTML = '';
+			for (let k = 0; k < visibles; k++) {
+				const base = new Date(Date.UTC(ahora.getFullYear(), ahora.getMonth() + primerMes + k, 1));
+				const a = base.getUTCFullYear();
+				const mes = base.getUTCMonth();
+				const fig = document.createElement('div');
+				fig.className = 'mes';
+				const id = `mes-${a}-${mes}`;
+				const titulo = fMes.format(base);
+				fig.innerHTML = `<h3 id="${id}">${titulo[0].toUpperCase() + titulo.slice(1)}</h3><div class="semana dias-semana" aria-hidden="true">${diasSemana.map((d) => `<span>${d}</span>`).join('')}</div>`;
+				const rejilla = document.createElement('div');
+				rejilla.className = 'semana';
+				rejilla.setAttribute('role', 'group');
+				rejilla.setAttribute('aria-labelledby', id);
+				const hueco = (base.getUTCDay() + 6) % 7; // la semana empieza en lunes
+				for (let i = 0; i < hueco; i++) rejilla.append(document.createElement('span'));
+				const diasMes = new Date(Date.UTC(a, mes + 1, 0)).getUTCDate();
+				for (let d = 1; d <= diasMes; d++) {
+					const f = iso(a, mes, d);
+					const estado = estadoDe(f);
+					const b = document.createElement('button');
+					b.type = 'button';
+					b.className = 'dia';
+					b.textContent = String(d);
+					b.dataset.fecha = f;
+					b.tabIndex = f === foco ? 0 : -1;
+					if (estado === 'pasado') b.classList.add('dia--pasado');
+					if (estado === 'ocupado' || estado === 'soloSalida') b.classList.add('dia--ocupado');
+					if (f === hoy) b.classList.add('dia--hoy');
+					if (llegada === f) b.classList.add('dia--llegada');
+					if (llegada === f && !salida) b.classList.add('dia--solo');
+					if (salida === f) b.classList.add('dia--salida');
+					if (llegada && salida && f > llegada && f < salida) b.classList.add('dia--rango');
+					// «bloqueado»: día libre más allá de una noche ocupada; no sirve de salida, pero sí como nueva llegada
+					// aria-disabled y no disabled: así el teclado puede recorrer también los días no elegibles
+					if (!(estado === 'libre' || estado === 'soloSalida' || estado === 'bloqueado')) b.setAttribute('aria-disabled', 'true');
+					const extra = llegada === f ? m.esLlegada : salida === f ? m.esSalida : estado === 'soloSalida' ? m.soloSalida : estado === 'pasado' ? m.pasado : ocupadas.has(f) ? m.ocupado : m.libre;
+					b.setAttribute('aria-label', `${fLarga.format(fecha(f))}, ${extra}`);
+					if (llegada === f || salida === f) b.setAttribute('aria-pressed', 'true');
+					rejilla.append(b);
+				}
+				fig.append(rejilla);
+				cont.append(fig);
+			}
+			// Si el día con el foco no está a la vista, el foco pasa al primer día elegible visible
+			if (!cont.querySelector('.dia[tabindex="0"]')) {
+				const primero = cont.querySelector<HTMLButtonElement>('.dia:not([aria-disabled])') || cont.querySelector<HTMLButtonElement>('.dia');
+				if (primero) {
+					primero.tabIndex = 0;
+					foco = primero.dataset.fecha!;
+				}
+			}
+		}
+
+		function actualizarResumen() {
+			const poner = (el: HTMLElement, f: string | null) => {
+				el.textContent = f ? fCorta.format(fecha(f)).replace(',', '') : textoElige;
+				el.classList.toggle('vacio', !f);
+			};
+			poner(elLlegada, llegada);
+			poner(elSalida, salida);
+			consultar.disabled = !(llegada && salida);
+			if (llegada && salida) {
+				const n = noches(llegada, salida);
+				aviso.textContent = `${n} ${n === 1 ? m.noche : m.noches} · ${m.minimoNota}`;
+			}
+		}
+
+		function elegir(f: string) {
+			if (!llegada || salida || f <= llegada || !salidaValida(f)) {
+				if (!libre(f)) return;
+				llegada = f;
+				salida = null;
+				aviso.textContent = m.eligeSalida;
+			} else if (noches(llegada, f) < 2) {
+				aviso.textContent = m.minimo;
+				return;
+			} else salida = f;
+			foco = f;
+			pintar();
+			actualizarResumen();
+			cont.querySelector<HTMLButtonElement>(`[data-fecha="${f}"]`)?.focus();
+		}
+
+		// Ir a un día con el teclado; cambia de mes si hace falta
+		function moverFoco(f: string) {
+			const limite = iso(ahora.getFullYear(), ahora.getMonth() + MESES_VISIBLES_MAX, 0);
+			if (f < iso(ahora.getFullYear(), ahora.getMonth(), 1) || f > limite) return;
+			foco = f;
+			let b = cont.querySelector<HTMLButtonElement>(`[data-fecha="${f}"]`);
+			if (!b) {
+				const d = fecha(f);
+				const indice = (d.getUTCFullYear() - ahora.getFullYear()) * 12 + d.getUTCMonth() - ahora.getMonth();
+				primerMes = indice < primerMes ? indice : indice - (dosMeses.matches ? 1 : 0);
+				pintar();
+				b = cont.querySelector<HTMLButtonElement>(`[data-fecha="${f}"]`);
+			}
+			cont.querySelectorAll<HTMLButtonElement>('.dia').forEach((x) => (x.tabIndex = x === b ? 0 : -1));
+			b?.focus();
+		}
+
+		cont.addEventListener('click', (e) => {
+			const b = (e.target as HTMLElement).closest<HTMLButtonElement>('.dia');
+			if (b && !b.hasAttribute('aria-disabled')) elegir(b.dataset.fecha!);
+		});
+		cont.addEventListener('keydown', (e) => {
+			const b = (e.target as HTMLElement).closest<HTMLButtonElement>('.dia');
+			if (!b) return;
+			const pasos: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
+			if (e.key in pasos) {
+				e.preventDefault();
+				moverFoco(sumar(b.dataset.fecha!, pasos[e.key]));
+			}
+		});
+		flechas.forEach((f) =>
+			f.addEventListener('click', () => {
+				primerMes += Number(f.dataset.mes);
+				pintar();
+			}),
+		);
+		dosMeses.addEventListener('change', pintar);
+
+		consultar.addEventListener('click', () => {
+			if (!llegada || !salida) return;
+			const n = noches(llegada, salida);
+			const campo = document.querySelector<HTMLInputElement>('#f-fechas');
+			const f = (d: string) => fNumerica.format(fecha(d)).replace(',', '');
+			if (campo) campo.value = `${m.del} ${f(llegada)} ${m.al} ${f(salida)} (${n} ${m.noches})`;
+			// Directo al formulario (en móvil queda por debajo de los datos de contacto)
+			const destino = document.querySelector<HTMLElement>('[data-formulario]') || document.querySelector<HTMLElement>('#contacto');
+			const nombre = document.querySelector<HTMLInputElement>('#f-nombre');
+			const enfocar = () => nombre?.focus({ preventScroll: true });
+			if (destino && lenis) lenis.scrollTo(destino, { offset: -96, onComplete: enfocar });
+			else {
+				destino?.scrollIntoView({ behavior: 'smooth' });
+				enfocar();
+			}
+		});
+
+		function sinCalendario() {
+			calendario.hidden = true;
+			pie.hidden = true;
+			seccion.querySelector<HTMLElement>('[data-leyenda]')!.hidden = true;
+			sinDatos.hidden = false;
+		}
+
+		async function cargar(): Promise<Rango[] | null> {
+			// En desarrollo no hay funciones de Netlify: datos de prueba (?calendario=error prueba el aviso)
+			if (import.meta.env.DEV) {
+				const { datosDePrueba } = await import('../../scripts/disponibilidad-prueba');
+				return new URLSearchParams(location.search).get('calendario') === 'error' ? null : datosDePrueba(hoy);
+			}
+			try {
+				const r = await fetch('/api/disponibilidad', { headers: { Accept: 'application/json' } });
+				if (!r.ok) return null;
+				const datos = await r.json();
+				return Array.isArray(datos.ocupado) ? datos.ocupado : null;
+			} catch {
+				return null;
+			}
+		}
+
+		// Se pide la disponibilidad solo cuando el calendario se acerca a la pantalla
+		const observador = new IntersectionObserver(
+			async ([entrada]) => {
+				if (!entrada.isIntersecting) return;
+				observador.disconnect();
+				const rangos = await cargar();
+				if (!rangos) return sinCalendario();
+				ocupadas = new Set();
+				for (const [a, b] of rangos) for (let d = a; d < b; d = sumar(d, 1)) ocupadas.add(d);
+				pintar();
+				actualizarResumen();
+			},
+			{ rootMargin: '600px 0px' },
+		);
+		observador.observe(seccion);
+	}
+</script>
