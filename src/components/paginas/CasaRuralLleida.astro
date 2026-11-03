@@ -7,6 +7,10 @@ import CabeceraPagina from '../pagina/CabeceraPagina.astro';
 import LlamadaFinal from '../pagina/LlamadaFinal.astro';
 import Icono from '../Icono.astro';
 import Visor from '../Visor.astro';
+import Distancias from '../pagina/Distancias.astro';
+import Opiniones from '../inicio/Opiniones.astro';
+import Preguntas from '../inicio/Preguntas.astro';
+import { esquemaPreguntas } from '../../data/preguntas';
 import { casa } from '../../data/casa';
 import { foto } from '../../data/fotos';
 import { idiomaDe, ruta } from '../../i18n';
@@ -70,7 +74,15 @@ const T = ({
 		"ampliar": "Ampliar",
 		"finT": "Reserva tu casa rural en Lleida",
 		"finTexto": "Consulta disponibilidad y precios para tu grupo. El alquiler mínimo es de 2 noches e incluye sábanas, toallas y limpieza final.",
-		"finBoton": "Enviar formulario"
+		"finBoton": "Ver disponibilidad",
+		"preguntas": [
+			["¿Dónde está exactamente la casa rural Els Porxos?", "En Bellcaire d'Urgell, un pueblo tranquilo de la comarca de La Noguera, en la provincia de Lleida. Está a 12 minutos de Balaguer, a 35 minutos de Lleida ciudad y a una hora y media de Barcelona, con acceso por la C-12 y la C-26."],
+			["¿Cuántas personas caben en esta casa rural de Lleida?", "Hasta 20 personas en 6 habitaciones (2 de matrimonio, 2 dobles, 1 triple y 1 séxtuple con literas) y 3 baños completos. La casa se alquila siempre entera."],
+			["¿La piscina es privada?", "Sí. La piscina, el jardín, la barbacoa, la pista deportiva y la zona de juegos son de uso exclusivo para el grupo que alquila la casa. No se comparten con otros huéspedes."],
+			["¿Cuál es la estancia mínima y qué incluye el alquiler?", "La estancia mínima es de 2 noches. El alquiler incluye la casa completa, sábanas, toallas y la limpieza final."],
+			["¿Qué se puede visitar cerca de la casa?", "El Congost de Mu (unos 25 minutos), el Congost de Mont-rebei (aprox. 1 hora), el embalse de Camarasa, el Estany d'Ivars i Vila-sana, el Castell del Remei y los murales de Penelles, a 10 minutos."],
+			["¿Cómo puedo saber si mis fechas están libres?", "En la portada de la web tienes un calendario de disponibilidad, actualizado cada hora con Airbnb, Booking y Vrbo. Eliges llegada y salida, y nos envías la consulta. También puedes escribirnos por WhatsApp al 620 10 45 39."]
+		]
 	},
 	"ca": {
 		"title": "Casa rural a Lleida amb piscina privada · Els Porxos",
@@ -128,7 +140,15 @@ const T = ({
 		"ampliar": "Amplia",
 		"finT": "Reserva la teva casa rural a Lleida",
 		"finTexto": "Consulta la disponibilitat i els preus per al teu grup. El lloguer mínim és de 2 nits i inclou llençols, tovalloles i neteja final.",
-		"finBoton": "Envia el formulari"
+		"finBoton": "Mira la disponibilitat",
+		"preguntas": [
+			["On és exactament la casa rural Els Porxos?", "A Bellcaire d'Urgell, un poble tranquil de la comarca de la Noguera, a la província de Lleida. És a 12 minuts de Balaguer, a 35 minuts de Lleida ciutat i a una hora i mitja de Barcelona, amb accés per la C-12 i la C-26."],
+			["Quantes persones hi caben en aquesta casa rural de Lleida?", "Fins a 20 persones en 6 habitacions (2 de matrimoni, 2 dobles, 1 triple i 1 sèxtuple amb lliteres) i 3 banys complets. La casa es lloga sempre sencera."],
+			["La piscina és privada?", "Sí. La piscina, el jardí, la barbacoa, la pista esportiva i la zona de jocs són d'ús exclusiu per al grup que lloga la casa. No es comparteixen amb altres hostes."],
+			["Quina és l'estada mínima i què inclou el lloguer?", "L'estada mínima és de 2 nits. El lloguer inclou la casa sencera, llençols, tovalloles i la neteja final."],
+			["Què es pot visitar a prop de la casa?", "El Congost de Mu (uns 25 minuts), el Congost de Mont-rebei (aprox. 1 hora), l'embassament de Camarasa, l'Estany d'Ivars i Vila-sana, el Castell del Remei i els murals de Penelles, a 10 minuts."],
+			["Com puc saber si les meves dates estan lliures?", "A la portada del web hi ha un calendari de disponibilitat, actualitzat cada hora amb Airbnb, Booking i Vrbo. Tries l'arribada i la sortida, i ens envies la consulta. També ens pots escriure per WhatsApp al 620 10 45 39."]
+		]
 	}
 })[lang];
 
@@ -139,6 +159,9 @@ const esquema = esquemaBase.map((b) => {
 		return { ...b, itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Inici', item: 'https://elsporxos.es/ca/' }, { '@type': 'ListItem', position: 2, name: T.miga, item: 'https://elsporxos.es/ca/casa-rural-lleida/' }] };
 	return { ...b, description: T.description };
 });
+
+const preguntas = T.preguntas.map(([pregunta, respuesta]) => ({ pregunta, respuesta }));
+esquema.push(esquemaPreguntas(preguntas, lang));
 
 const portada = foto('fachada-jardin-entrada', lang);
 const pingPong = foto('porche-ping-pong', lang);
@@ -218,6 +241,7 @@ const incluye = T.incluye.map(([titulo, texto], i) => ({ icono: iconos[i], titul
 				<h2 id="ubicacion-titulo" class="aparece" set:html={T.ubiT} />
 				<p class="aparece">{T.u1}</p>
 				<p class="aparece">{T.u2}</p>
+				<div class="aparece"><Distancias /></div>
 				<a class="btn btn--linea aparece" href={ruta('/que-hacer-cerca/', lang)}>{T.cerca} <Icono nombre="arrow-right" class="flecha" /></a>
 			</div>
 		</div>
@@ -241,7 +265,10 @@ const incluye = T.incluye.map(([titulo, texto], i) => ({ icono: iconos[i], titul
 		</div>
 	</section>
 
-	<LlamadaFinal titulo={T.finT} texto={T.finTexto} secundario={{ texto: T.finBoton, href: ruta('/#contacto', lang) }} />
+	<Opiniones />
+	<Preguntas lista={preguntas} />
+
+	<LlamadaFinal titulo={T.finT} texto={T.finTexto} secundario={{ texto: T.finBoton, href: ruta('/#disponibilidad', lang) }} />
 	<Visor />
 </BaseLayout>
 

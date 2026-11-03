@@ -2,7 +2,8 @@
 // «La casa»: el texto a la izquierda y dos fotos en arco a distinta altura que se desplazan
 // a distinto ritmo con el scroll (dan profundidad, como mirar a través de los porches).
 import { Picture } from 'astro:assets';
-import { idiomaDe } from '../../i18n';
+import { idiomaDe, ruta } from '../../i18n';
+import Icono from '../Icono.astro';
 import { foto } from '../../data/fotos';
 
 const lang = idiomaDe(Astro.currentLocale);
@@ -14,12 +15,14 @@ const T = {
 		p1: 'Els Porxos es una casa rural ideal para grupos grandes y familias que buscan alquilar un alojamiento con encanto en la comarca de La Noguera, Lleida. La vivienda de dos plantas está rodeada de un amplio jardín repleto de porches cubiertos, amueblados y decorados para vivir al aire libre durante todo el día. En uno de ellos encontrarás la barbacoa completamente equipada y una gran mesa donde comer todos juntos.',
 		p2: 'La casa también dispone de piscina privada, ideal para los meses de verano, una zona de juegos para los más pequeños y una gran pista con dos porterías de fútbol. Todo privado y para uso exclusivo del grupo que alquila la casa rural.',
 		ampliar: 'Ampliar',
+		enlace: 'Nuestra casa rural en Lleida',
 	},
 	ca: {
 		titulo: 'Casa rural amb porxos i <em>jardí</em> a Lleida',
 		p1: "Els Porxos és una casa rural ideal per a grups grans i famílies que volen llogar un allotjament amb encant a la comarca de la Noguera, Lleida. L'habitatge, de dues plantes, està envoltat d'un ampli jardí ple de porxos coberts, moblats i decorats per viure a l'aire lliure tot el dia. En un d'ells hi trobaràs la barbacoa totalment equipada i una gran taula per menjar tots junts.",
 		p2: "La casa també disposa de piscina privada, ideal per als mesos d'estiu, una zona de jocs per als més petits i una gran pista amb dues porteries de futbol. Tot privat i d'ús exclusiu per al grup que lloga la casa rural.",
 		ampliar: 'Amplia',
+		enlace: 'La nostra casa rural a Lleida',
 	},
 }[lang];
 ---
@@ -30,6 +33,7 @@ const T = {
 			<h2 id="la-casa-titulo" class="aparece" set:html={T.titulo} />
 			<p class="aparece">{T.p1}</p>
 			<p class="aparece">{T.p2}</p>
+			<a class="btn btn--linea aparece enlace" href={ruta('/casa-rural-lleida/', lang)}>{T.enlace} <Icono nombre="arrow-right" class="flecha" /></a>
 		</div>
 
 		<div class="fotos">
@@ -63,6 +67,9 @@ const T = {
 	}
 	.texto p {
 		max-width: 46ch;
+	}
+	.enlace {
+		justify-self: start;
 	}
 	.fotos {
 		position: relative;
